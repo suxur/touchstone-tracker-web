@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCharactersTable extends Migration
+class CreateStatBlocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateCharactersTable extends Migration
      */
     public function up()
     {
-        Schema::create('characters', function (Blueprint $table) {
+        Schema::create('stat_blocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('team_id')->nullable()->constrained();
             $table->string('name');
-            $table->string('race')->nullable();
-            $table->string('class')->nullable();
             $table->string('size')->nullable();
-            $table->string('type')->nullable();
-            $table->string('subtype')->nullable();
+            $table->string('stat_block_type')->nullable(); // monster | character | npc
+            $table->string('type')->nullable(); // type | race
+            $table->string('subtype')->nullable(); // subtype | class
             $table->string('alignment')->nullable();
             $table->integer('armor_class')->default(0);
             $table->integer('hit_points')->default(0);
@@ -75,7 +74,7 @@ class CreateCharactersTable extends Migration
             $table->text('legendary_description')->nullable();
             $table->json('speed_json')->nullable();
             $table->string('armor_description')->nullable();
-            $table->string('group')->nullable();
+            $table->string('collection')->nullable();
             $table->timestamps();
         });
     }
@@ -87,6 +86,6 @@ class CreateCharactersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('characters');
+        Schema::dropIfExists('stat_blocks');
     }
 }

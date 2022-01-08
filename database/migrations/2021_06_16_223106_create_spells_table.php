@@ -38,9 +38,9 @@ class CreateSpellsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('monster_spell', static function (Blueprint $table) {
-            $table->foreignId('monster_id')->constrained();
+        Schema::create('spell_stat_block', static function (Blueprint $table) {
             $table->foreignId('spell_id')->constrained();
+            $table->foreignId('stat_block_id')->constrained();
         });
     }
 

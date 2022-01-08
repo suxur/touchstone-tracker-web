@@ -15,13 +15,13 @@ class CreateActionsTable extends Migration
     {
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('combatant_id');
-            $table->string('combatant_type');
-            $table->string('name');
+            $table->unsignedBigInteger('stat_block_id');
+            $table->string('name')->nullable();
             $table->text('description');
             $table->integer('attack_bonus')->default(0);
             $table->string('damage_dice')->nullable();
             $table->integer('damage_bonus')->nullable();
+            $table->unsignedInteger('sort')->default(0);
             $table->boolean('is_reaction')->default(false);
             $table->boolean('is_special')->default(false);
             $table->boolean('is_legendary')->default(false);
