@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { useForm } from '@inertiajs/inertia-react';
 import { JetstreamTeamPermissions, Role, Team, User } from '@/types';
-import useRoute from '@/hooks/useRoute';
+import useRoute from '@/Hooks/useRoute';
 import {
   JetActionSection,
   JetButton,
@@ -10,8 +10,9 @@ import {
   JetDialogModal,
   JetSecondaryButton
 } from '@/Components/Jetstream';
-import useTypedPage from '@/hooks/useTypedPage';
+import useTypedPage from '@/Hooks/useTypedPage';
 import clsx from 'clsx';
+import { Roles } from '@/Domains/Teams/Components/Roles';
 
 interface Props {
   team: Team;
@@ -127,47 +128,11 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
       </div>
       <JetDialogModal isOpen={currentlyManagingRole} onClose={() => setCurrentlyManagingRole(false)}>
         <JetDialogModal.Content title="Manage Role">
-          <div className="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
-            {availableRoles.map((role, i) => (
-              <button
-                key={role.key}
-                type="button"
-                className={clsx(
-                  'relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200',
-                  {
-                    'border-t border-gray-200 rounded-t-none': i > 0,
-                    'rounded-b-none': i !== Object.keys(availableRoles).length - 1
-                  }
-                )}
-                onClick={() => updateRoleForm.setData('role', role.key)}
-              >
-                <div className={clsx({ 'opacity-50': updateRoleForm.data.role && updateRoleForm.data.role !== role.key })}>
-                  <div className="flex items-center">
-                    <div className={clsx('text-sm text-gray-600', { 'font-semibold': updateRoleForm.data.role === role.key })}>
-                      {role.name}
-                    </div>
-                    {updateRoleForm.data.role === role.key && (
-                      <svg
-                        className="ml-2 h-5 w-5 text-green-400"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    )}
-                  </div>
-                  {/* <!-- Role Description --> */}
-                  <div className="mt-2 text-xs text-gray-600 text-left">
-                    {role.description}
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+          <Roles
+            roles={availableRoles}
+            onClick={(key) => updateRoleForm.setData('role', key)}
+            selected={updateRoleForm.data.role}
+          />
           <JetDialogModal.Footer>
             <JetSecondaryButton onClick={() => setCurrentlyManagingRole(false)}>Cancel</JetSecondaryButton>
             <JetButton

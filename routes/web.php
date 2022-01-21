@@ -1,13 +1,15 @@
 <?php
 
 use App\Http\Controllers\CharacterController;
+use App\Http\Controllers\CombatantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EncounterController;
-use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\MonsterController;
+use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\SpellController;
+use App\Http\Controllers\StatBlockController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,32 +21,29 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-require __DIR__ . '/auth.php';
 Route::get('/', [WelcomeController::class, 'index'])->middleware('guest')->name('welcome');
 
+/* Encounter Routes */
 Route::get('/e', [EncounterController::class, 'index'])->name('encounter');
-Route::get('/e/active', [EncounterController::class, 'active'])->name('encounter.active');
 Route::post('/e/lookup', [EncounterController::class, 'lookup'])->name('encounter.lookup');
 
-Route::get('/p/{slug}', [EncounterController::class, 'player'])->name('encounter.player');
+/* Player Routes */
+Route::get('/p/{slug}', [PlayerController::class, 'show'])->name('player.show');
 
-Route::post('/encounter/{encounter}/save', [EncounterController::class, 'save'])->name('encounter.save');
+/* Encounter Action Routes */
 Route::post('/encounter/{encounter}/clear', [EncounterController::class, 'clear'])->name('encounter.clear');
-Route::post('/encounter/{encounter}/update', [EncounterController::class, 'update'])->name('encounter.update');
-Route::post('/encounter/{encounter}/destroy', [EncounterController::class, 'destroy'])->name('encounter.destroy');
-Route::post('/encounter/{encounter}/add/{type}', [EncounterController::class, 'add'])->name('encounter.add');
-Route::post('/encounter/{encounter}/remove', [EncounterController::class, 'remove'])->name('encounter.remove');
+Route::post('/encounter/{encounter}/update', [EncounterController::class, 'update'])->name('encounters.update');
+Route::post('/encounter/{encounter}/add/combatant', [EncounterController::class, 'add'])->name('encounter.add.combatant');
+Route::post('/encounter/{encounter}/add/combatants', [EncounterController::class, 'addCombatants'])->name('encounter.add.combatants');
+Route::post('/encounter/{encounter}/add/combatant/{stat_block}', [EncounterController::class, 'addByStatBlock'])->name('encounter.add.stat-block');
+Route::post('/encounter/{encounter}/remove/combatant/{combatant}', [EncounterController::class, 'remove'])->name('encounter.remove');
+Route::post('/encounter/{encounter}/create/monster', [EncounterController::class, 'createMonster'])->name('encounter.create.monster');
+Route::post('/encounter/{encounter}/add/monster/{monster}', [EncounterController::class, 'addMonster'])->name('encounter.add.monster');
 
-Route::get('/monster/{monster}', [MonsterController::class, 'monster'])->name('monster');
-Route::post('/monster/{monster}/duplicate', [MonsterController::class, 'duplicate'])->name('monster.duplicate');
-Route::get('/character/{character}', [CharacterController::class, 'character'])->name('character');
-Route::post('/character/{character}/duplicate', [CharacterController::class, 'duplicate'])->name('character.duplicate');
-Route::post('/characters/{character}/claim', [CharacterController::class, 'claim'])->name('characters.claim');
+Route::post('/combatant/{combatant}', [CombatantController::class, 'update'])->name('combatants.update');
 
-Route::post('/characters', [CharacterController::class, 'store'])->name('characters.store');
-Route::put('/characters/{character}', [CharacterController::class, 'update'])->name('characters.update');
-Route::post('/monsters', [MonsterController::class, 'store'])->name('monster.store');
-Route::put('/monsters/{monster}', [MonsterController::class, 'update'])->name('monster.update');
+Route::post('/stat-blocks', [StatBlockController::class, 'store'])->name('stat_block.store');
+Route::put('/stat-blocks/{stat_block}', [StatBlockController::class, 'update'])->name('stat_block.update');
 
 Route::get('/spell/{spell}', [SpellController::class, 'spell'])->name('spell');
 
@@ -54,11 +53,20 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/profile');
     Route::get('/e/{slug}', [EncounterController::class, 'owner'])->name('encounter.owner');
     Route::get('/encounters', [EncounterController::class, 'encounters'])->name('encounters');
+    Route::post('/encounters/create', [EncounterController::class, 'create'])->name('encounters.create');
+    Route::delete('/encounter/{encounter}/destroy', [EncounterController::class, 'destroy'])->name('encounter.destroy');
 
-    Route::get('/characters', [CharacterController::class, 'index'])->name('characters');
-    Route::delete('/characters/{character}', [CharacterController::class, 'destroy'])->name('characters.destroy');
+    /* Characters */
+    Route::resource('characters', CharacterController::class);
+    Route::post('/characters/{character}/claim', [CharacterController::class, 'claim'])->name('characters.claim');
+    Route::post('/characters/{character}/clone', [CharacterController::class, 'clone'])->name('characters.clone');
 
-    Route::delete('/monsters/{monster}', [MonsterController::class, 'destroy'])->name('monsters.destroy');
+    /** Monsters */
+    Route::resource('monsters', MonsterController::class);
+
+    /** Stat Blocks */
+    Route::resource('stat-blocks', StatBlockController::class);
+    Route::post('/stat-blocks/{stat_block}/type/{type}/clone', [StatBlockController::class, 'clone'])->name('stat_block.clone');
 });
 
 Route::group(['middleware' => config('jetstream.middleware', ['web'])], function () {

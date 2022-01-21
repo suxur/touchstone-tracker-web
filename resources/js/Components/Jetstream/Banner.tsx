@@ -3,11 +3,12 @@ import { useState } from 'react';
 import clsx from "clsx";
 
 interface Props {
-  message: string
-  style: 'success' | 'danger'
+  message: string;
+  style: 'success' | 'danger';
+  className?: string;
 }
 
-export const JetBanner = ({ message, style }: Props) => {
+export const JetBanner = ({ message, style, className }: Props) => {
   const [show, setShow] = useState(true);
   // const { props } = usePage<Page<{ jetstream: any }>>();
   // const props = {
@@ -26,16 +27,16 @@ export const JetBanner = ({ message, style }: Props) => {
       {show && message ? (
         <div
           className={clsx({
-            'bg-indigo-500': style == 'success',
+            'bg-green-500': style == 'success',
             'bg-red-700': style == 'danger',
-          })}
+          }, className)}
         >
           <div className="max-w-screen-xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between flex-wrap">
               <div className="w-0 flex-1 flex items-center min-w-0">
                 <span
                   className={clsx('flex p-2 rounded-lg', {
-                    'bg-indigo-600': style == 'success',
+                    'bg-green-600': style == 'success',
                     'bg-red-600': style == 'danger',
                   })}
                 >
@@ -81,7 +82,7 @@ export const JetBanner = ({ message, style }: Props) => {
                   })()}
                 </span>
 
-                <p className="ml-3 font-medium text-sm text-white truncate">
+                <p className="ml-3 font-medium text-sm text-white">
                   {message}
                 </p>
               </div>
@@ -92,7 +93,7 @@ export const JetBanner = ({ message, style }: Props) => {
                   className={clsx(
                     '-mr-1 flex p-2 rounded-md focus:outline-none sm:-mr-2 transition',
                     {
-                      'hover:bg-indigo-600 focus:bg-indigo-600':
+                      'hover:bg-green-600 focus:bg-green-600':
                         style == 'success',
                       'hover:bg-red-600 focus:bg-red-600': style == 'danger',
                     },
@@ -125,4 +126,4 @@ export const JetBanner = ({ message, style }: Props) => {
       ) : null}
     </div>
   );
-}
+};

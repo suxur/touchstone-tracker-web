@@ -1,13 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\CodexController;
 use App\Http\Controllers\Api\EncounterController;
 use App\Http\Controllers\MonsterController;
 use App\Http\Controllers\SpellController;
+use App\Http\Resources\CodexCharacterResource;
 use App\Http\Resources\CodexEncounterResource;
 use App\Http\Resources\CodexMonsterResource;
 use App\Http\Resources\CodexSpellResource;
 use App\Http\Resources\UserResource;
-use App\Models\Monster;
+use App\Models\StatBlock;
 use App\Models\Spell;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -52,28 +54,11 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
 //    return new UserResource($request->user());
 });
 
-Route::get('/encounter', [EncounterController::class, 'index']);
+Route::get('/codex/monsters', [CodexController::class, 'monsters'])->name('codex.monsters');
+Route::get('/codex/characters', [CodexController::class, 'characters'])->name('codex.characters');
+Route::get('/codex/spells', [CodexController::class, 'spells'])->name('codex.spells');
+Route::get('/codex/encounters', [CodexController::class, 'encounters'])->name('codex.encounters');
 
-Route::get('/e', [EncounterController::class, 'index'])->name('encounter');
-Route::get('/e/{slug}', [EncounterController::class, 'owner'])->name('encounter.owner');
-Route::get('/e/active', [EncounterController::class, 'active'])->name('encounter.active');
-Route::post('/e/lookup', [EncounterController::class, 'lookup'])->name('encounter.lookup');
-Route::post('/encounter/{encounter}/add/{type}', [EncounterController::class, 'add'])->name('encounter.add');
-Route::post('/encounter/{encounter}/remove', [EncounterController::class, 'remove'])->name('encounter.remove');
-
-
-Route::get('/codex/monsters', function () {
-    $monsters = Monster::select(['id', 'name', 'hit_points', 'dexterity'])->without('specialAbilities', 'actions', 'reactions', 'legendaryActions')->get();
-    return CodexMonsterResource::collection($monsters);
-});
-
-Route::get('/codex/spells', function () {
-    return CodexSpellResource::collection(Spell::all());
-});
-
-Route::get('/codex/encounters', function () {
-    return CodexEncounterResource::collection([]);
-});
-
+Route::get('stat-block/{stat_block}', [\App\Http\Controllers\StatBlockController::class, 'show'])->name('api.stat-block');
 Route::get('/monster/{monster}', [MonsterController::class, 'monster'])->name('monster');
 Route::get('/spell/{spell}', [SpellController::class, 'spell'])->name('spell');

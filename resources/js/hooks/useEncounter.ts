@@ -1,8 +1,10 @@
-import { useForm, usePage } from '@inertiajs/inertia-react';
+import { usePage } from '@inertiajs/inertia-react';
 import { Page, PageProps } from '@inertiajs/inertia';
 import axios from 'axios';
-import { COMBATANT_CHARACTER, COMBATANT_MONSTER, routes } from '../constants';
+
+import { COMBATANT_CHARACTER, COMBATANT_MONSTER, routes } from '@/constants';
 import { Combatant, Encounter } from '@/types';
+import useRoute from '@/Hooks/useRoute';
 
 interface AddCombatantProps {
   ids: number[] | number,
@@ -23,7 +25,8 @@ interface Props extends PageProps {
 }
 
 export const useEncounter = () => {
-  const { encounter } = usePage<Page<Props>>().props
+  const route = useRoute();
+  const { encounter } = usePage<Page<Props>>().props;
 
   const removeCombatant = async ({ combatant }: RemoveCombatantProps) => {
     return axios.post(`/encounter/${encounter.id}/remove`, { combatant });
@@ -39,31 +42,14 @@ export const useEncounter = () => {
     });
   };
 
-  // const { mutate: addCombatantMutation } = useMutation(addCombatant, {
-  //   onMutate: async newCombatant => {
-  //     await queryClient.cancelQueries(['encounter', encounterSlug]);
-  //
-  //     const previousEncounterData = queryClient.getQueriesData(['encounter', encounterSlug]);
-  //
-  //     queryClient.setQueryData(['encounter', encounterSlug], old => {
-  //       console.log(newCombatant);
-  //       // old.combatants.push(newCombatant);
-  //       return old;
-  //     });
-  //
-  //     return { previousEncounterData };
-  //   },
-  //   onError: (err, newCombatant, context) => {
-  //     queryClient.setQueryData(['encounter', encounterSlug], context.previousEncounterData);
-  //   },
-  //   onSettled: () => {
-  //     queryClient.invalidateQueries(['encounter', encounterSlug]);
-  //   }
-  // });
+  const updateCombatant = (combatant: Combatant) => {
+    axios.post(route('combatants.update', { combatant }), { ...combatant });
+  };
 
   return {
     encounter,
     addCombatant,
     removeCombatant,
+    updateCombatant,
   };
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetDialogModal } from '../../resources/js/Components/Jetstream/DialogModal';
+import { JetDialogModal } from '@/Components/Jetstream/DialogModal';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

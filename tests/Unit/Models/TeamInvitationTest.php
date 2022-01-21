@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Character;
+use App\Models\StatBlock;
 use App\Models\TeamInvitation;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

@@ -17,4 +17,9 @@ class Action extends Model
     protected $visible = ['id', 'name', 'description'];
 
     protected $guarded = [];
+
+    public function statBlock()
+    {
+        return $this->belongsTo(StatBlock::class);
+    }
 }

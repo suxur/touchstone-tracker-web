@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetResponsiveNavLink } from '../../resources/js/Components/Jetstream/ResponsiveNavLink';
+import { JetResponsiveNavLink } from '@/Components/Jetstream/ResponsiveNavLink';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

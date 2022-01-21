@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetApplicationLogo } from '../../resources/js/Components/Jetstream/ApplicationLogo';
+import { JetApplicationLogo } from '@/Components/Jetstream/ApplicationLogo';
 
 
 export default {

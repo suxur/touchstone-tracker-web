@@ -13,4 +13,9 @@ class Spell extends Model
         'is_ritual'              => 'boolean',
         'requires_concentration' => 'boolean',
     ];
+
+    public function statBlocks()
+    {
+        return $this->belongsToMany(StatBlock::class);
+    }
 }

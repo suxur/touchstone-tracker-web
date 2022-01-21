@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetSectionTitle } from '../../resources/js/Components/Jetstream/SectionTitle';
+import { JetSectionTitle } from '@/Components/Jetstream/SectionTitle';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

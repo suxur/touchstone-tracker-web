@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\Character;
+use App\Models\StatBlock;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasCharacters
@@ -14,6 +14,6 @@ trait HasCharacters
      */
     public function characters()
     {
-        return $this->hasMany(Character::class);
+        return $this->hasMany(StatBlock::class);
     }
 }

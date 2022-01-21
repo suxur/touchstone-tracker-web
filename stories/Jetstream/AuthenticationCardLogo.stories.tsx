@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetAuthenticationCardLogo } from '../../resources/js/Components/Jetstream/AuthenticationCardLogo';
+import { JetAuthenticationCardLogo } from '@/Components/Jetstream/AuthenticationCardLogo';
 
 
 export default {

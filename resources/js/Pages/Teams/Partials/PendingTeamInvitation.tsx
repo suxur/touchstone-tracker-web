@@ -3,7 +3,7 @@ import { JetActionSection } from '@/Components/Jetstream';
 import { JetstreamTeamPermissions, Team } from '@/types';
 import { useForm } from '@inertiajs/inertia-react';
 import { useCallback } from 'react';
-import useRoute from '@/hooks/useRoute';
+import useRoute from '@/Hooks/useRoute';
 
 type Props = {
   team: Team;

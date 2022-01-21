@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetFormSection } from '../../resources/js/Components/Jetstream/FormSection';
+import { JetFormSection } from '@/Components/Jetstream/FormSection';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

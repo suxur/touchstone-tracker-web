@@ -1,21 +1,24 @@
-import React, { ChangeEvent, FormEvent, useEffect } from 'react';
-import { Head, Link, useForm, usePage } from '@inertiajs/inertia-react';
+import * as React from 'react';
+import { FormEvent, useEffect } from 'react';
+import { Head, Link, useForm } from '@inertiajs/inertia-react';
+
+import useRoute from '@/Hooks/useRoute';
 import { GuestLayout } from '@/Layouts/GuestLayout';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
-import route from '@/lib/route';
-import { Button } from 'react-query/types/devtools/styledComponents';
-import { JetButton, JetCheckbox, JetValidationErrors } from '@/Components/Jetstream';
-import { Page, PageProps } from '@inertiajs/inertia';
+import { JetBanner, JetButton, JetCheckbox } from '@/Components/Jetstream';
+import useTypedPage from '@/Hooks/useTypedPage';
 
-interface Props extends PageProps {
+interface Props {
   status: string;
   canResetPassword: boolean;
 }
 
-export default function Login() {
-  const { status, canResetPassword } = usePage<Page<Props>>().props;
-  const { data, setData, post, processing, errors, reset } = useForm({
+export default function Login({ status, canResetPassword }: Props) {
+  const route = useRoute();
+  const { errors } = useTypedPage().props;
+
+  const form = useForm({
     email: '',
     password: '',
     remember: false,
@@ -23,55 +26,57 @@ export default function Login() {
 
   useEffect(() => {
     return () => {
-      reset('password');
+      form.reset('password');
     };
   }, []);
 
-  const submit = (e: FormEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    post(route('login'));
+    form.post(route('login'));
   };
 
   return (
     <GuestLayout>
-      <Head title="Log in" />
+      <Head title="Login" />
 
-      {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+      {status && <JetBanner className="mb-4 rounded-md" message={status} style="success" />}
+      {errors.email && <JetBanner className="mb-4 rounded-md" message={errors.email} style="danger" />}
 
-      <JetValidationErrors errors={errors} />
-
-      <form onSubmit={submit}>
+      <form onSubmit={onSubmit}>
         <div>
-          <AuthLabel title="Email" name="email"/>
+          <AuthLabel title="Email" name="email" error={form.errors.email} />
           <AuthInput
             type="text"
             name="email"
-            value={data.email}
+            value={form.data.email}
             className="mt-1 block w-full"
             autoComplete="username"
             autoFocus
-            onChange={e => setData('email', e.target.value)}
+            onChange={e => form.setData('email', e.target.value)}
+            hasError={!!form.errors.email}
           />
-
         </div>
 
         <div className="mt-4">
-          <AuthLabel title="Password" name="password" />
-
+          <AuthLabel title="Password" name="password" error={form.errors.password} />
           <AuthInput
             type="password"
             name="password"
-            value={data.password}
+            value={form.data.password}
             className="mt-1 block w-full"
             autoComplete="current-password"
-            onChange={e => setData('password', e.target.value)}
+            onChange={e => form.setData('password', e.target.value)}
+            hasError={!!form.errors.password}
           />
         </div>
 
         <div className="block mt-4">
           <label className="flex items-center">
-            <JetCheckbox name="remember" checked={data.remember} onChange={e => setData('remember', e.target.checked)} />
-
+            <JetCheckbox
+              name="remember"
+              checked={form.data.remember}
+              onChange={e => form.setData('remember', e.target.checked)}
+            />
             <span className="ml-2 text-sm text-gray-600">Remember me</span>
           </label>
         </div>
@@ -86,8 +91,8 @@ export default function Login() {
             </Link>
           )}
 
-          <JetButton className="ml-4" processing={processing}>
-            Log in
+          <JetButton className="ml-4" processing={form.processing}>
+            Login
           </JetButton>
         </div>
       </form>

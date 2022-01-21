@@ -3,7 +3,7 @@
 namespace App\Actions\Jetstream;
 
 use App\Models\Action;
-use App\Models\Character;
+use App\Models\StatBlock;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Arr;
@@ -18,13 +18,13 @@ class UpdateCharacter
      * Remove the team member from the given team.
      *
      * @param User      $user
-     * @param Character $character
+     * @param StatBlock $character
      * @param array     $input
      * @return void
      * @throws AuthorizationException
      * @throws ValidationException
      */
-    public function update(User $user, Character $character, array $input): void
+    public function update(User $user, StatBlock $character, array $input): void
     {
         $this->authorize($user, $character);
 
@@ -142,11 +142,11 @@ class UpdateCharacter
      * Authorize that the user can remove the team member.
      *
      * @param User      $user
-     * @param Character $character
+     * @param StatBlock $character
      * @return void
      * @throws AuthorizationException
      */
-    protected function authorize(User $user, Character $character): void
+    protected function authorize(User $user, StatBlock $character): void
     {
         if (!Gate::forUser($user)->check('update', $character)) {
             throw new AuthorizationException;

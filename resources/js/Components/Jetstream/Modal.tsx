@@ -59,7 +59,7 @@ export const JetModal = ({ isOpen, onClose, maxWidth = '2xl', children }: PropsW
             >
               <div
                 className={clsx(
-                  'inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full',
+                  'relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transition-all sm:my-8 sm:align-middle sm:w-full',
                   maxWidthClass,
                 )}
               >

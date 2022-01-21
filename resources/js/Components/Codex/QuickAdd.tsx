@@ -1,24 +1,52 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { FC } from "react";
+import * as React from 'react';
+import { FormEvent } from 'react';
+import { useForm } from '@inertiajs/inertia-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-type Props = {};
+import { StatBlockType } from '@/types';
+import useRoute from '@/Hooks/useRoute';
+import { useEncounter } from '@/Hooks/useEncounter';
+import { JetButton } from '@/Components/Jetstream';
 
-const QuickAdd: FC<Props> = (props) => {
+interface Props {
+  type: StatBlockType;
+}
+
+export const QuickAdd = ({ type }: Props) => {
+  const route = useRoute();
+  const { encounter } = useEncounter();
+
+  const form = useForm({
+    name: '',
+    type
+  });
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    form.post(route('encounter.add.combatant', { encounter }), {
+      only: ['encounter'],
+      onSuccess: () => form.reset(),
+    });
+  };
+
   return (
-    <div className="flex">
+    <form className="flex" onSubmit={onSubmit}>
       <input
         type="text"
         placeholder="Quick Add"
-        className="form-input w-full h-10 text-sm border-gray-200 rounded-l-md"
+        className="border-gray-300 focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50 flex-grow rounded-l-md border-r-0"
+        name="name"
+        value={form.data.name}
+        onChange={e => form.setData('name', e.target.value)}
+        required
       />
-      <button
-        type="button"
-        className="text-purple-600 bg-purple-200 h-10 rounded-r-md w-10 flex justify-center items-center px-4"
+      <JetButton
+        type="submit"
+        className="rounded-l-none"
+        processing={form.processing}
       >
         <FontAwesomeIcon icon="plus" />
-      </button>
-    </div>
+      </JetButton>
+    </form>
   );
 };
-
-export default QuickAdd;

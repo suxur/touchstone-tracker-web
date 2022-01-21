@@ -2,17 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\Models\Character;
+use App\Models\StatBlock;
+use App\Models\Combatant;
 use App\Models\Encounter;
+use App\Models\Monster;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Str;
 use Tests\TestCase;
 
 class EncounterTest extends TestCase
 {
     use DatabaseMigrations;
-
-
 
 //    /** @test */
 //    public function a_user_cannot_save_an_encounter(): void
@@ -57,11 +58,9 @@ class EncounterTest extends TestCase
         $slug = session()->get('encounter_slug');
         $encounter = Encounter::whereSlug($slug)->first();
 
-
-        $response = $this->get($encounter->path());
+        $this->get($encounter->path());
 
         $this->assertEquals($user->id, $encounter->fresh()->user_id);
-        $response->assertSessionMissing('encounter_slug');
     }
 
     /** @test */
@@ -72,6 +71,23 @@ class EncounterTest extends TestCase
         $this->actingAs($user);
 
         $this->post("/encounter/{$encounter->id}/save");
+
+        $this->assertCount(1, $user->fresh()->encounters);
+    }
+
+    /** @test */
+    public function a_user_can_create_an_encounter(): void
+    {
+        $this->withoutExceptionHandling();
+
+        /** @var User $user */
+        $user = User::factory()->withPersonalTeam()->create();
+        $this->actingAs($user);
+
+        $this->assertCount(0, $user->encounters);
+
+        $response = $this->post('/encounters/create');
+        $response->assertRedirect();
 
         $this->assertCount(1, $user->fresh()->encounters);
     }
@@ -127,106 +143,91 @@ class EncounterTest extends TestCase
         $this->actingAs($user);
 
         $this->assertTrue($encounter->is_active);
+
         $encounter->is_active = false;
-        $this->post("/encounter/{$encounter->id}/update", [
+
+        $response = $this->post("/encounter/{$encounter->id}/update", [
             'encounter' => $encounter->toArray()
         ]);
 
+        $response->assertRedirect();
         $this->assertFalse($encounter->fresh()->is_active);
     }
 
     /** @test */
-    public function a_user_can_create_and_add_a_character_to_encounter(): void
+    public function a_user_can_create_and_add_a_combatant_to_encounter(): void
     {
+        $this->withoutExceptionHandling();
         [$user, $encounter] = $this->createEncounterWithUser();
 
         $this->actingAs($user);
 
         $this->assertDatabaseCount('combatants', 0);
 
-        $this->post("/encounter/{$encounter->id}/add/character", [
-            'combatants' => [
-                [
-                    'id'              => null,
-                    'name'            => 'Alodray',
-                    'encounter_stats' => [
-                        'hit_points' => 0,
-                        'initiative' => 0
-                    ]
-                ]
-            ]
+        $this->post("/encounter/{$encounter->id}/add/combatant", [
+            'name' => 'Alodray',
+            'type' => 'character'
         ]);
 
-        $this->assertDatabaseHas('characters', ['name' => 'Alodray']);
+        $this->assertDatabaseHas('combatants', ['name' => 'Alodray']);
         $this->assertDatabaseCount('combatants', 1);
     }
 
     /** @test */
-    public function a_user_can_add_a_character_to_encounter(): void
+    public function a_user_can_add_a_combatant_to_an_encounter(): void
     {
         [$user, $encounter] = $this->createEncounterWithUser();
-        /** @var Character $character */
-        $character = Character::factory()->create([
-            'name' => 'Alodray'
-        ]);
+
+        /** @var StatBlock $statBlock */
+        $statBlock = StatBlock::factory()->create();
 
         $this->actingAs($user);
 
-        $this->post("/encounter/{$encounter->id}/add/character", [
-            'combatants' => [
-                [
-                    'id'              => $character->id,
-                    'name'            => $character->name,
-                    'encounter_stats' => [
-                        'hit_points' => 0,
-                        'initiative' => 0
-                    ]
-                ]
-            ]
-        ]);
-
-        $this->assertDatabaseCount('characters', 1);
+        $this->assertDatabaseCount('combatants', 0);
+        $this->post("/encounter/{$encounter->id}/add/combatant/{$statBlock->id}");
         $this->assertDatabaseCount('combatants', 1);
     }
 
     /** @test */
     public function a_user_can_add_multiple_characters_to_encounter(): void
     {
+        $this->withoutExceptionHandling();
         [$user, $encounter] = $this->createEncounterWithUser();
 
-        /** @var Character $character1 */
-        $character1 = Character::factory()->create([
-            'name' => 'Alodray'
-        ]);
-        /** @var Character $character2 */
-        $character2 = Character::factory()->create([
-            'name' => 'Rost'
-        ]);
+        /** @var StatBlock $character1 */
+        $character1 = StatBlock::factory()->create();
+
+        /** @var StatBlock $character2 */
+        $character2 = StatBlock::factory()->create();
+
+        $this->assertDatabaseCount('stat_blocks', 2);
 
         $this->actingAs($user);
 
-        $this->post("/encounter/{$encounter->id}/add/character", [
-            'combatants' => [
-                [
-                    'id'              => $character1->id,
-                    'name'            => $character1->name,
-                    'encounter_stats' => [
-                        'hit_points' => 0,
-                        'initiative' => 0
-                    ]
-                ],
-                [
-                    'id'              => $character2->id,
-                    'name'            => $character2->name,
-                    'encounter_stats' => [
-                        'hit_points' => 0,
-                        'initiative' => 0
-                    ]
-                ]
+        $this->post("/encounter/{$encounter->id}/add/combatants", [
+            'ids' => [
+                $character1->id,
+                $character2->id,
             ]
         ]);
 
-        $this->assertDatabaseCount('characters', 2);
+        $this->assertDatabaseCount('combatants', 2);
+    }
+
+    /** @test */
+    public function a_user_can_remove_a_combatant_from_an_encounter(): void
+    {
+        $this->withoutExceptionHandling();
+        $encounter = Encounter::factory()->has(Combatant::factory()->count(3))->create();
+
+        $combatant = $encounter->combatants->first();
+
+        $this->assertDatabaseCount('combatants', 3);
+
+        $response = $this->post("/encounter/{$encounter->id}/remove/combatant/{$combatant->id}");
+
+        $response->assertRedirect();
+
         $this->assertDatabaseCount('combatants', 2);
     }
 

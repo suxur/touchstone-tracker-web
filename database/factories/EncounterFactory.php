@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Combatant;
 use App\Models\Encounter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -45,4 +46,9 @@ class EncounterFactory extends Factory
             ];
         });
     }
+
+//    public function withCombatants($attributes = []): EncounterFactory
+//    {
+//        return $this->hasAttached(Combatant::factory()->count(3), $attributes);
+//    }
 }

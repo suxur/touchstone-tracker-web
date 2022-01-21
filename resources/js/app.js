@@ -18,14 +18,22 @@ import {
   faTimesCircle,
   faSearch,
   faChevronRight,
+  faChevronLeft,
   faCog,
   faEdit,
   faClone,
   faEye,
-  faCopy
+  faCopy,
+  faHeart,
+  faShieldAlt,
+  faCheck,
+  faSort
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faBook, faPlus, faPlusSquare, faTimes, faSkullCrossbones, faGripLines, faTrashAlt, faTimesCircle, faSearch, faChevronRight, faCopy, faCog, faEdit, faClone, faEye);
+import { enableMapSet } from 'immer';
+enableMapSet();
+
+library.add(faBook, faPlus, faPlusSquare, faTimes, faSkullCrossbones, faGripLines, faTrashAlt, faTimesCircle, faSearch, faChevronRight, faChevronLeft, faCopy, faCog, faEdit, faClone, faEye, faHeart, faShieldAlt, faCheck, faSort);
 
 const client = require('./lib/query-client').default;
 

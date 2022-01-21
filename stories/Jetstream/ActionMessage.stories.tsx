@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetActionMessage } from '../../resources/js/Components/Jetstream/ActionMessage';
+import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
 
 export default {
   /* 👇 The title prop is optional.

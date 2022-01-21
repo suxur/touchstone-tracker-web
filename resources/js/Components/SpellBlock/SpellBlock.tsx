@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { forwardRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown';
 
 import { StatLine } from '../StatBlock/StatLine';
 import { Spell } from '@/types';
+import { Divider } from '@/Components/StatBlock/Divider';
 
 interface Props {
   spell: Spell;
@@ -30,7 +31,7 @@ export const SpellBlock = forwardRef<HTMLButtonElement, Props>(({ spell }: Props
             {spell.is_ritual && <span>(ritual)</span>}
           </p>
         </div>
-        <hr className="my-2" />
+        <Divider />
         <div className="flex flex-col overflow-auto relative h-full">
           <div className="absolute inset-0">
             <div className="p-4 pt-0">
@@ -54,7 +55,7 @@ export const SpellBlock = forwardRef<HTMLButtonElement, Props>(({ spell }: Props
                   {spell.duration}
                 </p>
               )}
-              <hr className="my-2" />
+              <Divider />
               <div className="pb-2">
                 <ReactMarkdown>
                   {spell.description}
@@ -64,7 +65,7 @@ export const SpellBlock = forwardRef<HTMLButtonElement, Props>(({ spell }: Props
                 <div className="pb-2">
                   <p>
                     <span className="font-bold italic">At Higher Levels. </span>
-                    <br/>
+                    <br />
                     {spell.higher_level}
                   </p>
                 </div>

@@ -75,12 +75,16 @@ trait IsCombatant
         // 18 = 4
         // 19 = 4
         // 20 = 5
-        return $this->getModifier($this->attributes['dexterity']);
+        if (isset($this->attributes['dexterity'])) {
+            return $this->getModifier($this->attributes['dexterity']);
+        }
+
+        return 0;
     }
 
     public function getExperiencePointsAttribute(): ?string
     {
-        if ($this->attributes['challenge_rating']) {
+        if (isset($this->attributes['challenge_rating'])) {
             return number_format(DifficultyCalculator::EXPERIENCE_POINTS_BY_CHALLENGE_RATING[$this->attributes['challenge_rating']]);
         }
 

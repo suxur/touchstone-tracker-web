@@ -1,37 +1,36 @@
 import * as React from 'react';
-import { createContext, useState } from 'react';
-import { noop } from '../../lib/helpers';
+import { useState } from 'react';
 import { Bean } from './Bean';
-import { SetAction } from '@/types';
+import { Combatant } from '@/types';
+import { useUpdateCombatant } from '@/Hooks/useUpdateCombatant';
 
 interface Props {
+  active?: boolean;
+  combatant: Combatant;
+  type: 'success' | 'failure'
 }
 
-interface Context {
-  active: boolean;
-  count: number;
-  setCount: SetAction<number>;
-}
+export const Counter = ({ active, combatant, type }: Props) => {
+  const { data, update } = useUpdateCombatant(combatant);
 
-export const CounterContext = createContext<Context>({
-  active: false,
-  count: 0,
-  setCount: noop,
-});
+  const toggle = (index: number) => {
+    let current = data[`death_save_${type}`];
+    if (index === 1 && data[`death_save_${type}`] > 1) {
+      current = 0;
+    } else if (index === data[`death_save_${type}`]) {
+      --current;
+    } else {
+      current = index;
+    }
 
-export const Counter = (props: Props) => {
-  const [count, setCount] = useState(0);
+    update(`death_save_${type}`, current);
+  };
 
   return (
-    <CounterContext.Provider value={{ active: false, count, setCount }}>
-      <div className="flex justify-between w-1/2" data-testid="counter">
-        <Bean index={1} />
-        <Bean index={2} />
-        <Bean index={2} />
-        {/*<bean class="mr-1" :active="active" :count.sync="combatant.encounter_stats.death_save_failure" :index="1"></bean>*/}
-        {/*<bean class="mr-1" :active="active" :count.sync="combatant.encounter_stats.death_save_failure" :index="2"></bean>*/}
-        {/*  <bean :active="active" :count.sync="combatant.encounter_stats.death_save_failure" :index="3"></bean>*/}
-      </div>
-    </CounterContext.Provider>
+    <div className="flex flex-row">
+      <Bean active={active} filled={data[`death_save_${type}`] >= 1} onClick={() => toggle(1)} />
+      <Bean active={active} filled={data[`death_save_${type}`] >= 2} onClick={() => toggle(2)} />
+      <Bean active={active} filled={data[`death_save_${type}`] >= 3} onClick={() => toggle(3)} />
+    </div>
   );
 };

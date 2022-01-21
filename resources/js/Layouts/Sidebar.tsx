@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SidebarContext } from '../Components/Sidebar/SidebarContext';
 import { Codex } from '../Components/Codex/Codex';
+import { CodexProvider } from '@/Components/Codex/CodexContext';
 
 export const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -27,7 +28,9 @@ export const Sidebar = () => {
         </div>
         <div className={clsx({ 'hidden': !open }, 'ml-2 flex flex-grow w-96')}>
           <div className="w-full py-4">
-            <Codex />
+            <CodexProvider>
+              <Codex />
+            </CodexProvider>
           </div>
         </div>
       </aside>

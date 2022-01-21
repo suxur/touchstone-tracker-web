@@ -136,22 +136,15 @@ export default function TwoFactorAuthenticationForm() {
             )}
 
             <JetConfirmsPassword onConfirm={disableTwoFactorAuthentication}>
-              <JetDangerButton
-                className={clsx({ 'opacity-25': disabling })}
-                disabled={disabling}
-              >
+              <JetButton bg="danger" processing={disabling}>
                 Disable
-              </JetDangerButton>
+              </JetButton>
             </JetConfirmsPassword>
           </div>
         ) : (
           <div>
             <JetConfirmsPassword onConfirm={enableTwoFactorAuthentication}>
-              <JetButton
-                type="button"
-                className={clsx({ 'opacity-25': enabling })}
-                disabled={enabling}
-              >
+              <JetButton type="button" processing={enabling}>
                 Enable
               </JetButton>
             </JetConfirmsPassword>

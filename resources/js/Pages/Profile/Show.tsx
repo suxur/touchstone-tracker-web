@@ -4,7 +4,7 @@ import LogoutOtherBrowserSessions from '@/Domains/Profile/LogoutOtherBrowserSess
 import TwoFactorAuthenticationForm from '@/Domains/Profile/TwoFactorAuthenticationForm';
 import UpdatePasswordForm from '@/Domains/Profile/UpdatePasswordForm';
 import UpdateProfileInformationForm from '@/Domains/Profile/UpdateProfileInformationForm';
-import useTypedPage from '@/hooks/useTypedPage';
+import useTypedPage from '@/Hooks/useTypedPage';
 import { JetSectionBorder } from '@/Components/Jetstream/SectionBorder';
 import { AppLayout } from '@/Layouts/AppLayout';
 import { Session } from '@/types';
@@ -18,7 +18,7 @@ export default function Show({ sessions }: Props) {
 
   return (
     <AppLayout title="Profile">
-      <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8 bg-gray-100">
         {page.props.jetstream.canUpdateProfileInformation ? (
           <div>
             <UpdateProfileInformationForm user={page.props.user} />

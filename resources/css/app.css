@@ -6,58 +6,106 @@
 
 
 @layer components {
-  /* General */
-  /*===================================*/
-  .button {
-    @apply justify-center inline-flex items-center px-4 py-2 bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150 hover:bg-gray-800 active:bg-gray-900 focus:outline-none disabled:opacity-25;
-  }
+    /* General */
+    /*===================================*/
+    .button {
+        @apply justify-center inline-flex items-center px-4 py-2 bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150 hover:bg-gray-800 active:bg-gray-900 focus:outline-none disabled:opacity-25;
+    }
 
-  .button-primary {
-    @apply bg-purple-600 hover:bg-purple-700 active:bg-purple-800 focus:border-purple-800;
-  }
+    .button-primary {
+        @apply bg-purple-600 hover:bg-purple-700 active:bg-purple-800 focus:border-purple-800;
+    }
 
-  .button-transparent {
-    @apply bg-transparent border text-gray-500 hover:bg-gray-200;
-  }
+    .button-transparent {
+        @apply bg-transparent border text-gray-500 hover:bg-gray-200;
+    }
 
-  .input {
-    @apply border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm;
-  }
+    .input {
+        @apply border-gray-300 focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50 rounded-md shadow-sm;
+    }
 
-  .checkbox {
-    @apply rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50;
-  }
-  /*===================================*/
+    .checkbox {
+        @apply rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50;
+    }
 
-  /* Codex */
-  /*===================================*/
-  .tab {
-    @apply bg-gray-600 hover:bg-gray-700 flex justify-center items-center flex-1 text-center inline-block text-2xl xl:text-xs text-gray-200 uppercase tracking-wider rounded-t-md cursor-pointer px-2;
-  }
+    /*===================================*/
+    /* Codex */
+    /*===================================*/
+    .tab {
+        @apply bg-gray-600 hover:bg-gray-700 flex justify-center items-center flex-1 text-center inline-block text-2xl xl:text-xs text-gray-200 uppercase tracking-wider rounded-t-md cursor-pointer px-2;
+    }
 
-  .tab-selected {
-    @apply bg-white text-gray-600 font-bold hover:bg-white;
-  }
-  /*===================================*/
+    .tab-selected {
+        @apply bg-white text-gray-600 font-bold hover:bg-white;
+    }
+
+    /*===================================*/
+    .drop-area {
+        @apply relative bg-white text-white;
+    }
+
+    .drop-area > input, .drop-area > button {
+        @apply hidden;
+    }
+
+    .drop-area::before {
+        content: "Drop Here";
+        @apply absolute w-full h-full flex justify-center items-center text-purple-700 border-2 border-dashed border-purple-700 rounded-md uppercase text-xs;
+    }
+}
+
+.moveable-control {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.moveable-line {
+    background-color: transparent !important;
+    height: 5px !important;
+}
+
+.moveable-direction[data-rotation="0"] {
+    cursor: ns-resize !important;
+}
+
+.moveable-direction[data-rotation="45"] {
+    cursor: nesw-resize !important;
+}
+
+.moveable-direction[data-rotation="90"] {
+    cursor: ew-resize !important;
+}
+
+.moveable-direction[data-rotation="135"] {
+    cursor: nwse-resize !important;
 }
 
 .loading {
-  color: transparent !important;
-  pointer-events: none;
-  position: relative;
+    color: transparent !important;
+    pointer-events: none;
+    position: relative;
 }
 
 .loading::after {
-  animation: spin 500ms infinite linear;
-  border: 0.2rem solid white;
-  border-radius: 290486px;
-  border-right-color: transparent;
-  border-top-color: transparent;
-  content: "";
-  display: block;
-  height: 1em;
-  width: 1em;
-  left: calc(50% - (1em / 2));
-  top: calc(50% - (1em / 2));
-  position: absolute;
+    animation: spin 500ms infinite linear;
+    border: 0.2rem solid white;
+    border-radius: 290486px;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    content: "";
+    display: block;
+    height: 1em;
+    width: 1em;
+    left: calc(50% - (1em / 2));
+    top: calc(50% - (1em / 2));
+    position: absolute;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetCheckbox } from '../../resources/js/Components/Jetstream/Checkbox';
+import { JetCheckbox } from '@/Components/Jetstream/Checkbox';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Jetstream\CreateMonster;
+use App\Actions\Jetstream\CreateStatBlock;
 use App\Actions\Jetstream\RemoveMonster;
 use App\Actions\Jetstream\UpdateMonster;
 use App\Models\Action;
 use App\Models\Monster;
+use App\Models\StatBlock;
 use App\Models\User;
 use DB;
 use Facades\App\Import\XML;
@@ -41,22 +42,19 @@ class MonsterController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        $collections = $user->monsters->each->setAppends([
-            'initiative',
-            'speed_array',
-            'senses_array',
-            'damage_vulnerabilities_array',
-            'damage_resistances_array',
-            'damage_immunities_array',
-            'condition_immunities_array',
-            'languages_array',
-            'skills_array',
-            'saves_array'
-        ])->sortBy('name')->groupBy('collection');
-
+//        $collections = $user->monsters()->sortBy('name')->groupBy('collection');
+//
+//        return Inertia::render('Monsters/Index', [
+//            'collections'      => $collections,
+//            'collection_names' => $collections->keys()
+//        ]);
         return Inertia::render('Monsters/Index', [
-            'collections'      => $collections,
-            'collection_names' => $collections->keys()
+            'monsters'    => $user->monsters()->sortBy('name')->values(),
+            'preloaded'   => StatBlock::where('user_id', null)->monsters()->paginate(10),
+            'permissions' => [
+                // TODO: Implement character permissions
+                'canManageMonsters' => true,
+            ],
         ]);
     }
 
@@ -69,7 +67,7 @@ class MonsterController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $creator = app(CreateMonster::class);
+        $creator = app(CreateStatBlock::class);
 
         $creator->create($request->user(), $request->all());
 
@@ -258,12 +256,4 @@ class MonsterController extends Controller
         Action::insert($data);
     }
 
-    public function duplicate(Monster $monster): RedirectResponse
-    {
-        $duplicate = $monster->replicate();
-        $duplicate->name .= ' (Copy)';
-        $duplicate->save();
-
-        return back(303);
-    }
 }

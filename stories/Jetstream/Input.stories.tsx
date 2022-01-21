@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetInput } from '../../resources/js/Components/Jetstream/Input';
+import { JetInput } from '@/Components/Jetstream/Input';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

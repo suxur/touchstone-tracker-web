@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetBanner } from '../../resources/js/Components/Jetstream/Banner';
+import { JetBanner } from '@/Components/Jetstream/Banner';
 
 
 export default {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetLabel } from '../../resources/js/Components/Jetstream/Label';
+import { JetLabel } from '@/Components/Jetstream/Label';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

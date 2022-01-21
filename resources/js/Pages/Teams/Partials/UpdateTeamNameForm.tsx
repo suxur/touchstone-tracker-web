@@ -8,8 +8,8 @@ import { JetInput } from '@/Components/Jetstream/Input';
 import { JetInputError } from '@/Components/Jetstream/InputError';
 import { JetLabel } from '@/Components/Jetstream/Label';
 import { JetstreamTeamPermissions, Team } from '@/types';
-import useRoute from '@/hooks/useRoute';
-import useTypedPage from '@/hooks/useTypedPage';
+import useRoute from '@/Hooks/useRoute';
+import useTypedPage from '@/Hooks/useTypedPage';
 
 interface Props {
   team: Team;

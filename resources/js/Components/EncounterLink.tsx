@@ -3,16 +3,18 @@ import { useState } from 'react';
 import copy from 'clipboard-copy';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import useRoute from '@/Hooks/useRoute';
+
 interface Props {
   slug: string;
 }
 
 export const EncounterLink = ({ slug }: Props) => {
+  const route = useRoute();
   const [copied, setCopied] = useState(false);
   const copyLink = () => {
     setCopied(true);
-    const url = `${process.env.NEXT_PUBLIC_URL}/e/${slug}`;
-    copy(url);
+    copy(route('player.show', { slug}));
     setTimeout(() => {
       setCopied(false);
     }, 1000);

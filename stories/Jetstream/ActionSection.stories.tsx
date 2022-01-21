@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetActionSection } from '../../resources/js/Components/Jetstream/ActionSection';
+import { JetActionSection } from '@/Components/Jetstream/ActionSection';
 
 
 export default {

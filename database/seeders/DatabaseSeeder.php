@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Action;
-use App\Models\Monster;
+use App\Models\StatBlock;
 use App\Models\Spell;
 use App\Models\Team;
 use App\Models\User;
@@ -78,6 +78,7 @@ class DatabaseSeeder extends Seeder
             $data = [
                 'name'                   => $record['name'],
                 'size'                   => $record['size'] ?? null,
+                'stat_block_type'        => 'monster',
                 'type'                   => $record['type'] ?? null,
                 'subtype'                => $record['subtype'] ?? null,
                 'alignment'              => $record['alignment'] ?? null,
@@ -106,12 +107,12 @@ class DatabaseSeeder extends Seeder
                 'legendary_description'  => $record['legendary_desc'] ?? null,
                 'speed_json'             => $record['speed_json'] ? json_encode($record['speed_json']) : null,
                 'armor_description'      => $record['armor_desc'] ?? null,
-                'collection'             => 'Uncategorized',
+                'collection'             => '5e SRD',
                 'created_at'             => Carbon::now()
             ];
 
-            $monster = new Monster($data);
-            $monster->save();
+            $character = new StatBlock($data);
+            $character->save();
 
             $actions = [];
 
@@ -169,19 +170,19 @@ class DatabaseSeeder extends Seeder
                         ]);
                 }
             }
-            $monster->actions()->saveMany($actions);
+
+            $character->actions()->saveMany($actions);
 
             if (isset($record['spells'])) {
-                $monsterSpells = [];
+                $characterSpells = [];
                 foreach ($record['spells'] as $spell) {
                     if ($foundSpell = Spell::where(['name' => trim($spell)])->first()) {
-                        $monsterSpells[] = $foundSpell;
+                        $characterSpells[] = $foundSpell;
                     }
                 }
-                $monsterSpellsIds = collect($monsterSpells)->pluck(['id']);
-                $monster->spells()->sync($monsterSpellsIds);
+                $characterSpellIds = collect($characterSpells)->pluck(['id']);
+                $character->spells()->sync($characterSpellIds);
             }
         }
     }
-
 }

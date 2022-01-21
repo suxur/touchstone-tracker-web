@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-type VoidFn<T = unknown> = (param: T) => void;
+type VoidFn<T = unknown> = (param?: T) => void;
 type SetAction<T> = Dispatch<SetStateAction<T>>
 // TODO: need to confirm type
 type ResponseErrors = Record<string, string>;
@@ -13,6 +13,21 @@ type Routes =
   | 'ENCOUNTER'
   | 'ENCOUNTER_LOOKUP'
   | 'USER';
+
+export type Classes =
+  | 'artificer'
+  | 'barbarian'
+  | 'bard'
+  | 'cleric'
+  | 'druid'
+  | 'fighter'
+  | 'monk'
+  | 'paladin'
+  | 'ranger'
+  | 'rogue'
+  | 'sorcerer'
+  | 'warlock'
+  | 'wizard';
 
 export type InertiaSharedProps<T = {}> = T & {
   jetstream: {
@@ -35,11 +50,85 @@ export type InertiaSharedProps<T = {}> = T & {
   errors: any;
 };
 
+export interface Pagination<T> {
+  current_page: number;
+  data: T[],
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: {
+    url: string | null;
+    label: string;
+    active: boolean;
+  }[];
+  next_page_url: string | null
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
+
+export interface CharacterPermissions {
+  canManageCharacters: boolean;
+}
+
+export interface MonsterPermissions {
+  canManageMonsters: boolean;
+}
+
 export interface JetstreamTeamPermissions {
   canAddTeamMembers: boolean;
   canDeleteTeam: boolean;
   canRemoveTeamMembers: boolean;
   canUpdateTeam: boolean;
+}
+
+export interface Action {
+  id: number;
+  stat_block_id: number;
+  name: string;
+  description: string;
+  attack_bonus: number;
+  damage_dice: string;
+  damage_bonus: number;
+  sort: number;
+  is_reaction: boolean;
+  is_special: boolean;
+  is_legendary: boolean;
+}
+
+export interface Combatant {
+  id: number;
+  stat_block: StatBlock | null;
+  name: string;
+  type: string | null; // ?? 'character' | 'monster' | 'npc'
+  hit_point_maximum: number;
+  current_hit_points: number;
+  temporary_hit_points: number;
+  initiative: number;
+  armor_class: number;
+  action: boolean;
+  bonus_action: boolean;
+  reaction: boolean;
+  death_save_success: number;
+  death_save_failure: number;
+  is_hidden: boolean;
+  order: number;
+}
+
+export interface Encounter {
+  id: number;
+  combatants: Combatant[];
+  user_id: number | null;
+  slug: string;
+  round: number;
+  monster_hp_status: number;
+  character_hp_status: number;
+  active_index: number;
+  is_active: boolean;
+  started_at: string;
 }
 
 export interface Role {
@@ -67,7 +156,6 @@ export interface ApiToken {
   updated_at: DateTime;
 }
 
-
 export interface Session {
   id: number;
   ip_address: string;
@@ -80,63 +168,41 @@ export interface Session {
   last_active: DateTime;
 }
 
-export interface CodexSpell {
-  id: number;
-  name: string;
-}
+export type StatBlockType = 'monster' | 'character';
 
-export interface Action {
-  id: number;
-  combatant_id: number;
-  combatant_type: 'monster' | 'character';
-  name: string;
-  description: string;
-  attack_bonus: number;
-  damage_dice: string;
-  damage_bonus: number;
-  sort: number;
-  is_reaction: boolean;
-  is_special: boolean;
-  is_legendary: boolean;
-}
-
+// Codex
 export interface CodexMonster {
   id: number;
   name: string;
 }
 
-export interface Encounter {
+export interface CodexCharacter {
   id: number;
-  user_id: number | null;
-  round: number;
+  name: string;
+  class: Classes;
+}
+
+export interface CodexSpell {
+  id: number;
+  name: string;
+}
+
+export interface CodexEncounter {
+  id: number;
   slug: string;
-  is_active: boolean;
-  combatants: Combatant[];
+  created_at_diff: string;
 }
 
 export interface EncounterStats {
-  action?: boolean;
-  bonus_action?: boolean;
-  combatant_id?: number;
-  combatant_type: 'monster' | 'character';
-  death_save_failure?: number;
-  death_save_success?: number;
-  encounter_id?: number;
-  extra_action?: boolean;
-  hit_points: number;
-  initiative: number;
-  order?: number;
-  reaction?: boolean;
-  unique_id?: string;
-  unique_name?: string;
 }
 
-export interface Combatant {
+export interface StatBlock {
   id: number;
   user_id: number | null;
   team_id: number | null;
   name: string;
   size: string | null;
+  stat_block_type: string | null;
   type: string | null;
   subtype: string | null;
   alignment: string | null;
@@ -201,7 +267,6 @@ export interface Combatant {
   special_abilities: Action[];
   encounter_stats: EncounterStats;
 }
-
 
 export interface Membership {
   user_id: number,

@@ -23,15 +23,19 @@ class Encounter extends Model
 
     protected $fillable = [
         'slug',
+        'round',
+        'monster_hp_status',
+        'character_hp_status',
+        'hide_monsters_while_not_active',
+        'active_index',
+        'is_active',
     ];
 
-//    protected $with = [
-//        'monsters',
-//        'characters',
-//    ];
+    protected $with = [
+        'combatants',
+    ];
 
     protected $appends = [
-        'combatants',
         'created_at_diff'
     ];
 
@@ -49,34 +53,14 @@ class Encounter extends Model
         return "/e/{$this->slug}";
     }
 
-    public function monsters()
+    public function combatants()
     {
-        return $this->morphedByMany(Monster::class, 'combatant')->using(Combatant::class)->withPivot($this->combatantPivotColumns)->as('encounter_stats')->orderBy('order')->using(EncounterStats::class);
-    }
-
-    public function characters()
-    {
-        return $this->morphedByMany(Character::class, 'combatant')->using(Combatant::class)->withPivot($this->combatantPivotColumns)->as('encounter_stats')->orderBy('order')->using(EncounterStats::class);
-    }
-
-    public function getCombatantsAttribute(): Collection
-    {
-        $combatants = collect();
-        $this->characters->map(function ($character) use ($combatants) {
-            $combatants->push($character);
-        });
-        $this->monsters->map(function ($monster) use ($combatants) {
-            $combatants->push($monster);
-        });
-
-        return $combatants->sortBy(function ($combatant) {
-            return $combatant->encounter_stats->order;
-        })->values();
+        return $this->hasMany(Combatant::class)->orderBy('order');
     }
 
     public function getCombatantsCountAttribute()
     {
-        return $this->getCombatantsAttribute()->count();
+        return $this->combatants()->count();
     }
 
     public function getCreatedAtDiffAttribute()
@@ -110,7 +94,7 @@ class Encounter extends Model
         return $query->onlyTrashed()->whereDate('deleted_at', '<=', Carbon::now()->subMonth());
     }
 
-    public function addCharacterCombatant(Character $character)
+    public function addCharacterCombatant(StatBlock $character)
     {
         $this->characters()->attach([
             $character->id => [
@@ -123,36 +107,22 @@ class Encounter extends Model
         ]);
     }
 
-    public function addMonsterCombatant(Monster $monster)
+    public function addMonsterCombatant(StatBlock $character)
     {
-//        if ($combatant['id']) {
-//            $monster = Monster::find($combatant['id']);
-//        } else {
-//            $monsterData = [
-//                'name' => $combatant['name'],
-//                'collection' => 'Uncategorized',
-//            ];
-//
-//            if ($user) {
-//                $monsterData['user_id'] = $user->id;
-//            }
-//
-//            $monster = Monster::create($monsterData);
-//        }
         $updateData = [
-            'unique_name' => $monster->name,
+            'unique_name' => $character->name,
             'unique_id'   => Str::random(8),
-            'hit_points'  => $monster->hit_points,
-            'initiative'  => $monster->initiative,
+            'hit_points'  => $character->hit_points,
+            'initiative'  => $character->initiative,
             'order'       => $this->combatants_count,
         ];
 
-        if (($count = $this->monsters()->where('id', $monster->id)->count()) > 0) {
-            $updateData['unique_name'] = $monster->name . ' ' . $count;
+        if (($count = $this->combatants()->where('id', $character->id)->count()) > 0) {
+            $updateData['unique_name'] = $character->name . ' ' . $count;
         }
 
-        $this->monsters()->attach([
-            $monster->id => $updateData
+        $this->combatants()->attach([
+            $character->id => $updateData
         ]);
     }
 }

@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
-import useRoute from '@/hooks/useRoute';
+import useRoute from '@/Hooks/useRoute';
 import { JetActionSection } from '@/Components/Jetstream/ActionSection';
 import { JetDangerButton } from '@/Components/Jetstream/DangerButton';
 import { JetDialogModal } from '@/Components/Jetstream/DialogModal';

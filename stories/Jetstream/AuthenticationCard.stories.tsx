@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetAuthenticationCard } from '../../resources/js/Components/Jetstream/AuthenticationCard';
+import { JetAuthenticationCard } from '@/Components/Jetstream/AuthenticationCard';
 
 
 export default {

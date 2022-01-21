@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetConfirmationModal } from '../../resources/js/Components/Jetstream/ConfirmationModal';
+import { JetConfirmationModal } from '@/Components/Jetstream/ConfirmationModal';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

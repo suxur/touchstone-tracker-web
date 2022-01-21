@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { TabTypes } from './Codex';
+
+import { TabTypes } from '@/Components/Codex/Codex';
 
 interface Props {
   type: TabTypes;
@@ -10,7 +11,7 @@ export const CodexTab = ({ type, title }: Props) => (
   <>
     <span className="hidden xl:inline-block">{title}</span>
     <span className="inline-block xl:hidden">
-        <i className={`icon-${type}s`} />
-      </span>
+      <i className={`icon-${type}s`} />
+    </span>
   </>
 );

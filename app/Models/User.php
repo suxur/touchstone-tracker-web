@@ -65,6 +65,7 @@ class User extends Authenticatable
 
     protected $with = [
         'teams',
+        'ownedTeams'
     ];
 
     public function encounters()
@@ -72,60 +73,44 @@ class User extends Authenticatable
         return $this->hasMany(Encounter::class);
     }
 
+    public function statBlocks()
+    {
+        return $this->hasMany(StatBlock::class);
+    }
+
+    /**
+     * Remove the given user from the team.
+     *
+     * @param StatBlock $statBlock
+     * @return void
+     */
+    public function removeStatBlock(StatBlock $statBlock)
+    {
+        $statBlock->delete();
+    }
+
+    /**
+     * Determine if the user owns the given character.
+     *
+     * @param mixed $statBlock
+     * @return bool
+     */
+    public function ownsStatBlock($statBlock): bool
+    {
+        if (is_null($statBlock)) {
+            return false;
+        }
+
+        return $this->id === $statBlock->{$this->getForeignKey()};
+    }
+
+    public function characters()
+    {
+        return $this->statBlocks()->where('stat_block_type', 'character')->get();
+    }
+
     public function monsters()
     {
-        return $this->hasMany(Monster::class);
-    }
-
-    /**
-     * Remove the given user from the team.
-     *
-     * @param Character $character
-     * @return void
-     */
-    public function removeCharacter($character)
-    {
-        $character->delete();
-    }
-
-    /**
-     * Determine if the user owns the given character.
-     *
-     * @param mixed $character
-     * @return bool
-     */
-    public function ownsCharacter($character): bool
-    {
-        if (is_null($character)) {
-            return false;
-        }
-
-        return $this->id === $character->{$this->getForeignKey()};
-    }
-
-    /**
-     * Determine if the user owns the given character.
-     *
-     * @param mixed $monster
-     * @return bool
-     */
-    public function ownsMonster($monster)
-    {
-        if (is_null($monster)) {
-            return false;
-        }
-
-        return $this->id === $monster->{$this->getForeignKey()};
-    }
-
-    /**
-     * Remove the given user from the team.
-     *
-     * @param Monster $monster
-     * @return void
-     */
-    public function removeMonster(Monster $monster): void
-    {
-        $monster->delete();
+        return $this->statBlocks()->where('stat_block_type', 'monster')->get();
     }
 }

@@ -24,7 +24,6 @@ class ActionFactory extends Factory
         return [
             'id'             => null,
             'combatant_id'   => null,
-            'combatant_type' => null,
             'name'           => $this->faker->name,
             'description'    => $this->faker->text,
             'attack_bonus'   => $this->faker->numberBetween(0, 10),

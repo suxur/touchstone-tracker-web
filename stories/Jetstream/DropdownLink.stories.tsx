@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { JetDropdownLink } from '../../resources/js/Components/Jetstream/DropdownLink';
+import { JetDropdownLink } from '@/Components/Jetstream/DropdownLink';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

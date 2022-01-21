@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Encounters\Encounters;
 use App\Events\UpdateEncounter;
 use App\Http\Controllers\Controller;
-use App\Models\Character;
+use App\Models\StatBlock;
 use App\Models\Encounter;
 use App\Models\Monster;
 use App\Models\Spell;
@@ -50,7 +50,7 @@ class EncounterController extends Controller
 
         if ($lookup = $request->get('lookup')) {
             $slug = Encounters::lookup($lookup);
-            return redirect()->route('encounter.player', ['slug' => $slug]);
+            return redirect()->route('player.show', ['slug' => $slug]);
         }
 
         // Show errors...
@@ -197,7 +197,7 @@ class EncounterController extends Controller
         }
 
         if ($type === Encounter::COMBATANT_CHARACTER) {
-            $characters = Character::find($ids);
+            $characters = StatBlock::find($ids);
 //            } else {
 //                $characterData = [
 //                    'name' => $combatant['name']
@@ -252,7 +252,7 @@ class EncounterController extends Controller
                 }
 
                 if ($combatant['encounter_stats']['combatant_type'] === Encounter::COMBATANT_CHARACTER) {
-                    Character::where('id', $combatant['id'])->update(['hit_points' => $combatant['hit_points'], 'armor_class' => $combatant['armor_class']]);
+                    StatBlock::where('id', $combatant['id'])->update(['hit_points' => $combatant['hit_points'], 'armor_class' => $combatant['armor_class']]);
                     $characters[$combatant['id']] = $updateData;
                 }
             }

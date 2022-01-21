@@ -3,11 +3,12 @@
 namespace App\Providers;
 
 use App\Encounters\Permissions;
-use App\Models\Character;
+use App\Models\StatBlock;
 use App\Models\Encounter;
 use App\Models\Team;
 use App\Policies\CharacterPolicy;
 use App\Policies\EncounterPolicy;
+use App\Policies\StatBlockPolicy;
 use App\Policies\TeamPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -22,7 +23,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Team::class      => TeamPolicy::class,
-        Character::class => CharacterPolicy::class,
+        StatBlock::class => StatBlockPolicy::class,
         Encounter::class => EncounterPolicy::class,
     ];
 
@@ -36,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         ResetPassword::createUrlUsing(function($notifiable, $token) {
-            return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
+            return config('app.url')."/reset-password/$token?email={$notifiable->getEmailForPasswordReset()}";
         });
 
         Gate::define(Permissions::EDIT, function ($user, $encounter) {

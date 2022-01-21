@@ -8,7 +8,8 @@ import { JetInput } from '@/Components/Jetstream/Input';
 import { JetInputError } from '@/Components/Jetstream/InputError';
 import { JetLabel } from '@/Components/Jetstream/Label';
 import { JetstreamTeamPermissions, Role, Team } from '@/types';
-import useRoute from '@/hooks/useRoute';
+import useRoute from '@/Hooks/useRoute';
+import { Roles } from '@/Domains/Teams/Components/Roles';
 
 interface Props {
   team: Team;
@@ -76,57 +77,14 @@ export const AddTeamMember = ({ team, permissions, availableRoles }: Props) => {
 
       {/* <!-- Role --> */}
       {availableRoles.length > 0 && (
-
         <div className="col-span-6 lg:col-span-4" v-if="availableRoles.length > 0">
           <JetLabel htmlFor="roles" value="Role" />
           <JetInputError message={form.errors.role} className="mt-2" />
-
-          <div className="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
-            {availableRoles.map((role, i) => (
-              <button
-                type="button"
-                className={clsx(
-                  'relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200',
-                  {
-                    'border-t border-gray-200 rounded-t-none': i > 0,
-                    'rounded-b-none': i != Object.keys(availableRoles).length - 1
-                  },
-                )}
-                onClick={() => {
-                  form.setData('role', role.key);
-                }}
-                key={role.key}
-              >
-                <div className={clsx({ 'opacity-50': form.data.role && form.data.role != role.key })}>
-                  {/* <!-- Role Name --> */}
-                  <div className="flex items-center">
-                    <div className={clsx('text-sm text-gray-600', { 'font-semibold': form.data.role == role.key })}>
-                      {role.name}
-                    </div>
-
-                    {form.data.role === role.key && (
-                      <svg
-                        className="ml-2 h-5 w-5 text-green-400"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    )}
-                  </div>
-
-                  {/* <!-- Role Description --> */}
-                  <div className="mt-2 text-xs text-gray-600 text-left">
-                    {role.description}
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+          <Roles
+            roles={availableRoles}
+            onClick={(key) => form.setData('role', key)}
+            selected={form.data.role}
+          />
         </div>
       )}
     </JetFormSection>

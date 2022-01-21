@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { Link } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
 
-import route from '../../lib/route';
 import { JetApplicationLogo, JetNavLink, JetResponsiveNavLink } from '@/Components/Jetstream';
-import { useUser } from '@/hooks/useUser';
-import { User } from '@/Layouts/Nav/User';
+import { useUser } from '@/Hooks/useUser';
+import { UserMenu } from '@/Layouts/Nav/UserMenu';
+import useRoute from '@/Hooks/useRoute';
 
 const Nav = () => {
+  const route = useRoute();
   const user = useUser();
   // const hasTeamFeatures = false;
   // const canCreateTeams = false;
@@ -33,12 +34,12 @@ const Nav = () => {
             {user && (
               <div className="hidden space-x-2 md:-my-px md:ml-6 md:flex">
                 <JetNavLink href="/e">
-                  Encounters
+                  Encounter
                 </JetNavLink>
                 <JetNavLink href="/monsters">
                   Monsters
                 </JetNavLink>
-                <JetNavLink href="/characters">
+                <JetNavLink href={route('characters.index')}>
                   Characters
                 </JetNavLink>
               </div>
@@ -46,12 +47,12 @@ const Nav = () => {
           </div>
           {!user ? (
             <div className="hidden md:flex md:items-center md:ml-6">
-              <Link href={route('welcome')} className="button bg-purple-600 hover:bg-purple-700">
+              <Link href={route('login')} className="button bg-purple-600 hover:bg-purple-700">
                 Login
               </Link>
             </div>
           ) : (
-            <User />
+            <UserMenu />
           )}
           {/* Hamburger */}
           <div className="-mr-2 flex items-center md:hidden">
