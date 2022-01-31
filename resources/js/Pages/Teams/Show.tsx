@@ -13,36 +13,34 @@ interface Props {
   availableRoles: Role[];
 }
 
-const Show = ({ availableRoles, team, permissions }: Props) => {
-  return (
-    <AppLayout title="Team Settings">
-      <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8 bg-gray-100">
-        <UpdateTeamNameForm team={team} permissions={permissions} />
-        {permissions.canAddTeamMembers && (
-          <>
-            <JetSectionBorder />
-            <AddTeamMember
-              team={team}
-              availableRoles={availableRoles}
-              permissions={permissions}
-            />
-            {team.team_invitations.length > 0 && (
-              <>
-                <JetSectionBorder />
-                <PendingTeamInvitation team={team} permissions={permissions} />
-              </>
-            )}
-            <JetSectionBorder />
-            <ManageTeamMembers
-              team={team}
-              availableRoles={availableRoles}
-              permissions={permissions}
-            />
-          </>
+const Show = ({ availableRoles, team, permissions }: Props) => (
+  <AppLayout title="Team Settings">
+    <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8 bg-gray-100">
+      <UpdateTeamNameForm team={team} permissions={permissions} />
+      {permissions.canAddTeamMembers && (
+      <>
+        <JetSectionBorder />
+        <AddTeamMember
+          team={team}
+          availableRoles={availableRoles}
+          permissions={permissions}
+        />
+        {team.team_invitations.length > 0 && (
+        <>
+          <JetSectionBorder />
+          <PendingTeamInvitation team={team} permissions={permissions} />
+        </>
         )}
-      </div>
-    </AppLayout>
-  );
-};
+        <JetSectionBorder />
+        <ManageTeamMembers
+          team={team}
+          availableRoles={availableRoles}
+          permissions={permissions}
+        />
+      </>
+      )}
+    </div>
+  </AppLayout>
+);
 
 export default Show;

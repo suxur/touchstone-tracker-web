@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { FC, PropsWithChildren } from 'react';
-import Nav from './Nav/Nav';
+import { PropsWithChildren } from 'react';
 import { Head } from '@inertiajs/inertia-react';
+
+import Nav from './Nav/Nav';
 
 interface Props {
   title?: string;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AppLayout } from '@/Layouts/AppLayout';
-import { JetstreamTeamPermissions, Role, Team, User } from '@/types';
+import { User } from '@/types';
 import { CreateTeamForm } from '@/Pages/Teams/Partials/CreateTeamForm';
 
 interface Props {

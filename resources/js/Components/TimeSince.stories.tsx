@@ -12,5 +12,5 @@ const Template: ComponentStory<typeof TimeSince> = (args) => <TimeSince {...args
 
 export const Default = Template.bind({});
 Default.args = {
-  date: '2021-12-15 03:53:42'
+  date: '2021-12-15 03:53:42',
 };

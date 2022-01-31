@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { KeyboardEventHandler, useMemo } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-
-import { JetButton, JetInput } from '@/Components/Jetstream';
 import { kebabCase, last } from 'lodash';
-import { DeleteButton } from '@/Components/Button/DeleteButton';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { reorder } from '@/lib/helpers';
+import { JetButton, JetInput } from '@/Components/Jetstream';
+import { DeleteButton } from '@/Components/Button/DeleteButton';
 
 export type DragItems = {
   key: string,
@@ -26,7 +26,7 @@ export const DynamicInput = ({ title, items, setItems }: Props) => {
   };
 
   const editItem = (value: string, index: number) => {
-    setItems(items.map((i, id) => id === index ? { ...i, value } : i));
+    setItems(items.map((i, id) => (id === index ? { ...i, value } : i)));
   };
 
   const removeItem = (index: number) => {
@@ -72,40 +72,41 @@ export const DynamicInput = ({ title, items, setItems }: Props) => {
         )}
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId={kebabCase(title)}>{provided => (
-          <div
-            ref={provided.innerRef}
-            className="flex flex-col w-full"
-            {...provided.droppableProps}
-          >
-            {items.map((item, index) => (
-              <Draggable draggableId={item.key} index={index} key={item.key}>
-                {provided => (
-                  <div
-                    ref={provided.innerRef}
-                    className="mt-2 w-full bg-white py-2 rounded-md flex items-center"
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <div className="flex justify-center items-center cursor-move handle w-10">
-                      <FontAwesomeIcon icon="grip-lines" />
+        <Droppable droppableId={kebabCase(title)}>
+          {dropProvided => (
+            <div
+              ref={dropProvided.innerRef}
+              className="flex flex-col w-full"
+              {...dropProvided.droppableProps}
+            >
+              {items.map((item, index) => (
+                <Draggable draggableId={item.key} index={index} key={item.key}>
+                  {dragProvided => (
+                    <div
+                      ref={dragProvided.innerRef}
+                      className="mt-2 w-full bg-white py-2 rounded-md flex items-center"
+                      {...dragProvided.draggableProps}
+                      {...dragProvided.dragHandleProps}
+                    >
+                      <div className="flex justify-center items-center cursor-move handle w-10">
+                        <FontAwesomeIcon icon="grip-lines" />
+                      </div>
+                      <JetInput
+                        type="text"
+                        value={item.value}
+                        className="flex flex-grow mr-2"
+                        onChange={e => editItem(e.target.value, index)}
+                        onKeyUp={onKeyUp}
+                        autoFocus
+                      />
+                      <DeleteButton onClick={() => removeItem(index)} />
                     </div>
-                    <JetInput
-                      type="text"
-                      value={item.value}
-                      className="flex flex-grow mr-2"
-                      onChange={e => editItem(e.target.value, index)}
-                      onKeyUp={onKeyUp}
-                      autoFocus
-                    />
-                    <DeleteButton onClick={() => removeItem(index)} />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
+                  )}
+                </Draggable>
+              ))}
+              {dropProvided.placeholder}
+            </div>
+          )}
         </Droppable>
       </DragDropContext>
       {items.length > 0 && (

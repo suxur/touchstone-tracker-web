@@ -14,10 +14,6 @@ class Combatant extends Model
 
     protected $guarded = [];
 
-    protected $with = [
-        'statBlock',
-    ];
-
     protected $casts = [
         'action'       => 'boolean',
         'bonus_action' => 'boolean',

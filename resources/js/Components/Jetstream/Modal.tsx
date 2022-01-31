@@ -46,8 +46,8 @@ export const JetModal = ({ isOpen, onClose, maxWidth = '2xl', children }: PropsW
               className="hidden sm:inline-block sm:align-top sm:h-screen"
               aria-hidden="true"
             >
-            &#8203;
-          </span>
+              &#8203;
+            </span>
             <Transition.Child
               as={React.Fragment}
               enter="ease-out duration-300"
@@ -74,4 +74,4 @@ export const JetModal = ({ isOpen, onClose, maxWidth = '2xl', children }: PropsW
   }
 
   return null;
-}
+};

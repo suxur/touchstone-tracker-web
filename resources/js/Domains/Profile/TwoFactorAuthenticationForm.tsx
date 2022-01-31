@@ -17,17 +17,6 @@ export default function TwoFactorAuthenticationForm() {
   const [recoveryCodes, setRecoveryCodes] = useState<string[]>([]);
   const twoFactorEnabled = page.props?.user?.two_factor_enabled;
 
-  function enableTwoFactorAuthentication() {
-    setEnabling(true);
-
-    axios.post('/user/two-factor-authentication').then(() => {
-      Promise.all([showQrCode(), showRecoveryCodes()]).then(() => {
-        setEnabling(false);
-        Inertia.reload();
-      });
-    });
-  }
-
   function showQrCode() {
     return axios.get('/user/two-factor-qr-code').then(response => {
       setQrCode(response.data.svg);
@@ -40,8 +29,19 @@ export default function TwoFactorAuthenticationForm() {
     });
   }
 
+  function enableTwoFactorAuthentication() {
+    setEnabling(true);
+
+    axios.post('/user/two-factor-authentication').then(() => {
+      Promise.all([showQrCode(), showRecoveryCodes()]).then(() => {
+        setEnabling(false);
+        Inertia.reload();
+      });
+    });
+  }
+
   function regenerateRecoveryCodes() {
-    axios.post('/user/two-factor-recovery-codes').then(response => {
+    axios.post('/user/two-factor-recovery-codes').then(() => {
       showRecoveryCodes();
     });
   }
@@ -57,10 +57,8 @@ export default function TwoFactorAuthenticationForm() {
 
   return (
     <JetActionSection
-      title={'Two Factor Authentication'}
-      description={
-        'Add additional security to your account using two factor authentication.'
-      }
+      title="Two Factor Authentication"
+      description="Add additional security to your account using two factor authentication."
     >
       {twoFactorEnabled ? (
         <h3 className="text-lg font-medium text-gray-900">

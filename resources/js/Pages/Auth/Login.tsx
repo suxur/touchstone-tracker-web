@@ -24,11 +24,9 @@ export default function Login({ status, canResetPassword }: Props) {
     remember: false,
   });
 
-  useEffect(() => {
-    return () => {
-      form.reset('password');
-    };
-  }, []);
+  useEffect(() => () => {
+    form.reset('password');
+  }, [form]);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();

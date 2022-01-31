@@ -8,7 +8,7 @@ import {
   JetButton,
   JetConfirmationModal,
   JetDialogModal,
-  JetSecondaryButton
+  JetSecondaryButton,
 } from '@/Components/Jetstream';
 import useTypedPage from '@/Hooks/useTypedPage';
 import clsx from 'clsx';
@@ -24,7 +24,7 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
   const page = useTypedPage();
   const route = useRoute();
 
-  const [managingRoleFor, setManagingRoleFor] = useState<User>();
+  const [, setManagingRoleFor] = useState<User>();
   const [currentlyManagingRole, setCurrentlyManagingRole] = useState(false);
   const [confirmingLeavingTeam, setConfirmingLeavingTeam] = useState(false);
 
@@ -42,7 +42,7 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
   const leaveForm = useForm({});
   const leaveTeam = () => {
     leaveForm.delete(route('team-members.destroy', { team, user: page.props.user }));
-  }
+  };
 
   const addTeamMember = () => {
     form.post(route('teams.update', { team }), {
@@ -54,7 +54,7 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
   const updateRole = () => {
     updateRoleForm.put(route('team-members.update', { team, user: currentlyManagingRole }), {
       preserveScroll: true,
-      onSuccess: () => setCurrentlyManagingRole(false)
+      onSuccess: () => setCurrentlyManagingRole(false),
     });
   };
 
@@ -64,9 +64,7 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
     setCurrentlyManagingRole(true);
   };
 
-  const displayableRole = useCallback((role: string) => {
-    return availableRoles.find(r => r.key === role)?.name;
-  }, [availableRoles]);
+  const displayableRole = useCallback((role: string) => availableRoles.find(r => r.key === role)?.name, [availableRoles]);
 
   const confirmLeavingTeam = () => {
   };
@@ -77,8 +75,8 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
 
   return (
     <JetActionSection
-      title={'Team Members'}
-      description={`All of the people that are part of this team.`}
+      title="Team Members"
+      description="All of the people that are part of this team."
     >
       <div className="space-y-6">
         {team.users.map(user => (
@@ -148,7 +146,7 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
 
       <JetConfirmationModal isOpen={confirmingLeavingTeam} onClose={() => setConfirmingLeavingTeam(false)}>
         <JetConfirmationModal.Content title="Leave Team">
-            Are you sure you would like to leave this team?
+          Are you sure you would like to leave this team?
         </JetConfirmationModal.Content>
         <JetConfirmationModal.Footer>
           <JetSecondaryButton onClick={() => setConfirmingLeavingTeam(false)}>Cancel</JetSecondaryButton>
@@ -162,26 +160,26 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
         </JetConfirmationModal.Footer>
       </JetConfirmationModal>
 
-      {/*  <!-- Remove Team Member Confirmation Modal -->*/}
-      {/*  <JetConfirmationModal :show="teamMemberBeingRemoved" @close="teamMemberBeingRemoved = null">*/}
-      {/*    <template #title>*/}
-      {/*  Remove Team Member*/}
-      {/*  </template>*/}
+      {/*  <!-- Remove Team Member Confirmation Modal --> */}
+      {/*  <JetConfirmationModal :show="teamMemberBeingRemoved" @close="teamMemberBeingRemoved = null"> */}
+      {/*    <template #title> */}
+      {/*  Remove Team Member */}
+      {/*  </template> */}
 
-      {/*  <template #content>*/}
-      {/*  Are you sure you would like to remove this person from the team?*/}
-      {/*</template>*/}
+      {/*  <template #content> */}
+      {/*  Are you sure you would like to remove this person from the team? */}
+      {/* </template> */}
 
-      {/*  <template #footer>*/}
-      {/*  <jet-secondary-button @click="teamMemberBeingRemoved = null">*/}
-      {/*    Cancel*/}
-      {/*    </jet-secondary-button>*/}
+      {/*  <template #footer> */}
+      {/*  <jet-secondary-button @click="teamMemberBeingRemoved = null"> */}
+      {/*    Cancel */}
+      {/*    </jet-secondary-button> */}
 
-      {/*  <jet-danger-button class="ml-2" @click="removeTeamMember" :class="{ 'opacity-25': removeTeamMemberForm.processing }" :disabled="removeTeamMemberForm.processing">*/}
-      {/*    Remove*/}
-      {/*    </jet-danger-button>*/}
-      {/*</template>*/}
-      {/*</JetConfirmationModal>*/}
+      {/*  <jet-danger-button class="ml-2" @click="removeTeamMember" :class="{ 'opacity-25': removeTeamMemberForm.processing }" :disabled="removeTeamMemberForm.processing"> */}
+      {/*    Remove */}
+      {/*    </jet-danger-button> */}
+      {/* </template> */}
+      {/* </JetConfirmationModal> */}
 
     </JetActionSection>
   );

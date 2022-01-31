@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { CombatantRow } from './CombatantRow';
-import { Action, Combatant, EncounterStats } from '@/types';
+import { Combatant } from '@/types';
+import { CombatantRow } from '@/Components/Encounter/CombatantRow';
 
 export default {
   title: 'CombatantRow',
@@ -22,6 +22,7 @@ export const Default = Template.bind({});
 Default.args = {
   combatant: {
     id: 1,
+    encounter_id: 1,
     stat_block: null,
     name: 'Alodray',
     type: 'character',

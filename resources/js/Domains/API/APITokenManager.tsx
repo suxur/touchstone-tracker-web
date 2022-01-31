@@ -38,10 +38,8 @@ export default function APITokenManager({
   });
   const deleteApiTokenForm = useForm({});
   const [displayingToken, setDisplayingToken] = useState(false);
-  const [managingPermissionsFor, setManagingPermissionsFor] =
-    useState<ApiToken | null>(null);
-  const [apiTokenBeingDeleted, setApiTokenBeingDeleted] =
-    useState<ApiToken | null>(null);
+  const [managingPermissionsFor, setManagingPermissionsFor] = useState<ApiToken | null>(null);
+  const [apiTokenBeingDeleted, setApiTokenBeingDeleted] = useState<ApiToken | null>(null);
   const page = usePage<any>();
 
   function createApiToken() {
@@ -96,10 +94,8 @@ export default function APITokenManager({
       {/* <!-- Generate API Token --> */}
       <JetFormSection
         onSubmit={createApiToken}
-        title={'Create API Token'}
-        description={
-          'API tokens allow third-party services to authenticate with our application on your behalf.'
-        }
+        title="Create API Token"
+        description="API tokens allow third-party services to authenticate with our application on your behalf."
         renderActions={() => (
           <>
             <JetActionMessage
@@ -128,9 +124,7 @@ export default function APITokenManager({
             type="text"
             className="mt-1 block w-full"
             value={createApiTokenForm.data.name}
-            onChange={e =>
-              createApiTokenForm.setData('name', e.currentTarget.value)
-            }
+            onChange={e => createApiTokenForm.setData('name', e.currentTarget.value)}
             autoFocus
           />
           <JetInputError
@@ -191,10 +185,8 @@ export default function APITokenManager({
           {/* <!-- Manage API Tokens --> */}
           <div className="mt-10 sm:mt-0">
             <JetActionSection
-              title={'Manage API Tokens'}
-              description={
-                'You may delete any of your existing tokens if they are no longer needed.'
-              }
+              title="Manage API Tokens"
+              description="You may delete any of your existing tokens if they are no longer needed."
             >
               {/* <!-- API Token List --> */}
               <div className="space-y-6">
@@ -241,10 +233,9 @@ export default function APITokenManager({
         isOpen={displayingToken}
         onClose={() => setDisplayingToken(false)}
       >
-        <JetDialogModal.Content title={'API Token'}>
+        <JetDialogModal.Content title="API Token">
           <div>
-            Please copy your new API token. For your security, it won't be shown
-            again.
+            Please copy your new API token. For your security, it won't be shown again.
           </div>
 
           <div className="mt-4 bg-gray-100 px-4 py-2 rounded font-mono text-sm text-gray-500">
@@ -263,7 +254,7 @@ export default function APITokenManager({
         isOpen={!!managingPermissionsFor}
         onClose={() => setManagingPermissionsFor(null)}
       >
-        <JetDialogModal.Content title={'API Token Permissions'}>
+        <JetDialogModal.Content title="API Token Permissions">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {availablePermissions.map(permission => (
               <div key={permission}>
@@ -323,7 +314,7 @@ export default function APITokenManager({
         isOpen={!!apiTokenBeingDeleted}
         onClose={() => setApiTokenBeingDeleted(null)}
       >
-        <JetConfirmationModal.Content title={'Delete API Token'}>
+        <JetConfirmationModal.Content title="Delete API Token">
           Are you sure you would like to delete this API token?
         </JetConfirmationModal.Content>
         <JetConfirmationModal.Footer>

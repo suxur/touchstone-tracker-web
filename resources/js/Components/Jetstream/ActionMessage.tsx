@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Transition } from '@headlessui/react';
 import { PropsWithChildren } from 'react';
+import { Transition } from '@headlessui/react';
 
 interface Props {
   on: boolean;

@@ -34,7 +34,7 @@ export const JetResponsiveNavLink = ({
         </button>
       ) : (
         <Link href={href || ''} className={classes}>
-            {children}
+          {children}
         </Link>
       )}
     </div>

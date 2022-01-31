@@ -4,7 +4,6 @@ import { useForm } from '@inertiajs/inertia-react';
 
 import { MonsterPermissions, StatBlock } from '@/types';
 import useRoute from '@/Hooks/useRoute';
-import useTypedPage from '@/Hooks/useTypedPage';
 import { JetActionSection, JetButton } from '@/Components/Jetstream';
 import { DeleteButton } from '@/Components/Button/DeleteButton';
 import { CloneButton } from '@/Components/Button/CloneButton';
@@ -22,11 +21,10 @@ type DeleteModal = {
 }
 
 export const ManageMonsters = ({ monsters, permissions }: Props) => {
-  const page = useTypedPage();
   const route = useRoute();
 
   const [createMonsterModal, setCreateMonsterModal] = useState({
-    isOpen: false
+    isOpen: false,
   });
 
   const [deleteModal, setDeleteModal] = useState<DeleteModal>({
@@ -80,7 +78,7 @@ export const ManageMonsters = ({ monsters, permissions }: Props) => {
       />
       <DeleteStatBlockModal
         isOpen={deleteModal.isOpen}
-        stat_block={deleteModal.monster}
+        statBlock={deleteModal.monster}
         type="monster"
         onClose={() => setDeleteModal({ ...deleteModal, isOpen: false })}
       />

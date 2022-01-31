@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 type VoidFn<T = unknown> = (param?: T) => void;
 type SetAction<T> = Dispatch<SetStateAction<T>>
+
 // TODO: need to confirm type
 type ResponseErrors = Record<string, string>;
 
@@ -29,7 +30,7 @@ export type Classes =
   | 'warlock'
   | 'wizard';
 
-export type InertiaSharedProps<T = {}> = T & {
+export type InertiaSharedProps<T = Record<string, unknown>> = T & {
   jetstream: {
     canCreateTeams: boolean;
     canManageTwoFactorAuthentication: boolean;
@@ -101,9 +102,10 @@ export interface Action {
 
 export interface Combatant {
   id: number;
+  encounter_id: number;
   stat_block: StatBlock | null;
   name: string;
-  type: string | null; // ?? 'character' | 'monster' | 'npc'
+  type: 'monster' | 'character';
   hit_point_maximum: number;
   current_hit_points: number;
   temporary_hit_points: number;
@@ -193,9 +195,6 @@ export interface CodexEncounter {
   created_at_diff: string;
 }
 
-export interface EncounterStats {
-}
-
 export interface StatBlock {
   id: number;
   user_id: number | null;
@@ -265,7 +264,6 @@ export interface StatBlock {
   legendary_actions: Action[];
   reactions: Action[];
   special_abilities: Action[];
-  encounter_stats: EncounterStats;
 }
 
 export interface Membership {
@@ -325,4 +323,3 @@ export interface Spell {
   is_ritual: boolean;
   requires_concentration: boolean;
 }
-

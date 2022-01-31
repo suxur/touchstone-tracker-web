@@ -35,25 +35,21 @@ export const AddTeamMember = ({ team, permissions, availableRoles }: Props) => {
   return (
     <JetFormSection
       onSubmit={addTeamMember}
-      title={'Add Team Member'}
-      description={`Add a new team member to your team, allowing them to collaborate with you.`}
-      renderActions={() => (
+      title="Add Team Member"
+      description="Add a new team member to your team, allowing them to collaborate with you."
+      renderActions={() => (permissions.canUpdateTeam ? (
         <>
-          {permissions.canUpdateTeam && (
-            <>
-              <JetButton
-                className={clsx({ 'opacity-25': form.processing })}
-                disabled={form.processing}
-              >
-                Add
-              </JetButton>
-              <JetActionMessage on={form.recentlySuccessful} className="ml-3">
-                Added.
-              </JetActionMessage>
-            </>
-          )}
+          <JetButton
+            className={clsx({ 'opacity-25': form.processing })}
+            disabled={form.processing}
+          >
+            Add
+          </JetButton>
+          <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+            Added.
+          </JetActionMessage>
         </>
-      )}
+      ) : <div />)}
     >
       {/* <!-- Team Owner Information --> */}
       <div className="col-span-6">

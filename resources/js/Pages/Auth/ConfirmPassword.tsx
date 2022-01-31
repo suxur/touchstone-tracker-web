@@ -19,7 +19,7 @@ export default function ConfirmPassword() {
     form.post(route('password.confirm'), {
       onFinish: () => form.reset(),
     });
-  }
+  };
 
   return (
     <JetAuthenticationCard>

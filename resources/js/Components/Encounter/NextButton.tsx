@@ -1,28 +1,26 @@
 import * as React from 'react';
-import { useForm } from '@inertiajs/inertia-react';
-
-import useRoute from '@/Hooks/useRoute';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { JetButton } from '@/Components/Jetstream';
+
 import { useEncounter } from '@/Hooks/useEncounter';
+import { JetButton } from '@/Components/Jetstream';
 
 export const NextButton = () => {
-
-  const { encounter } = useEncounter();
-  const route = useRoute();
-  const form = useForm({
-    increment_active_index: true
-  });
+  const { encounter, mutation } = useEncounter();
 
   const onClick = () => {
-    form.post(route('encounters.update', { encounter }), {
-      only: ['encounter'],
-    });
+    if (encounter) {
+      if (encounter.active_index === encounter.combatants.length - 1) {
+        mutation.mutate({ ...encounter, round: encounter.round + 1, active_index: 0 });
+      } else {
+        mutation.mutate({ ...encounter, active_index: encounter.active_index + 1 });
+      }
+    }
   };
 
   return (
     <JetButton onClick={onClick}>
-      Next &nbsp;<FontAwesomeIcon icon="chevron-right" />
+      Next
+      <FontAwesomeIcon icon="chevron-right" className="ml-1" />
     </JetButton>
   );
 };

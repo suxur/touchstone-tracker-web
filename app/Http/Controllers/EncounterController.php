@@ -251,35 +251,52 @@ class EncounterController extends Controller
     {
         $this->authorize('update', $encounter);
 
-        $encounter->fill($request->all());
+        $encounter->fill($request->except(['is_active']));
+
+        // Update During Encounter
+        if ($request->get('is_active') && $encounter->is_active) {
+            foreach ($request->get('combatants') as $index => $requestCombatant) {
+                $combatant = $encounter->combatants()->where('id', $requestCombatant['id'])->first();
+                $combatant->order = $index;
+                $combatant->save();
+            }
+        }
+
+        // End Encounter
+        if (!$request->get('is_active') && $encounter->is_active) {
+            $encounter->is_active = false;
+            $encounter->round = 1;
+            $encounter->active_index = 0;
+            $encounter->started_at = null;
+
+            foreach ($encounter->combatants as $combatant) {
+                $combatant->action = false;
+                $combatant->bonus_action = false;
+                $combatant->reaction = false;
+                $combatant->death_save_success = 0;
+                $combatant->death_save_failure = 0;
+                $combatant->initiative = $combatant->statBlock->initiative ?? 0;
+                $combatant->save();
+            }
+        }
+
+        // Start Encounter
+        if ($request->get('is_active') && !$encounter->is_active) {
+            $encounter->is_active = true;
+            $encounter->started_at = Carbon::now();
+
+            foreach ($encounter->combatants->sortByDesc('initiative')->values() as $index => $combatant) {
+                $combatant->order = $index;
+                $combatant->save();
+            }
+        }
 //        $encounter->is_active = $request->get('is_active');
 
 //        $requestCombatants = $request->get('combatants');
 //        $requestEncounter = $request->get('encounter');
 //
 //        if ($requestCombatants) {
-//            foreach ($requestCombatants as $index => $combatantId) {
-//                $combatant = $encounter->combatants()->where('id', $combatantId)->first();
-//                $combatant->order = $index;
-//                $combatant->save();
-//            }
-//        }
-//
-//        if ($request->has('monster_hp_status')) {
-//            $encounter->monster_hp_status = $request->get('monster_hp_status');
-//        }
-//
-//        if ($request->has('character_hp_status')) {
-//            $encounter->character_hp_status = $request->get('character_hp_status');
-//        }
-//
-//        if ($request->has('increment_active_index')) {
-//            if (($encounter->combatants_count - 1) === $encounter->active_index) {
-//                $encounter->round++;
-//                $encounter->active_index = 0;
-//            } else {
-//                $encounter->active_index++;
-//            }
+
 //        }
 //
 //        if ($requestEncounter) {

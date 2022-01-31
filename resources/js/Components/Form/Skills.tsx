@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { KeyboardEventHandler, useMemo } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-
-import { JetButton, JetInput } from '@/Components/Jetstream';
 import { kebabCase, last } from 'lodash';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { reorder } from '@/lib/helpers';
+import { JetButton, JetInput } from '@/Components/Jetstream';
 import { DeleteButton } from '@/Components/Button/DeleteButton';
 import { Dropdown } from '@/Components/Form/Dropdown';
-import { reorder } from '@/lib/helpers';
 
 export type SkillDragItems = {
   key: string;
@@ -25,7 +25,7 @@ type Props = {
 const remaining = (list: SkillDragItems[], values: string[]) => {
   const result = list.map(l => l.name).filter(name => name !== '');
   return values.filter(v => !result.includes(v)).concat(result.filter(r => !values.includes(r)));
-}
+};
 
 export const Skills = ({ title, items, setItems, values }: Props) => {
   const addItem = () => {
@@ -34,11 +34,11 @@ export const Skills = ({ title, items, setItems, values }: Props) => {
   };
 
   const editItemName = (value: string, index: number) => {
-    setItems(items.map((i, id) => id === index ? { ...i, name: value } : i));
+    setItems(items.map((i, id) => (id === index ? { ...i, name: value } : i)));
   };
 
   const editItemValue = (value: number, index: number) => {
-    setItems(items.map((i, id) => id === index ? { ...i, value } : i));
+    setItems(items.map((i, id) => (id === index ? { ...i, value } : i)));
   };
 
   const removeItem = (index: number) => {
@@ -47,14 +47,14 @@ export const Skills = ({ title, items, setItems, values }: Props) => {
 
   const canAdd = useMemo(() => {
     const lastAdded = last(items);
-    return items.length === 0 || !lastAdded || lastAdded.name !== '' && remaining(items, values).length > 0;
-  }, [items]);
+    return (items.length === 0 || !lastAdded || lastAdded.name !== '') && remaining(items, values).length > 0;
+  }, [items, values]);
 
   const onKeyUp: KeyboardEventHandler = (e) => {
     if (canAdd && e.nativeEvent.code === 'Enter') {
       addItem();
     }
-  }
+  };
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
@@ -86,45 +86,46 @@ export const Skills = ({ title, items, setItems, values }: Props) => {
       <DragDropContext
         onDragEnd={onDragEnd}
       >
-        <Droppable droppableId={kebabCase(title)}>{provided => (
-          <div
-            ref={provided.innerRef}
-            className="flex flex-col w-full"
-            {...provided.droppableProps}
-          >
-            {items.map((item, index) => (
-              <Draggable draggableId={item.key} index={index} key={item.key}>
-                {provided => (
-                  <div
-                    ref={provided.innerRef}
-                    className="mt-2 w-full bg-white py-2 rounded-md flex items-center"
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <div className="flex justify-center items-center cursor-move handle w-10">
-                      <FontAwesomeIcon icon="grip-lines" />
+        <Droppable droppableId={kebabCase(title)}>
+          {dropProvided => (
+            <div
+              ref={dropProvided.innerRef}
+              className="flex flex-col w-full"
+              {...dropProvided.droppableProps}
+            >
+              {items.map((item, index) => (
+                <Draggable draggableId={item.key} index={index} key={item.key}>
+                  {dragProvided => (
+                    <div
+                      ref={dragProvided.innerRef}
+                      className="mt-2 w-full bg-white py-2 rounded-md flex items-center"
+                      {...dragProvided.draggableProps}
+                      {...dragProvided.dragHandleProps}
+                    >
+                      <div className="flex justify-center items-center cursor-move handle w-10">
+                        <FontAwesomeIcon icon="grip-lines" />
+                      </div>
+                      <Dropdown
+                        value={item.name}
+                        onChange={value => editItemName(value, index)}
+                        data={remaining(items, values)}
+                        placeholder={`Select a ${title}`}
+                      />
+                      <JetInput
+                        type="number"
+                        value={item.value}
+                        className="w-20 mx-2 text-center"
+                        onChange={e => editItemValue(Number(e.target.value), index)}
+                        onKeyUp={onKeyUp}
+                      />
+                      <DeleteButton onClick={() => removeItem(index)} />
                     </div>
-                    <Dropdown
-                      value={item.name}
-                      onChange={value => editItemName(value, index)}
-                      data={remaining(items, values)}
-                      placeholder={`Select a ${title}`}
-                    />
-                    <JetInput
-                      type="number"
-                      value={item.value}
-                      className="w-20 mx-2 text-center"
-                      onChange={e => editItemValue(Number(e.target.value), index)}
-                      onKeyUp={onKeyUp}
-                    />
-                    <DeleteButton onClick={() => removeItem(index)} />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
+                  )}
+                </Draggable>
+              ))}
+              {dropProvided.placeholder}
+            </div>
+          )}
         </Droppable>
       </DragDropContext>
       {items.length > 0 && (

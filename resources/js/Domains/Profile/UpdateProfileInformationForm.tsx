@@ -28,6 +28,13 @@ export default function UpdateProfileInformationForm({ user }: Props) {
   const photoRef = useRef<HTMLInputElement>(null);
   const page = usePage<any>();
 
+  function clearPhotoFileInput() {
+    if (photoRef.current?.value) {
+      photoRef.current.value = '';
+      form.setData('photo', null);
+    }
+  }
+
   function updateProfileInformation() {
     form.post(route('user-profile-information.update'), {
       errorBag: 'updateProfileInformation',
@@ -68,18 +75,11 @@ export default function UpdateProfileInformationForm({ user }: Props) {
     });
   }
 
-  function clearPhotoFileInput() {
-    if (photoRef.current?.value) {
-      photoRef.current.value = '';
-      form.setData('photo', null);
-    }
-  }
-
   return (
     <JetFormSection
       onSubmit={updateProfileInformation}
-      title={'Profile Information'}
-      description={`Update your account's profile information and email address.`}
+      title="Profile Information"
+      description={'Update your account\'s profile information and email address.'}
       renderActions={() => (
         <>
           <JetButton

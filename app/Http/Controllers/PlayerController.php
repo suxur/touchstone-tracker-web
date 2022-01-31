@@ -13,11 +13,11 @@ class PlayerController extends Controller
     {
         $encounter = Encounter::where(['slug' => $slug])->firstOrFail();
 
-        $characterIds = [];
-        /** @var User $user */
-        if ($user = auth()->user()) {
-            $characterIds = $user->characters->pluck('id');
-        }
+//        $characterIds = [];
+//        /** @var User $user */
+//        if ($user = auth()->user()) {
+//            $characterIds = $user->characters->pluck('id');
+//        }
 
         return Inertia::render('Player/Show', [
             'encounter' => $encounter,

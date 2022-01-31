@@ -14,7 +14,7 @@ export const EncounterLink = ({ slug }: Props) => {
   const [copied, setCopied] = useState(false);
   const copyLink = () => {
     setCopied(true);
-    copy(route('player.show', { slug}));
+    copy(route('player.show', { slug }));
     setTimeout(() => {
       setCopied(false);
     }, 1000);

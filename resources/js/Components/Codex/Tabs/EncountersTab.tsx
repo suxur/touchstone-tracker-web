@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { routes } from '@/constants';
-import { NoResults } from '../NoResults';
-import { useEncounter } from '@/Hooks/useEncounter';
-import { EncounterRow } from '@/Components/Codex/Encounters/EncounterRow';
-import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from '@inertiajs/inertia-react';
 
 import { CodexEncounter } from '@/types';
+import { ONE_MINUTE, routes } from '@/constants';
 import useRoute from '@/Hooks/useRoute';
+import { useEncounter } from '@/Hooks/useEncounter';
+import { EncounterRow } from '@/Components/Codex/Encounters/EncounterRow';
+import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
 import { DeleteEncounterModal } from '@/Components/Modals/DeleteEncounterModal';
+import { NoResults } from '@/Components/Codex/NoResults';
 
 type DeleteModal = {
   isOpen: boolean;
@@ -26,8 +26,8 @@ export const EncountersTab = () => {
     isOpen: false,
   });
 
-  const { isFetching, isFetched, error, data } = useQuery<CodexEncounter[]>(routes.CODEX_ENCOUNTERS, {
-    initialData: []
+  const { isFetched, data } = useQuery<CodexEncounter[]>(routes.CODEX_ENCOUNTERS, {
+    staleTime: ONE_MINUTE,
   });
 
   const form = useForm({});
@@ -35,12 +35,12 @@ export const EncountersTab = () => {
   const createEncounter = () => {
     form.post(route('encounters.create'));
     queryClient.invalidateQueries(routes.CODEX_ENCOUNTERS);
-  }
+  };
 
   const cancelDeleteAction = useCallback(() => {
     setDeleteModal({ ...deleteModal, isOpen: false });
     queryClient.invalidateQueries(routes.CODEX_ENCOUNTERS);
-  }, [deleteModal, setDeleteModal]);
+  }, [deleteModal, queryClient]);
 
   const renderContent = () => {
     if (isFetched && data && data.length === 0) {
@@ -52,7 +52,8 @@ export const EncountersTab = () => {
         <>
           {data.map(encounter => (
             <EncounterRow
-              active_encounter_id={activeEncounter?.id}
+              key={encounter.id}
+              activeEncounterId={activeEncounter?.id}
               encounter={encounter}
               onDelete={() => setDeleteModal({ ...deleteModal, isOpen: true, encounter })}
             />
@@ -73,7 +74,11 @@ export const EncountersTab = () => {
         <FontAwesomeIcon icon="plus" />
         <span className="ml-2">New Encounter</span>
       </JetTransparentButton>
-      <DeleteEncounterModal encounter={deleteModal.encounter} isOpen={deleteModal.isOpen} onClose={cancelDeleteAction} />
+      <DeleteEncounterModal
+        encounter={deleteModal.encounter}
+        isOpen={deleteModal.isOpen}
+        onClose={cancelDeleteAction}
+      />
     </>
   );
 };

@@ -13,15 +13,12 @@ class UpdateEncounter implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var Encounter
-     */
-    public $encounter;
+    public Encounter $encounter;
 
     /**
      * Create a new event instance.
      *
-     * @param Encounter  $encounter
+     * @param Encounter $encounter
      */
     public function __construct(Encounter $encounter)
     {
@@ -32,9 +29,9 @@ class UpdateEncounter implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return Channel
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
         return new Channel($this->encounter->slug);
     }

@@ -5,7 +5,7 @@ interface Props {
   highlight: string;
 }
 
-export const Highlighted = ({ text, highlight}: Props) => {
+export const Highlighted = ({ text, highlight }: Props) => {
   if (!highlight.trim()) {
     return <span>{text}</span>;
   }
@@ -15,13 +15,11 @@ export const Highlighted = ({ text, highlight}: Props) => {
 
   return (
     <span>
-      {parts.filter(String).map((part, i) => {
-        return regex.test(part) ? (
-          <mark key={i} className="bg-purple-200">{part}</mark>
-        ) : (
-          <span key={i}>{part}</span>
-        );
-      })}
+      {parts.filter(String).map((part, i) => (regex.test(part) ? (
+        <mark key={i} className="bg-purple-200">{part}</mark>
+      ) : (
+        <span key={i}>{part}</span>
+      )))}
     </span>
   );
 };

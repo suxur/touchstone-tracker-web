@@ -1,18 +1,18 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Skills } from './Skills';
-import { useState } from 'react';
+import { Skills } from '@/Components/Form/Skills';
 
 export default {
   title: 'Skills',
   component: Skills,
 } as ComponentMeta<typeof Skills>;
 
-const Template: ComponentStory<typeof Skills> = (args) => {
-  const [items, setItems] = useState(args.items)
-  return <Skills {...args} items={items} setItems={items => setItems(items)}/>;
-}
+const Template: ComponentStory<typeof Skills> = ({ items, ...args }) => {
+  const [data, setData] = useState(items);
+  return <Skills {...args} items={data} setItems={i => setData(i)} />;
+};
 
 export const Default = Template.bind({});
 Default.args = {
@@ -21,8 +21,8 @@ Default.args = {
   values: [
     'Acid',
     'Fire',
-    'Cold'
-  ]
+    'Cold',
+  ],
 };
 
 export const WithData = Template.bind({});
@@ -32,17 +32,17 @@ WithData.args = {
     {
       key: Math.random().toString(16).slice(2),
       name: 'Fire',
-      value: 2
+      value: 2,
     },
     {
       key: Math.random().toString(16).slice(2),
       name: 'Acid',
-      value: 1
+      value: 1,
     },
   ],
   values: [
     'Acid',
     'Fire',
-    'Cold'
-  ]
+    'Cold',
+  ],
 };

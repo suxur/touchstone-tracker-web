@@ -7,6 +7,7 @@ interface Props {
   align?: string;
   width?: string | number;
   contentClasses?: string;
+
   renderTrigger(): JSX.Element;
 }
 
@@ -20,17 +21,19 @@ export const JetDropdown = ({
   const [open, setOpen] = useState(false);
 
   const widthClass = {
-    '48': 'w-48',
+    48: 'w-48',
   }[width.toString()];
 
   const alignmentClasses = (() => {
     if (align === 'left') {
       return 'origin-top-left left-0';
-    } else if (align === 'right') {
-      return 'origin-top-right right-0';
-    } else {
-      return 'origin-top';
     }
+
+    if (align === 'right') {
+      return 'origin-top-right right-0';
+    }
+
+    return 'origin-top';
   })();
 
   return (

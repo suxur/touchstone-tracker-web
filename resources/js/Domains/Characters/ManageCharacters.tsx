@@ -4,7 +4,6 @@ import { useForm } from '@inertiajs/inertia-react';
 
 import { CharacterPermissions, Classes, StatBlock } from '@/types';
 import useRoute from '@/Hooks/useRoute';
-import useTypedPage from '@/Hooks/useTypedPage';
 import { JetActionSection, JetButton } from '@/Components/Jetstream';
 import { ClassIcon } from '@/Components/ClassIcon/ClassIcon';
 import { DeleteButton } from '@/Components/Button/DeleteButton';
@@ -23,11 +22,10 @@ type DeleteModal = {
 }
 
 export const ManageCharacters = ({ characters, permissions }: Props) => {
-  const page = useTypedPage();
   const route = useRoute();
 
   const [createCharacterModal, setCreateCharacterModal] = useState({
-    isOpen: false
+    isOpen: false,
   });
 
   const [deleteModal, setDeleteModal] = useState<DeleteModal>({
@@ -63,7 +61,7 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
                 ) : (
                   <img
                     className="w-8 h-8 rounded-full"
-                    src={'https://ui-avatars.com/api/?name=' + encodeURI(character.name) + '&color=7C3AED&background=DDD6FE'}
+                    src={`https://ui-avatars.com/api/?name=${encodeURI(character.name)}&color=7C3AED&background=DDD6FE`}
                     alt={character.name}
                   />
                 )}
@@ -90,7 +88,7 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
       />
       <DeleteStatBlockModal
         isOpen={deleteModal.isOpen}
-        stat_block={deleteModal.character}
+        statBlock={deleteModal.character}
         type="character"
         onClose={() => setDeleteModal({ ...deleteModal, isOpen: false })}
       />

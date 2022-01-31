@@ -41,10 +41,8 @@ export default function UpdatePasswordForm() {
   return (
     <JetFormSection
       onSubmit={updatePassword}
-      title={'Update Password'}
-      description={
-        'Ensure your account is using a long, random password to stay secure.'
-      }
+      title="Update Password"
+      description="Ensure your account is using a long, random password to stay secure."
       renderActions={() => (
         <>
           <JetButton
@@ -67,9 +65,7 @@ export default function UpdatePasswordForm() {
           className="mt-1 block w-full"
           ref={currentPasswordRef}
           value={form.data.current_password}
-          onChange={e =>
-            form.setData('current_password', e.currentTarget.value)
-          }
+          onChange={e => form.setData('current_password', e.currentTarget.value)}
           autoComplete="current-password"
         />
         <JetInputError
@@ -99,9 +95,7 @@ export default function UpdatePasswordForm() {
           type="password"
           className="mt-1 block w-full"
           value={form.data.password_confirmation}
-          onChange={e =>
-            form.setData('password_confirmation', e.currentTarget.value)
-          }
+          onChange={e => form.setData('password_confirmation', e.currentTarget.value)}
           autoComplete="new-password"
         />
         <JetInputError

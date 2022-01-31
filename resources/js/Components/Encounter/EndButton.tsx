@@ -1,25 +1,21 @@
 import * as React from 'react';
-import clsx from 'clsx';
+import { useEncounter } from '@/Hooks/useEncounter';
+import { JetDangerButton, JetDangerButtonProps } from '@/Components/Jetstream';
 
-import { VoidFn } from '@/types';
-import { useUpdateEncounter } from '@/Hooks/useUpdateEncounter';
-
-interface Props {
-  onSuccess: VoidFn;
-}
-
-export const EndButton = ({ onSuccess }: Props) => {
-  const { update, processing } = useUpdateEncounter({ onSuccess });
+export const EndButton = ({ ...props }: JetDangerButtonProps) => {
+  const { mutation, encounter } = useEncounter();
 
   const onClick = () => {
-    update('is_active', false);
+    if (encounter) {
+      return mutation.mutate({ ...encounter, is_active: false });
+    }
+
+    return null;
   };
 
   return (
-    <button
-      className={clsx("button bg-red-600 hover:bg-red-700 mr-2", { 'loading': processing })}
-      onClick={onClick}
-    >
+    <JetDangerButton {...props} onClick={onClick} processing={mutation.isLoading}>
       End
-    </button>);
+    </JetDangerButton>
+  );
 };

@@ -4,8 +4,8 @@ interface Props {
   children: JSX.Element[];
 }
 
-const Header = (props: { children: JSX.Element }) => props.children || null;
-const Body = (props: { children: JSX.Element }) => props.children || null;
+const Header = ({ children }: { children: JSX.Element }) => children || null;
+const Body = ({ children }: { children: JSX.Element }) => children || null;
 
 export const Card = ({ children }: Props) => {
   const header = children?.find(child => child.type.name === 'Header');

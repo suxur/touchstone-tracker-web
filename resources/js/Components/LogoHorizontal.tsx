@@ -86,11 +86,19 @@ export const LogoHorizontal = () => (
           fill="#ea6068"
         />
         <ellipse
-          cx="1.38" cy=".75" rx="1.38" ry=".75" transform="rotate(-52.72 37.36 -32.73)"
+          cx="1.38"
+          cy=".75"
+          rx="1.38"
+          ry=".75"
+          transform="rotate(-52.72 37.36 -32.73)"
           fill="#fdf9f0"
         />
         <ellipse
-          cx=".86" cy=".55" rx=".86" ry=".55" transform="rotate(-43.79 41.73 -46.7)"
+          cx=".86"
+          cy=".55"
+          rx=".86"
+          ry=".55"
+          transform="rotate(-43.79 41.73 -46.7)"
           fill="#fdf9f0"
         />
         <path
@@ -167,16 +175,35 @@ export const LogoHorizontal = () => (
         fill="#67ad6a"
       />
       <ellipse
-        cx="2.13" cy=".93" rx="2.13" ry=".93" transform="rotate(-153.13 8.94 6)" fill="#67ad6a"
+        cx="2.13"
+        cy=".93"
+        rx="2.13"
+        ry=".93"
+        transform="rotate(-153.13 8.94 6)"
+        fill="#67ad6a"
       />
       <ellipse
-        cx="1.25" cy=".8" rx="1.25" ry=".8" transform="rotate(-153.13 8.14 4.23)" fill="#67ad6a"
+        cx="1.25"
+        cy=".8"
+        rx="1.25"
+        ry=".8"
+        transform="rotate(-153.13 8.14 4.23)"
+        fill="#67ad6a"
       />
       <ellipse
-        cx=".93" cy=".6" rx=".93" ry=".6" transform="rotate(-158.36 38.02 2.42)" fill="#cfe8cf"
+        cx=".93"
+        cy=".6"
+        rx=".93"
+        ry=".6"
+        transform="rotate(-158.36 38.02 2.42)"
+        fill="#cfe8cf"
       />
       <ellipse
-        cx="1.87" cy="1.22" rx="1.87" ry="1.22" transform="rotate(-158.36 37.15 3.37)"
+        cx="1.87"
+        cy="1.22"
+        rx="1.87"
+        ry="1.22"
+        transform="rotate(-158.36 37.15 3.37)"
         fill="#cfe8cf"
       />
       <path

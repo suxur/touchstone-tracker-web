@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { VoidFn } from '@/types';
-import { noop } from '../../lib/helpers';
+import { noop } from '@/lib/helpers';
 
 interface Context {
   open: boolean;

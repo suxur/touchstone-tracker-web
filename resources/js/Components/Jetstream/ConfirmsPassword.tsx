@@ -2,12 +2,13 @@ import * as React from 'react';
 import { PropsWithChildren, useRef, useState } from 'react';
 import axios from 'axios';
 import clsx from 'clsx';
-import { JetDialogModal } from './DialogModal';
-import { JetInput } from './Input';
-import { JetSecondaryButton } from './SecondaryButton';
-import { JetButton } from './Button';
-import { JetInputError } from './InputError';
+
 import useRoute from '@/Hooks/useRoute';
+import { JetDialogModal } from '@/Components/Jetstream/DialogModal';
+import { JetInput } from '@/Components/Jetstream/Input';
+import { JetSecondaryButton } from '@/Components/Jetstream/SecondaryButton';
+import { JetButton } from '@/Components/Jetstream/Button';
+import { JetInputError } from '@/Components/Jetstream/InputError';
 
 interface Props {
   title?: string;
@@ -44,6 +45,11 @@ export const JetConfirmsPassword = ({
     });
   }
 
+  const closeModal = () => {
+    setConfirmingPassword(false);
+    setForm({ processing: false, password: '', error: '' });
+  };
+
   function confirmPassword() {
     setForm({ ...form, processing: true });
 
@@ -65,11 +71,6 @@ export const JetConfirmsPassword = ({
       });
   }
 
-  function closeModal() {
-    setConfirmingPassword(false);
-    setForm({ processing: false, password: '', error: '' });
-  }
-
   return (
     <span>
       <span onClick={startConfirmingPassword}>{children}</span>
@@ -82,11 +83,9 @@ export const JetConfirmsPassword = ({
               className="mt-1 block w-3/4"
               placeholder="Password"
               value={form.password}
-              onChange={e =>
-                setForm({ ...form, password: e.currentTarget.value })
-              }
+              onChange={e => setForm({ ...form, password: e.currentTarget.value })}
             />
-                <JetInputError message={form.error} className="mt-2" />
+            <JetInputError message={form.error} className="mt-2" />
           </div>
         </JetDialogModal.Content>
         <JetDialogModal.Footer>

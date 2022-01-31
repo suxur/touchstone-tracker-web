@@ -8,10 +8,9 @@ interface Props {
   error?: string;
 }
 
-export const AuthLabel = ({ name, title, error }: Props) => {
-  return (
-    <JetLabel htmlFor={name} className="flex justify-between items-center">
-      <span>{title}</span> {error && <InputError>{error}</InputError>}
-    </JetLabel>
-  );
-};
+export const AuthLabel = ({ name, title, error }: Props) => (
+  <JetLabel htmlFor={name} className="flex justify-between items-center">
+    <span className="mr-1">{title}</span>
+    {error && <InputError>{error}</InputError>}
+  </JetLabel>
+);

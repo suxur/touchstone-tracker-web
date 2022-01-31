@@ -1,5 +1,6 @@
 import * as React from 'react';
 import produce from 'immer';
+import { createContext, useMemo } from 'react';
 
 export interface StatBlock {
   id: number;
@@ -24,7 +25,7 @@ type State = {
 
 type CodexProviderProps = { children: React.ReactNode }
 
-const CodexStateContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
+const CodexStateContext = createContext<{ state: State; dispatch: Dispatch } | undefined>(undefined);
 
 const codexReducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -54,6 +55,8 @@ const codexReducer = (state: State, action: Action) => {
         const index = draftState.spell_blocks.findIndex(sb => sb.id === action.id);
         draftState.spell_blocks.splice(index, 1);
       });
+    default:
+      return state;
   }
 };
 
@@ -61,7 +64,7 @@ const CodexProvider = ({ children }: CodexProviderProps) => {
   const [state, dispatch] = React.useReducer(codexReducer, { stat_blocks: [], spell_blocks: [] });
   // NOTE: you *might* need to memoize this value
   // Learn more in http://kcd.im/optimize-context
-  const value = { state, dispatch };
+  const value = useMemo(() => ({ state, dispatch }), [state]);
   return (
     <CodexStateContext.Provider value={value}>
       {children}

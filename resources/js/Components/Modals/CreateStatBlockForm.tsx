@@ -91,7 +91,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
       onSuccess: () => {
         onClose();
         form.reset();
-      }
+      },
     });
   };
 
@@ -141,7 +141,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.armor_class}
-                onChange={e => form.setData('armor_class', parseInt(e.target.value))}
+                onChange={e => form.setData('armor_class', Number(e.target.value))}
               />
             </div>
             <div className="col-span-2">
@@ -161,7 +161,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.hit_points}
-                onChange={e => form.setData('hit_points', parseInt(e.target.value))}
+                onChange={e => form.setData('hit_points', Number(e.target.value))}
               />
             </div>
             <div className="col-span-2">
@@ -186,7 +186,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.strength}
-                onChange={e => form.setData('strength', parseInt(e.target.value))}
+                onChange={e => form.setData('strength', Number(e.target.value))}
               />
             </div>
             <div className="col-span-1">
@@ -198,7 +198,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.dexterity}
-                onChange={e => form.setData('dexterity', parseInt(e.target.value))}
+                onChange={e => form.setData('dexterity', Number(e.target.value))}
               />
             </div>
             <div className="col-span-1">
@@ -210,7 +210,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.constitution}
-                onChange={e => form.setData('constitution', parseInt(e.target.value))}
+                onChange={e => form.setData('constitution', Number(e.target.value))}
               />
             </div>
             <div className="col-span-1">
@@ -222,7 +222,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.intelligence}
-                onChange={e => form.setData('intelligence', parseInt(e.target.value))}
+                onChange={e => form.setData('intelligence', Number(e.target.value))}
               />
             </div>
             <div className="col-span-1">
@@ -234,7 +234,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.wisdom}
-                onChange={e => form.setData('wisdom', parseInt(e.target.value))}
+                onChange={e => form.setData('wisdom', Number(e.target.value))}
               />
             </div>
             <div className="col-span-1">
@@ -246,11 +246,11 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 type="number"
                 className="mt-1 block w-full text-center"
                 value={form.data.charisma}
-                onChange={e => form.setData('charisma', parseInt(e.target.value))}
+                onChange={e => form.setData('charisma', Number(e.target.value))}
               />
             </div>
           </div>
-          <div className={clsx('col-span-6 grid grid-cols-6 gap-6', { 'hidden': advancedForm })}>
+          <div className={clsx('col-span-6 grid grid-cols-6 gap-6', { hidden: advancedForm })}>
             <div className="col-span-6">
               <Divider />
             </div>

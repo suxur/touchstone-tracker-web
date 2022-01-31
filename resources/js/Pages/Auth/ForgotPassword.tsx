@@ -22,7 +22,7 @@ export default function ForgotPassword({ status }: Props) {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     form.post(route('password.email'));
-  }
+  };
 
   return (
     <GuestLayout>

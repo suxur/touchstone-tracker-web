@@ -6,7 +6,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EncounterController;
 use App\Http\Controllers\MonsterController;
 use App\Http\Controllers\PlayerController;
-use App\Http\Controllers\SpellController;
 use App\Http\Controllers\StatBlockController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -44,8 +43,6 @@ Route::post('/combatant/{combatant}', [CombatantController::class, 'update'])->n
 
 Route::post('/stat-blocks', [StatBlockController::class, 'store'])->name('stat_block.store');
 Route::put('/stat-blocks/{stat_block}', [StatBlockController::class, 'update'])->name('stat_block.update');
-
-Route::get('/spell/{spell}', [SpellController::class, 'spell'])->name('spell');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

@@ -1,14 +1,11 @@
 import * as React from 'react';
 import clsx from 'clsx';
 
+import { Combatant } from '@/types';
+import { useCombatant } from '@/Hooks/useCombatant';
 import { JetCheckbox } from '@/Components/Jetstream';
 import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
-import { Combatant } from '@/types';
-import { useForm } from '@inertiajs/inertia-react';
-import { useEffect } from 'react';
-import useRoute from '@/Hooks/useRoute';
-import { useIsMounting } from '@/Hooks/useIsMounting';
-import { useUpdateCombatant } from '@/Hooks/useUpdateCombatant';
+import { useMemo } from 'react';
 
 type Props = {
   combatant: Combatant;
@@ -17,43 +14,50 @@ type Props = {
 };
 
 export const Actions = ({ combatant, active, disabled }: Props) => {
-  const isMounted = useIsMounting();
-  const route = useRoute();
-  const { data, update } = useUpdateCombatant(combatant);
+  const { mutation } = useCombatant(combatant);
+
+  const update = (newData: Combatant) => {
+    mutation.mutate(newData);
+  };
 
   const clear = () => {
-    update({ ...data, action: false, bonus_action: false, reaction: false });
+    mutation.mutate({ ...combatant, action: false, bonus_action: false, reaction: false });
   };
+
+  const labelClass = useMemo(() => clsx('flex items-center justify-center', disabled ? 'cursor-not-allowed' : 'cursor-pointer'), [disabled]);
 
   return (
     <div className="flex flex-col sm:flex-row">
       <div className={clsx('bg-gray-100 rounded-md px-2 h-10 text-sm flex justify-around sm:justify-center items-center space-x-4', { 'bg-purple-400': active })}>
-        <label className="flex items-center justify-center cursor-pointer">
+        <label className={labelClass}>
           <span>Action</span>
           <JetCheckbox
             className="ml-1"
             name="action"
             disabled={disabled}
-            checked={data.action}
-            onChange={() => update('action', !data.action)}
+            checked={combatant.action}
+            onChange={() => update({ ...combatant, action: !combatant.action })}
           />
         </label>
-        <label className="flex items-center justify-center cursor-pointer">
-          <span>Bonus <span className="hidden sm:inline-block">Action</span></span>
+        <label className={labelClass}>
+          <span>
+            Bonus
+            <span className="ml-1 hidden sm:inline-block">Action</span>
+          </span>
           <JetCheckbox
             className="ml-1"
             disabled={disabled}
-            checked={data.bonus_action}
-            onChange={() => update('bonus_action', !data.bonus_action)}
+            checked={combatant.bonus_action}
+            onChange={() => update({ ...combatant, bonus_action: !combatant.bonus_action })}
           />
         </label>
-        <label className="flex items-center justify-center cursor-pointer">
+        <label className={labelClass}>
           <span>Reaction</span>
           <JetCheckbox
             className="ml-1"
             disabled={disabled}
-            checked={data.reaction}
-            onChange={() => update('reaction', !data.reaction)}
+            checked={combatant.reaction}
+            onChange={() => update({ ...combatant, reaction: !combatant.reaction })}
           />
         </label>
       </div>

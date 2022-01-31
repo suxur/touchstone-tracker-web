@@ -10,13 +10,11 @@ type Props = {
   permissions: MonsterPermissions;
 };
 
-const Index = ({ monsters, preloaded, permissions }: Props) => {
-  return (
-    <AppLayout>
-      <ManageMonsters monsters={monsters} permissions={permissions} />
-      <PreloadedMonsters preloaded={preloaded} />
-    </AppLayout>
-  );
-};
+const Index = ({ monsters, preloaded, permissions }: Props) => (
+  <AppLayout>
+    <ManageMonsters monsters={monsters} permissions={permissions} />
+    <PreloadedMonsters preloaded={preloaded} />
+  </AppLayout>
+);
 
 export default Index;

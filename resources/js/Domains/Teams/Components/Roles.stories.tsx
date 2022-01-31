@@ -18,18 +18,18 @@ Default.args = {
       name: 'Dungeon Master',
       description: 'Administrator users can perform any action.',
       permissions: [
-        'create', 'read', 'update', 'delete'
-      ]
+        'create', 'read', 'update', 'delete',
+      ],
     },
     {
       key: 'player',
       name: 'Player',
       description: 'Editor users have the ability to read, create, and update.',
       permissions: [
-        'read', 'update'
-      ]
+        'read', 'update',
+      ],
     },
-  ]
+  ],
 };
 
 export const Selected = Template.bind({});

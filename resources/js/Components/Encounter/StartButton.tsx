@@ -1,12 +1,15 @@
 import * as React from 'react';
+
+import { useEncounter } from '@/Hooks/useEncounter';
 import { JetButton } from '@/Components/Jetstream';
-import { useUpdateEncounter } from '@/Hooks/useUpdateEncounter';
 
 export const StartButton = () => {
-  const { update } = useUpdateEncounter({});
+  const { mutation, encounter } = useEncounter();
 
   const onClick = () => {
-    update('is_active', true);
+    if (encounter) {
+      mutation.mutate({ ...encounter, is_active: true });
+    }
   };
 
   return (

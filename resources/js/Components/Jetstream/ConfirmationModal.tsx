@@ -27,7 +27,6 @@ const JetConfirmationModalContent = ({ title, children }: PropsWithChildren<{ ti
 
       <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
         <h3 className="text-lg">{title}</h3>
-
         <div className="mt-2">{children}</div>
       </div>
     </div>

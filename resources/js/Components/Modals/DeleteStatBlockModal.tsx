@@ -9,26 +9,26 @@ import { StatBlock, StatBlockType } from '@/types';
 import { startCase } from 'lodash';
 
 interface Props extends ModalProps {
-  stat_block?: StatBlock;
+  statBlock?: StatBlock;
   type: StatBlockType
 }
 
-export const DeleteStatBlockModal = ({ stat_block, type, isOpen, onClose }: Props) => {
+export const DeleteStatBlockModal = ({ statBlock, type, isOpen, onClose }: Props) => {
   const route = useRoute();
-  const form = useForm({ stat_block, type });
+  const form = useForm({ stat_block: statBlock, type });
 
   const confirm = useCallback(() => {
-    if (stat_block) {
-      form.delete(route('stat-blocks.destroy', { stat_block }), {
-        onSuccess: () => onClose()
+    if (statBlock) {
+      form.delete(route('stat-blocks.destroy', { statBlock }), {
+        onSuccess: () => onClose(),
       });
     }
-  }, [stat_block]);
+  }, [form, onClose, route, statBlock]);
 
   return (
     <JetConfirmationModal isOpen={isOpen} onClose={onClose}>
       <JetConfirmationModal.Content title={`Delete ${startCase(type)}?`}>
-        <p>Are you sure you want to remove the <strong>{stat_block?.name}</strong> {type}?</p>
+        <p>Are you sure you want to remove the <strong>{statBlock?.name}</strong> {type}?</p>
       </JetConfirmationModal.Content>
       <JetConfirmationModal.Footer>
         <JetTransparentButton className="mr-2" onClick={onClose}>

@@ -13,16 +13,16 @@ interface Props extends ModalProps {
 
 export const DeleteEncounterModal = ({ encounter, isOpen, onClose }: Props) => {
   const route = useRoute();
-  const form  = useForm({});
+  const form = useForm({});
 
   const confirm = useCallback(() => {
     if (encounter) {
       form.delete(route('encounter.destroy', { encounter }), {
         only: ['encounter'],
-        onSuccess: () => onClose()
+        onSuccess: () => onClose(),
       });
     }
-  }, [encounter]);
+  }, [encounter, form, onClose, route]);
 
   return (
     <JetConfirmationModal isOpen={isOpen} onClose={onClose}>

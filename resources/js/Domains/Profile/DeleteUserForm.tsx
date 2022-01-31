@@ -23,6 +23,11 @@ export default function DeleteUserForm() {
     setTimeout(() => passwordRef.current?.focus(), 250);
   }
 
+  function closeModal() {
+    setConfirmingUserDeletion(false);
+    form.reset();
+  }
+
   function deleteUser() {
     form.delete(route('current-user.destroy'), {
       preserveScroll: true,
@@ -32,15 +37,10 @@ export default function DeleteUserForm() {
     });
   }
 
-  function closeModal() {
-    setConfirmingUserDeletion(false);
-    form.reset();
-  }
-
   return (
     <JetActionSection
-      title={'Delete Account'}
-      description={'Permanently delete your account.'}
+      title="Delete Account"
+      description="Permanently delete your account."
     >
       <div className="max-w-xl text-sm text-gray-600">
         Once your account is deleted, all of its resources and data will be
@@ -56,7 +56,7 @@ export default function DeleteUserForm() {
 
       {/* <!-- Delete Account Confirmation Modal --> */}
       <JetDialogModal isOpen={confirmingUserDeletion} onClose={closeModal}>
-        <JetDialogModal.Content title={'Delete Account'}>
+        <JetDialogModal.Content title="Delete Account">
           Are you sure you want to delete your account? Once your account is
           deleted, all of its resources and data will be permanently deleted.
           Please enter your password to confirm you would like to permanently

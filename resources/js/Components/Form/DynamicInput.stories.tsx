@@ -1,23 +1,23 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { DynamicInput } from './DynamicInput';
-import { useState } from 'react';
+import { DynamicInput } from '@/Components/Form/DynamicInput';
 
 export default {
   title: 'DynamicInput',
   component: DynamicInput,
 } as ComponentMeta<typeof DynamicInput>;
 
-const Template: ComponentStory<typeof DynamicInput> = (args) => {
-  const [items, setItems] = useState(args.items)
-  return <DynamicInput {...args} items={items} setItems={items => setItems(items)}/>;
+const Template: ComponentStory<typeof DynamicInput> = ({ items, ...args }) => {
+  const [data, setData] = useState(items);
+  return <DynamicInput {...args} items={data} setItems={i => setData(i)} />;
 };
 
 export const Default = Template.bind({});
 Default.args = {
   title: 'Damage Vulnerabilities',
-  items: []
+  items: [],
 };
 
 export const WithData = Template.bind({});
@@ -32,5 +32,5 @@ WithData.args = {
       key: Math.random().toString(16).slice(2),
       value: 'Acid',
     },
-  ]
+  ],
 };

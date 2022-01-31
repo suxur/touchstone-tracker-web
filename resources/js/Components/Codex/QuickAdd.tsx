@@ -18,15 +18,17 @@ export const QuickAdd = ({ type }: Props) => {
 
   const form = useForm({
     name: '',
-    type
+    type,
   });
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    form.post(route('encounter.add.combatant', { encounter }), {
-      only: ['encounter'],
-      onSuccess: () => form.reset(),
-    });
+    if (encounter) {
+      form.post(route('encounter.add.combatant', { encounter }), {
+        only: ['encounter'],
+        onSuccess: () => form.reset(),
+      });
+    }
   };
 
   return (

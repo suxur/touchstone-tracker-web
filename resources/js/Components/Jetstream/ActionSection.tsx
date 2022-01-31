@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { PropsWithChildren, ReactElement } from 'react';
-import { JetSectionTitle } from './SectionTitle';
+import { PropsWithChildren } from 'react';
+import { JetSectionTitle } from '@/Components/Jetstream/SectionTitle';
 
 interface Props {
   title: string;

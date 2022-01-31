@@ -9,7 +9,7 @@ import { JetButton } from '@/Components/Jetstream';
 export default function Welcome() {
   const route = useRoute();
   const form = useForm({
-    'lookup': ''
+    lookup: '',
   });
 
   const submit = (e: FormEvent) => {

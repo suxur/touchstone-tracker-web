@@ -5,9 +5,7 @@ import { useForm } from '@inertiajs/inertia-react';
 import { CodexCharacter } from '@/types';
 import useRoute from '@/Hooks/useRoute';
 import { useEncounter } from '@/Hooks/useEncounter';
-import { CodexRow } from '../CodexRow';
 import { useCodex } from '@/Components/Codex/CodexContext';
-import { Highlighted } from '@/Components/Highlight';
 import { ViewButton } from '@/Components/Button/ViewButton';
 import { ClassIcon } from '@/Components/ClassIcon/ClassIcon';
 
@@ -16,22 +14,16 @@ interface Props {
 }
 
 export const CharacterRow = ({ character }: Props) => {
-  const route = useRoute();
-  const { encounter } = useEncounter();
+  const { addCombatant } = useEncounter();
   const { dispatch } = useCodex();
-  const { post } = useForm({});
 
   const onClick = useCallback(() => {
-    post(route('encounter.add.stat-block', { encounter, stat_block: character.id }), {
-      onSuccess: (r => console.log(r)),
-      onError: (e => console.log(e)),
-      only: ['encounter']
-    });
-  }, [encounter, character]);
+    addCombatant.mutate(character.id);
+  }, [addCombatant, character.id]);
 
   const onViewClick = useCallback(() => {
     dispatch({ type: 'open_stat_block', id: character.id });
-  }, [dispatch]);
+  }, [dispatch, character.id]);
 
   return (
     <div
@@ -40,7 +32,7 @@ export const CharacterRow = ({ character }: Props) => {
       <div className="flex flex-1 justify-center items-center">
         <div className="w-8 mx-2">
           {character.class ? (
-            <ClassIcon icon={character.class} size="sm"/>
+            <ClassIcon icon={character.class} size="sm" />
           ) : (
             <img
               className="w-8 h-8 rounded-full"
@@ -49,12 +41,13 @@ export const CharacterRow = ({ character }: Props) => {
             />
           )}
         </div>
-        <p
-          className="pr-4 lg:pr-6 py-4 flex flex-1"
+        <button
+          type="button"
+          className="bg-transparent border-0 pr-4 lg:pr-6 py-4 flex flex-1"
           onClick={onClick}
         >
           {character.name}
-        </p>
+        </button>
       </div>
       {onViewClick && (
         <div className="flex w-10 mr-4 lg:mr-6 justify-end">

@@ -27,6 +27,7 @@ export const Codex = () => {
           <div className="flex h-10 justify-between items-center min-h-10">
             <p><strong>Codex</strong></p>
             <button
+              type="button"
               className="button bg-transparent hover:bg-gray-200 text-gray-500 text-lg p-2 py-1"
               onClick={toggleOpen}
             >
@@ -35,7 +36,10 @@ export const Codex = () => {
           </div>
         </Card.Header>
         <Card.Body>
-          <Tab.Group defaultIndex={localStorage.codex_tab ?? 0} onChange={(index) => localStorage.codex_tab = index}>
+          <Tab.Group
+            defaultIndex={localStorage.codex_tab ?? 0}
+            onChange={index => { localStorage.codex_tab = index }}
+          >
             <Tab.List className="bg-gray-600 flex rounded-t-md h-10">
               <Tab className={({ selected }) => clsx('tab', { 'tab-selected': selected })}>
                 <CodexTab type="monster" title="Monsters" />
@@ -76,7 +80,7 @@ export const Codex = () => {
       {state.stat_blocks.map(sb => (
         <MoveableStatBlock
           key={sb.id}
-          isOpen={true}
+          isOpen
           id={sb.id}
           close={() => dispatch({ type: 'close_stat_block', id: sb.id })}
         />
@@ -84,7 +88,7 @@ export const Codex = () => {
       {state.spell_blocks.map(sb => (
         <MoveableSpellBlock
           key={sb.id}
-          isOpen={true}
+          isOpen
           id={sb.id}
           close={() => dispatch({ type: 'close_spell_block', id: sb.id })}
         />

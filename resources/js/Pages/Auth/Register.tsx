@@ -15,11 +15,9 @@ export default function Register() {
     password_confirmation: '',
   });
 
-  useEffect(() => {
-    return () => {
-      form.reset('password', 'password_confirmation');
-    };
-  }, []);
+  useEffect(() => () => {
+    form.reset('password', 'password_confirmation');
+  }, [form]);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();

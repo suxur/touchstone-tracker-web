@@ -16,9 +16,9 @@ export const PendingTeamInvitation = ({ team, permissions }: Props) => {
 
   const cancelTeamInvitation = useCallback((invitation) => {
     form.delete(route('team-invitations.destroy', { invitation }), {
-      preserveScroll: true
+      preserveScroll: true,
     });
-  }, [form]);
+  }, [form, route]);
 
   return (
     <JetActionSection
@@ -30,7 +30,6 @@ export const PendingTeamInvitation = ({ team, permissions }: Props) => {
           <div
             key={invitation.id}
             className="flex items-center justify-between"
-            v-for="invitation in team.team_invitations"
           >
             <div className="text-gray-600">{invitation.email}</div>
             <div className="flex items-center">
@@ -47,6 +46,5 @@ export const PendingTeamInvitation = ({ team, permissions }: Props) => {
         ))}
       </div>
     </JetActionSection>
-  )
-    ;
+  );
 };

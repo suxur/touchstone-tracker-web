@@ -33,7 +33,7 @@ export const PreloadedMonsters = ({ preloaded }: Props) => {
                     <div>{monster.name}</div>
                   </div>
                   <div className="flex items-center">
-                    <CloneButton onClick={() =>cloneMonster(monster)} />
+                    <CloneButton onClick={() => cloneMonster(monster)} />
                   </div>
                 </div>
                 <span className="mt-2 text-xs py-1 px-2 bg-gray-200 rounded-md">{monster.collection}</span>

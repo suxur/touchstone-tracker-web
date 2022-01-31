@@ -14,6 +14,7 @@ export const Default = Template.bind({});
 Default.args = {
   combatant: {
     id: 1,
+    encounter_id: 1,
     stat_block: null,
     name: 'Alodray',
     type: 'character',

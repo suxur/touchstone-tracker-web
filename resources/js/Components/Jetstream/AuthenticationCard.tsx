@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PropsWithChildren, ReactNode } from 'react';
-import { LogoHorizontal } from '../LogoHorizontal';
+import { LogoHorizontal } from '@/Components/LogoHorizontal';
 
 export const JetAuthenticationCard = ({ children }: PropsWithChildren<ReactNode>) => (
   <div className="bg-purple-700 min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">

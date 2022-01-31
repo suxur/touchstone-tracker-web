@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { CodexCharacter } from '@/types';
-import { CLASSES, routes } from '@/constants';
+import { CLASSES, ONE_MINUTE, routes } from '@/constants';
 import { QuickAdd } from '@/Components/Codex/QuickAdd';
 import { ClassIcon } from '@/Components/ClassIcon/ClassIcon';
 import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
@@ -13,15 +13,13 @@ import { CreateStatBlockForm } from '@/Components/Modals/CreateStatBlockForm';
 
 export const CharactersTab = () => {
   const [createCharacterModal, setCreateCharacterModal] = useState({
-    isOpen: false
+    isOpen: false,
   });
 
-  const icon = useMemo(() => {
-    return CLASSES[Math.floor(Math.random() * CLASSES.length)];
-  }, []);
+  const icon = useMemo(() => CLASSES[Math.floor(Math.random() * CLASSES.length)], []);
 
   const { data, isFetched } = useQuery<CodexCharacter[]>(routes.CODEX_CHARACTERS, {
-    initialData: []
+    staleTime: ONE_MINUTE,
   });
 
   const renderContent = () => {

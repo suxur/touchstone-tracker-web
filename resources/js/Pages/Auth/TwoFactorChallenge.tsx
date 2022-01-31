@@ -1,13 +1,10 @@
 import * as React from 'react';
 import { FormEvent, useRef, useState } from 'react';
-import { useForm, Head } from '@inertiajs/inertia-react';
-import clsx from 'clsx';
+import { Head, useForm } from '@inertiajs/inertia-react';
 
 import useRoute from '@/Hooks/useRoute';
 import { JetAuthenticationCard } from '@/Components/Jetstream/AuthenticationCard';
 import { JetButton } from '@/Components/Jetstream/Button';
-import { JetInput } from '@/Components/Jetstream/Input';
-import { JetLabel } from '@/Components/Jetstream/Label';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
 

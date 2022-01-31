@@ -9,14 +9,11 @@ interface Props extends React.HTMLProps<HTMLDivElement> {
   max?: number,
   value: string | number,
   editable?: boolean;
-  shouldFocus?: boolean;
   shouldHighlight?: boolean;
   onDone?: (s: string) => void;
 }
 
-export const InlineInput = ({
-  editable = true, shouldFocus = false, value, max, className, onDone, shouldHighlight = false
-}: Props) => {
+export const InlineInput = ({ editable = true, value, max, className, onDone, shouldHighlight = false }: Props) => {
   const [editValue, setEditValue] = useState(value);
   useEffect(() => {
     setEditValue(value);
@@ -32,25 +29,39 @@ export const InlineInput = ({
 
   const done = useCallback(() => {
     setEditing(false);
-    if (editValue !== '') {
-      let newValue = Math.floor(evaluate(editValue.toString()));
+    if (editValue === '') {
+      setEditValue(value);
+    } else {
+      let newValue = value;
+      try {
+        newValue = Math.floor(evaluate(editValue.toString()));
+      } catch (e) {
+        console.log(e);
+      }
       if (max && newValue > max && max !== 0) {
         newValue = max;
       }
       if (onDone) {
         onDone(newValue.toString());
       }
+      setEditValue(newValue);
     }
-  }, [editValue, max]);
+  }, [editValue, max, onDone, value]);
 
   return (
     <div className={clsx('w-12 h-10 flex justify-center items-center cursor-pointer', className)} onClick={edit}>
-      {!editing ? <>{editValue}</> : (
+      {!editing ? editValue : (
         <JetInput
           ref={ref}
           type="text"
           className="px-0 w-12 text-center rounded-md bg-white text-gray-900"
-          onChange={(e) => setEditValue(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length === 1 && e.target.value.match(/[+|*|\-|\/]/)) {
+              setEditValue(`${value}${e.target.value}`);
+            } else {
+              setEditValue(e.target.value);
+            }
+          }}
           onBlur={done}
           onKeyUp={(e) => {
             if (e.key === 'Enter') {

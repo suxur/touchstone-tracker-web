@@ -16,15 +16,13 @@ export const getStatBlock = async (id: number) => {
 };
 
 export const StatBlockQuery = forwardRef<HTMLButtonElement, Props>(({ id }: Props, ref) => {
-  const { data: stat_block } = useQuery<SB>(['stat_block', id], () => getStatBlock(id));
+  const { data: statBlock } = useQuery<SB>(['stat_block', id], () => getStatBlock(id));
 
-  if (stat_block) {
+  if (statBlock) {
     return (
-      <StatBlock ref={ref} stat_block={stat_block} />
+      <StatBlock ref={ref} statBlock={statBlock} />
     );
   }
 
   return null;
 });
-
-

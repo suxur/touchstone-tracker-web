@@ -9,6 +9,8 @@
   "license": "MIT",
   "require": {
     "php": "^7.4|^8.0",
+    "ext-json": "*",
+    "beyondcode/laravel-websockets": "^1.12",
     "doctrine/dbal": "^3.2",
     "fruitcake/laravel-cors": "^2.0",
     "guzzlehttp/guzzle": "^7.0.1",
@@ -19,7 +21,7 @@
     "laravel/telescope": "^4.6",
     "laravel/tinker": "^2.5",
     "tightenco/ziggy": "^1.0",
-    "ext-json": "*"
+    "ext-curl": "*"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.10",

@@ -1,41 +1,64 @@
 import * as React from 'react';
 import { useCallback } from 'react';
 import { useForm } from '@inertiajs/inertia-react';
-import clsx from 'clsx';
 
 import useRoute from '@/Hooks/useRoute';
 import { useEncounter } from '@/Hooks/useEncounter';
-import { JetConfirmationModal, ModalProps } from '@/Components/Jetstream';
+import {
+  ConfirmModal,
+  ConfirmModalContents,
+  ConfirmModalDismissAsyncButton,
+  ConfirmModalDismissButton,
+  ConfirmModalOpenButton,
+} from '@/Components/Modals/ConfirmModal';
+import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
+import { JetDangerButton } from '@/Components/Jetstream';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import queryClient from '@/lib/query-client';
 
-export const ClearEncounterModal = ({ isOpen, onClose }: ModalProps) => {
+export const ClearEncounterModal = () => {
   const route = useRoute();
-  const form = useForm({});
   const { encounter } = useEncounter();
 
+  const mutation = useMutation(() => axios.post(route('api.encounter.clear', { encounter })), {
+    onSuccess: (response) => {
+      queryClient.setQueryData(['encounter', encounter?.id], response.data);
+    },
+  });
+
   const confirm = useCallback(() => {
-    form.post(route('encounter.clear', { encounter: encounter.id }), {
-      only: ['encounter', 'combatants'],
-      onSuccess: () => onClose()
-    });
+    mutation.mutate();
+  }, [mutation]);
 
-  }, [form.post, encounter]);
-
-  return (
-    <JetConfirmationModal isOpen={isOpen} onClose={onClose}>
-      <JetConfirmationModal.Content title="Clear Encounter?">
-        <p>Are you sure you want to clear the encounter?</p>
-      </JetConfirmationModal.Content>
-      <JetConfirmationModal.Footer>
-        <button className="button bg-transparent hover:bg-gray-200 text-gray-500 mr-2" onClick={onClose}>
-          Cancel
-        </button>
-        <button
-          className={clsx("button bg-red-600 hover:bg-red-700", { 'loading': form.processing })}
-          onClick={confirm}
+  if (encounter) {
+    return (
+      <ConfirmModal>
+        <ConfirmModalOpenButton>
+          <JetTransparentButton className="mr-2">Clear</JetTransparentButton>
+        </ConfirmModalOpenButton>
+        <ConfirmModalContents
+          title="Clear Encounter?"
+          actions={(
+            <>
+              <ConfirmModalDismissButton>
+                <JetTransparentButton className="mr-2">
+                  Cancel
+                </JetTransparentButton>
+              </ConfirmModalDismissButton>
+              <ConfirmModalDismissAsyncButton>
+                <JetDangerButton processing={mutation.isLoading} onClick={confirm}>
+                  Remove
+                </JetDangerButton>
+              </ConfirmModalDismissAsyncButton>
+            </>
+          )}
         >
-          Remove
-        </button>
-      </JetConfirmationModal.Footer>
-    </JetConfirmationModal>
-  );
+          <p>Are you sure you want to clear the encounter?</p>
+        </ConfirmModalContents>
+      </ConfirmModal>
+    );
+  }
+
+  return null;
 };

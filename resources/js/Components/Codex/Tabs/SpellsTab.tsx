@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 
 import { CodexSpell, Spell } from '@/types';
-import { routes } from '@/constants';
+import { ONE_MINUTE, routes } from '@/constants';
 import { CodexRow } from '@/Components/Codex/CodexRow';
 import { NoResults } from '@/Components/Codex/NoResults';
 import { useCodex } from '@/Components/Codex/CodexContext';
@@ -19,9 +19,13 @@ export const SpellsTab = () => {
   const { dispatch } = useCodex();
   const [query, setQuery] = useState('');
 
-  const { isFetched, data } = useQuery<CodexSpell[]>(routes.CODEX_SPELLS);
+  const { isFetched, data } = useQuery<CodexSpell[]>(routes.CODEX_SPELLS, {
+    staleTime: ONE_MINUTE,
+  });
 
-  const filtered = data?.filter(spell => spell.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
+  const filtered = data?.filter(
+    spell => spell.name.toLowerCase().indexOf(query.toLowerCase()) > -1,
+  );
 
   const renderContent = () => {
     if (isFetched && filtered && filtered.length === 0) {

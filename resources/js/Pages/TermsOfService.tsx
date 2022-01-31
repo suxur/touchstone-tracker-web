@@ -1,7 +1,6 @@
 import React from 'react';
-import { JetAuthenticationCardLogo } from '@/Components/Jetstream/AuthenticationCardLogo';
-// @ts-ignore
 import { Head } from '@inertiajs/inertia-react';
+import { JetAuthenticationCardLogo } from '@/Components/Jetstream/AuthenticationCardLogo';
 
 interface Props {
   terms: string;
@@ -11,7 +10,6 @@ export default function TermsOfService({ terms }: Props) {
   return (
     <div className="font-sans text-gray-900 antialiased">
       <Head title="Terms of Service" />
-
       <div className="pt-4 bg-gray-100">
         <div className="min-h-screen flex flex-col items-center pt-6 sm:pt-0">
           <div>

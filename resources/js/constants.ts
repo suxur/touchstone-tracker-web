@@ -10,6 +10,10 @@ export const routes: Record<Routes, string> = {
   USER: 'user',
 };
 
+export const ROUND_TIME = 6;
+
+export const ONE_MINUTE = 60000;
+
 export const COMBATANT_CHARACTER = 'character';
 export const COMBATANT_MONSTER = 'monster';
 

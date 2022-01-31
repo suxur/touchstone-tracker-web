@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Models\Encounters;
+namespace Tests\Unit\Encounters;
 
 use App\Encounters\Encounters;
 use Illuminate\Support\Str;

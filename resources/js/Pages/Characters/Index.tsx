@@ -8,12 +8,10 @@ type Props = {
   permissions: CharacterPermissions;
 };
 
-const Index = ({ characters, permissions }: Props) => {
-  return (
-    <AppLayout>
-      <ManageCharacters characters={characters} permissions={permissions} />
-    </AppLayout>
-  );
-};
+const Index = ({ characters, permissions }: Props) => (
+  <AppLayout>
+    <ManageCharacters characters={characters} permissions={permissions} />
+  </AppLayout>
+);
 
 export default Index;

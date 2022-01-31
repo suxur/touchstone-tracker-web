@@ -11,27 +11,26 @@ interface Props {
   highlight?: string;
 }
 
-export const CodexRow = ({ title, onClick, onViewClick, highlight = '' }: Props) => {
-  return (
-    <div
-      className="group cursor-pointer flex flex-row justify-between items-center hover:bg-gray-200 odd:bg-white even:bg-gray-50"
-    >
-      <div className="flex flex-1">
-        <p
-          className="px-4 lg:px-6 py-4 flex flex-1"
-          onClick={onClick}
-        >
-          <Highlighted text={title} highlight={highlight} />
-        </p>
-      </div>
-      {onViewClick && (
-        <div className="flex w-10 mr-4 lg:mr-6 justify-end">
-          <ViewButton
-            className="hidden group-hover:flex"
-            onClick={onViewClick}
-          />
-        </div>
-      )}
+export const CodexRow = ({ title, onClick, onViewClick, highlight = '' }: Props) => (
+  <div
+    className="group cursor-pointer flex flex-row justify-between items-center hover:bg-gray-200 odd:bg-white even:bg-gray-50"
+  >
+    <div className="flex flex-1">
+      <button
+        type="button"
+        className="bg-transparent border-0 px-4 lg:px-6 py-4 flex flex-1"
+        onClick={onClick}
+      >
+        <Highlighted text={title} highlight={highlight} />
+      </button>
     </div>
-  );
-};
+    {onViewClick && (
+    <div className="flex w-10 mr-4 lg:mr-6 justify-end">
+      <ViewButton
+        className="hidden group-hover:flex"
+        onClick={onViewClick}
+      />
+    </div>
+    )}
+  </div>
+);

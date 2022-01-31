@@ -34,7 +34,7 @@ class CharacterController extends Controller
     }
 
     /**
-     * Create a new character.
+     * Create a new character
      *
      * @param Request $request
      * @return RedirectResponse
@@ -50,7 +50,7 @@ class CharacterController extends Controller
     }
 
     /**
-     * Update a character.
+     * Update a character
      *
      * @param Request $request
      * @param StatBlock $character
@@ -114,5 +114,4 @@ class CharacterController extends Controller
 
         return back(303);
     }
-
 }

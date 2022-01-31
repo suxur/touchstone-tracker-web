@@ -19,7 +19,7 @@ export const CreateTeamForm = ({ user }: Props) => {
   const createTeam = () => {
     form.post(route('teams.store'), {
       errorBag: 'createTeam',
-      preserveScroll: true
+      preserveScroll: true,
     });
   };
 

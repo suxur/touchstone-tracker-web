@@ -11,5 +11,3 @@ export const ActionLine = ({ action }: Props) => (
     <p>{action.description}</p>
   </div>
 );
-
-

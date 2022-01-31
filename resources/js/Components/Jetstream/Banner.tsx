@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import clsx from "clsx";
+import clsx from 'clsx';
 
 interface Props {
   message: string;
@@ -27,8 +27,8 @@ export const JetBanner = ({ message, style, className }: Props) => {
       {show && message ? (
         <div
           className={clsx({
-            'bg-green-500': style == 'success',
-            'bg-red-700': style == 'danger',
+            'bg-green-500': style === 'success',
+            'bg-red-700': style === 'danger',
           }, className)}
         >
           <div className="max-w-screen-xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
@@ -36,8 +36,8 @@ export const JetBanner = ({ message, style, className }: Props) => {
               <div className="w-0 flex-1 flex items-center min-w-0">
                 <span
                   className={clsx('flex p-2 rounded-lg', {
-                    'bg-green-600': style == 'success',
-                    'bg-red-600': style == 'danger',
+                    'bg-green-600': style === 'success',
+                    'bg-red-600': style === 'danger',
                   })}
                 >
                   {(() => {
@@ -94,8 +94,8 @@ export const JetBanner = ({ message, style, className }: Props) => {
                     '-mr-1 flex p-2 rounded-md focus:outline-none sm:-mr-2 transition',
                     {
                       'hover:bg-green-600 focus:bg-green-600':
-                        style == 'success',
-                      'hover:bg-red-600 focus:bg-red-600': style == 'danger',
+                        style === 'success',
+                      'hover:bg-red-600 focus:bg-red-600': style === 'danger',
                     },
                   )}
                   aria-label="Dismiss"

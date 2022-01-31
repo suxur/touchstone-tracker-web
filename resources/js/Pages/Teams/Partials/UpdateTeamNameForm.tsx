@@ -33,25 +33,21 @@ export const UpdateTeamNameForm = ({ team, permissions }: Props) => {
   return (
     <JetFormSection
       onSubmit={updateTeamName}
-      title={'Team Name'}
-      description={`The team's name and owner information.`}
-      renderActions={() => (
+      title="Team Name"
+      description={'The team\'s name and owner information.'}
+      renderActions={() => (permissions.canUpdateTeam ? (
         <>
-        {permissions.canUpdateTeam && (
-            <>
-              <JetButton
-                className={clsx({ 'opacity-25': form.processing })}
-                disabled={form.processing}
-              >
-                Save
-              </JetButton>
-              <JetActionMessage on={form.recentlySuccessful} className="ml-3">
-                Saved.
-              </JetActionMessage>
-            </>
-        )}
+          <JetButton
+            className={clsx({ 'opacity-25': form.processing })}
+            disabled={form.processing}
+          >
+            Save
+          </JetButton>
+          <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+            Saved.
+          </JetActionMessage>
         </>
-      )}
+      ) : <div />)}
     >
       {/* <!-- Team Owner Information --> */}
       <div className="col-span-6">

@@ -6,12 +6,12 @@ import useRoute from '@/Hooks/useRoute';
 import { DeleteButton } from '@/Components/Button/DeleteButton';
 
 type Props = {
-  active_encounter_id: number;
+  activeEncounterId?: number;
   encounter: CodexEncounter;
   onDelete: VoidFn;
 };
 
-export const EncounterRow = ({ active_encounter_id, encounter, onDelete }: Props) => {
+export const EncounterRow = ({ activeEncounterId, encounter, onDelete }: Props) => {
   const route = useRoute();
 
   return (
@@ -24,12 +24,13 @@ export const EncounterRow = ({ active_encounter_id, encounter, onDelete }: Props
           {encounter.created_at_diff}
         </span>
       </Link>
-      {encounter.id !== active_encounter_id && (
+      {encounter.id !== activeEncounterId && (
         <div className="col-span-1">
           <div className="flex h-full justify-end items-center">
             <DeleteButton onClick={onDelete} />
           </div>
         </div>
       )}
-    </div>);
+    </div>
+  );
 };

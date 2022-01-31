@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useRef, useState } from 'react';
+import * as ReactDOM from 'react-dom';
 import Moveable from 'react-moveable';
 import clsx from 'clsx';
-import { useWindowSize, } from '@react-hook/window-size';
-import { VoidFn } from '@/types';
-import { StatBlockQuery } from './StatBlockQuery';
-import * as ReactDOM from 'react-dom';
+import { useWindowSize } from '@react-hook/window-size';
 import { Transition } from '@headlessui/react';
+
+import { VoidFn } from '@/types';
+import { StatBlockQuery } from '@/Components/StatBlock/StatBlockQuery';
 
 interface Props {
   isOpen: boolean;
@@ -40,9 +41,9 @@ export const MoveableStatBlock = ({ id, close, isOpen }: Props) => {
             top: 10,
             right: width - 10,
             bottom: height - 10,
-            left: 10
+            left: 10,
           }}
-          draggable={true}
+          draggable
           throttleDrag={0}
           resizable={!collapsed}
           keepRatio={false}
@@ -52,8 +53,8 @@ export const MoveableStatBlock = ({ id, close, isOpen }: Props) => {
           throttleRotate={0}
           pinchable={false}
           origin={false}
-          snappable={true}
-          edge={true}
+          snappable
+          edge
           target={target}
           onClick={e => {
             if (e.isDouble) {
@@ -101,7 +102,7 @@ export const MoveableStatBlock = ({ id, close, isOpen }: Props) => {
           }}
         />
       </Transition.Root>,
-      document.body
+      document.body,
     );
   }
 

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Encounters\Encounters;
 use App\Events\UpdateEncounter;
 use App\Http\Controllers\Controller;
-use App\Models\StatBlock;
+use App\Http\Resources\EncounterResource;
+use App\Models\Combatant;
 use App\Models\Encounter;
-use App\Models\Monster;
-use App\Models\Spell;
+use App\Models\StatBlock;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -39,6 +39,10 @@ class EncounterController extends Controller
         return response()->json($encounter);
     }
 
+    public function show(Encounter $encounter): EncounterResource
+    {
+        return new EncounterResource($encounter);
+    }
 
     public function lookup(Request $request): RedirectResponse
     {
@@ -62,55 +66,12 @@ class EncounterController extends Controller
      *
      * @param $slug
      * @return JsonResponse
-     * @throws AuthorizationException
      */
     public function owner($slug): JsonResponse
     {
         $encounter = Encounter::whereSlug($slug)->firstOrFail();
 
         return response()->json($encounter);
-
-        $this->authorize('update', $encounter);
-
-        /** @var User $user */
-        $user = auth()->user();
-
-        if ($encounter->user_id === null) {
-            $encounter->user_id = auth()->id();
-            session()->remove('encounter_slug');
-            $encounter->save();
-        }
-
-        session(['encounter_slug' => $encounter->slug]);
-        return response()->json($encounter);
-
-//        $characters = $user->characters;
-//        $teamCharacters = $user->currentTeam->characters;
-//        $characters = $characters->merge($teamCharacters);
-//        $encounters = $user->encounters()->get(['id', 'slug', 'created_at'])->each->setAppends(['created_at_diff']);
-//
-//        $collections = $user->monsters->each->setAppends([
-//            'initiative',
-//            'speed_array',
-//            'senses_array',
-//            'damage_vulnerabilities_array',
-//            'damage_resistances_array',
-//            'damage_immunities_array',
-//            'condition_immunities_array',
-//            'languages_array',
-//            'skills_array',
-//            'saves_array'
-//        ])->sortBy('name')->groupBy('collection');
-//
-//        return Inertia::render('Encounter/Index', [
-//            'encounter'  => $encounter,
-//            'monsters'   => Monster::select(['id', 'name', 'hit_points', 'dexterity'])->without('specialAbilities', 'actions', 'reactions', 'legendaryActions')->get(),
-//            'characters' => $characters,
-//            'combatants' => $encounter->combatants,
-//            'spells'     => Spell::all('id', 'name'),
-//            'encounters' => $encounters,
-//            'collection_names' => $collections->keys()
-//        ]);
     }
 
     public function player($slug): Response
@@ -124,7 +85,7 @@ class EncounterController extends Controller
         }
 
         return Inertia::render('Encounter/Player', [
-            'init' => $encounter,
+            'init'          => $encounter,
             'character_ids' => $characterIds
         ]);
     }
@@ -150,16 +111,14 @@ class EncounterController extends Controller
         return redirect()->route('register');
     }
 
-    public function clear(Encounter $encounter): RedirectResponse
+    public function clear(Encounter $encounter): EncounterResource
     {
         $encounter->is_active = false;
         $encounter->active_index = 0;
-        $encounter->monsters()->detach();
-        $encounter->characters()->detach();
+        $encounter->combatants()->delete();
         $encounter->save();
 
-        UpdateEncounter::dispatch($encounter);
-        return back();
+        return $this->returnResponse($encounter);
     }
 
     public function destroy(Encounter $encounter): JsonResponse
@@ -170,138 +129,112 @@ class EncounterController extends Controller
         return response()->json(true);
     }
 
-    public function add(Request $request, Encounter $encounter, $type): JsonResponse
+    public function add(Request $request, Encounter $encounter, $type)
     {
-        $ids = collect($request->get('ids'));
-
-        /** @var User $user */
-        $user = auth()->user();
-
-        if ($type === Encounter::COMBATANT_MONSTER) {
-            $monsters = Monster::find($ids);
-            foreach ($monsters as $monster) {
-                $encounter->addMonsterCombatant($monster);
-            }
-//            } else {
-//                $monsterData = [
-//                    'name' => $combatant['name'],
-//                    'collection' => 'Uncategorized',
-//                ];
-//
-//                if ($user) {
-//                    $monsterData['user_id'] = $user->id;
-//                }
-//
-//                $monster = Monster::create($monsterData);
-//            }
-        }
-
-        if ($type === Encounter::COMBATANT_CHARACTER) {
-            $characters = StatBlock::find($ids);
-//            } else {
-//                $characterData = [
-//                    'name' => $combatant['name']
-//                ];
-//
-//                if ($user && $user->currentTeam) {
-//                    $characterData['team_id'] = $user->currentTeam->id;
-//                }
-//
-//                $character = Character::create($characterData);
-//            }
-
-            foreach ($characters as $character) {
-                $encounter->addCharacterCombatant($character);
-            }
-
-            if (!auth()->check()) {
-                $characterIds = session('character_ids', []);
-                $characterIds[] = $character->id;
-                session(['character_ids' => $characterIds]);
-            }
-        }
-
-        UpdateEncounter::dispatch($encounter);
-        return response()->json($encounter);
+        return null;
     }
 
-    public function update(Request $request, Encounter $encounter): RedirectResponse
+    /**
+     * Update
+     *
+     * @param Request $request
+     * @param Encounter $encounter
+     * @return EncounterResource
+     * @throws AuthorizationException
+     */
+    public function update(Request $request, Encounter $encounter): EncounterResource
     {
         $this->authorize('update', $encounter);
 
-        $requestCombatants = $request->get('combatants');
-        $requestEncounter = $request->get('encounter');
+        $encounter->fill($request->except(['is_active']));
 
-        if ($requestCombatants) {
-            foreach ($requestCombatants as $index => $combatant) {
-                $updateData = [
-                    'hit_points' => $combatant['encounter_stats']['hit_points'],
-                    'initiative' => $combatant['encounter_stats']['initiative'],
-                    'action' => $combatant['encounter_stats']['action'],
-                    'bonus_action' => $combatant['encounter_stats']['bonus_action'],
-                    'reaction' => $combatant['encounter_stats']['reaction'],
-                    'extra_action' => $combatant['encounter_stats']['extra_action'],
-                    'death_save_success' => $combatant['encounter_stats']['death_save_success'],
-                    'death_save_failure' => $combatant['encounter_stats']['death_save_failure'],
-                    'order' => $index
-                ];
-
-                if ($combatant['encounter_stats']['combatant_type'] === Encounter::COMBATANT_MONSTER) {
-                    Monster::where('id', $combatant['id'])->update(['hit_points' => $combatant['hit_points'], 'armor_class' => $combatant['armor_class']]);
-                    $encounter->monsters()->wherePivot('unique_id', $combatant['encounter_stats']['unique_id'])->updateExistingPivot($combatant['id'], $updateData);
-                }
-
-                if ($combatant['encounter_stats']['combatant_type'] === Encounter::COMBATANT_CHARACTER) {
-                    StatBlock::where('id', $combatant['id'])->update(['hit_points' => $combatant['hit_points'], 'armor_class' => $combatant['armor_class']]);
-                    $characters[$combatant['id']] = $updateData;
-                }
-            }
-
-            if (isset($characters)) {
-                $encounter->characters()->syncWithoutDetaching($characters);
+        // Update During Encounter
+        if ($request->get('is_active') && $encounter->is_active) {
+            foreach ($request->get('combatants') as $index => $requestCombatant) {
+                $combatant = $encounter->combatants()->where('id', $requestCombatant['id'])->first();
+                $combatant->order = $index;
+                $combatant->save();
             }
         }
 
-        if ($request->has('monster_hp_status')) {
-            $encounter->monster_hp_status = $request->get('monster_hp_status');
-        }
+        // End Encounter
+        if (!$request->get('is_active') && $encounter->is_active) {
+            $encounter->is_active = false;
+            $encounter->round = 1;
+            $encounter->active_index = 0;
+            $encounter->started_at = null;
 
-        if ($request->has('character_hp_status')) {
-            $encounter->character_hp_status = $request->get('character_hp_status');
-        }
-
-        if ($requestEncounter) {
-            if ($requestEncounter['is_active']) {
-                $encounter->started_at = Carbon::now();
+            if (count($request->get('combatants')) === 0) {
+                $encounter->combatants()->delete();
             }
 
-            $encounter->is_active = $requestEncounter['is_active'];
-            $encounter->active_index = $requestEncounter['active_index'];
-            $encounter->round = $requestEncounter['round'];
+            foreach ($encounter->combatants as $combatant) {
+                $combatant->action = false;
+                $combatant->bonus_action = false;
+                $combatant->reaction = false;
+                $combatant->death_save_success = 0;
+                $combatant->death_save_failure = 0;
+                $combatant->initiative = $combatant->statBlock->initiative ?? 0;
+                $combatant->save();
+            }
         }
+
+        // Start Encounter
+        if ($request->get('is_active') && !$encounter->is_active) {
+            $encounter->is_active = true;
+            $encounter->started_at = Carbon::now();
+
+            foreach ($encounter->combatants->sortByDesc('initiative')->values() as $index => $combatant) {
+                $combatant->order = $index;
+                $combatant->save();
+            }
+        }
+//        $encounter->is_active = $request->get('is_active');
+
+//        $requestCombatants = $request->get('combatants');
+//        $requestEncounter = $request->get('encounter');
+//
+//        if ($requestCombatants) {
+
+//        }
+//
+//        if ($requestEncounter) {
+//            if ($requestEncounter['is_active'] === false) {
+//                $encounter->round = 1;
+//                $encounter->active_index = 0;
+//            } else {
+//                $encounter->started_at = Carbon::now();
+//                foreach ($encounter->combatants->sortByDesc('initiative')->values() as $index => $combatant) {
+//                    $combatant->order = $index;
+//                    $combatant->save();
+//                }
+//            }
+//
+//            if (isset($requestEncounter['combatants']) && count($requestEncounter['combatants']) === 0) {
+//                $encounter->combatants()->delete();
+//            }
+//
+//            $encounter->is_active = $requestEncounter['is_active'];
+//        }
 
         $encounter->save();
-        UpdateEncounter::dispatch($encounter);
-        return back();
+        $encounter->fresh();
+
+        return $this->returnResponse($encounter);
     }
 
-    public function remove(Request $request, Encounter $encounter): JsonResponse
+    public function order(Request $request, Encounter $encounter): EncounterResource
     {
-        $combatant = $request->get('combatant');
-        $combatantType = $combatant['encounter_stats']['combatant_type'];
-
-        if ($combatantType === Encounter::COMBATANT_MONSTER) {
-            $encounter
-                ->monsters()
-                ->wherePivot('unique_id', $combatant['encounter_stats']['unique_id'])
-                ->detach($combatant['encounter_stats']['combatant_id']);
-        } else {
-            $encounter->characters()->detach($combatant['id']);
+        foreach ($request->get('combatants') as $index => $requestCombatant) {
+            $combatant = $encounter->combatants()->where('id', $requestCombatant['id'])->first();
+            $combatant->order = $index;
+            $combatant->save();
         }
 
-        $encounter->save();
-        UpdateEncounter::dispatch($encounter);
-        return response()->json(true);
+        $encounter->combatants->fresh();
+        $encounter->fresh();
+
+        return $this->returnResponse($encounter);
     }
 
     public function encounters()
@@ -314,4 +247,37 @@ class EncounterController extends Controller
             'encounters' => $encounters
         ]);
     }
+
+
+    public function addByStatBlock(Encounter $encounter, StatBlock $statBlock): EncounterResource
+    {
+        $order = $encounter->combatants_count;
+
+        $encounter->combatants()->create([
+            'name'               => $statBlock->name,
+            'type'               => $statBlock->stat_block_type,
+            'current_hit_points' => $statBlock->hit_points,
+            'hit_point_maximum'  => $statBlock->hit_points,
+            'armor_class'        => $statBlock->armor_class,
+            'initiative'         => $statBlock->getDexterityModifierAttribute(),
+            'order'              => $order,
+            'stat_block_id'      => $statBlock->id
+        ]);
+
+        return $this->returnResponse($encounter);
+    }
+
+    public function remove(Encounter $encounter, Combatant $combatant): EncounterResource
+    {
+        $combatant->delete();
+
+        return $this->returnResponse($encounter);
+    }
+
+    private function returnResponse(Encounter $encounter): EncounterResource
+    {
+        UpdateEncounter::dispatch($encounter);
+        return new EncounterResource($encounter->fresh());
+    }
+
 }
