@@ -24,10 +24,6 @@ export default function Login({ status, canResetPassword }: Props) {
     remember: false,
   });
 
-  useEffect(() => () => {
-    form.reset('password');
-  }, [form]);
-
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     form.post(route('login'));

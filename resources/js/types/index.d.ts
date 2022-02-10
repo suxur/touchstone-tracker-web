@@ -71,6 +71,10 @@ export interface Pagination<T> {
   total: number;
 }
 
+export interface StatBlockPermissions {
+  canManageStatBlocks: boolean;
+}
+
 export interface CharacterPermissions {
   canManageCharacters: boolean;
 }
@@ -201,7 +205,7 @@ export interface StatBlock {
   team_id: number | null;
   name: string;
   size: string | null;
-  stat_block_type: string | null;
+  stat_block_type: StatBlockType
   type: string | null;
   subtype: string | null;
   alignment: string | null;

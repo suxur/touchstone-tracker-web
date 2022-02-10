@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Jetstream\CreateStatBlock;
-use App\Actions\Jetstream\RemoveMonster;
+use App\Actions\Jetstream\RemoveStatBlock;
 use App\Actions\Jetstream\UpdateMonster;
+use App\Actions\StatBlock\CreateStatBlock;
 use App\Models\Action;
-use App\Models\Monster;
 use App\Models\StatBlock;
 use App\Models\User;
 use DB;
@@ -42,18 +41,14 @@ class MonsterController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-//        $collections = $user->monsters()->sortBy('name')->groupBy('collection');
-//
-//        return Inertia::render('Monsters/Index', [
-//            'collections'      => $collections,
-//            'collection_names' => $collections->keys()
-//        ]);
+        $monsters = $user->monsters()->sortBy('name');
+
         return Inertia::render('Monsters/Index', [
-            'monsters'    => $user->monsters()->sortBy('name')->values(),
+            'monsters'    => $monsters->values(),
+            'collections' => $monsters->groupBy('collection')->keys(),
             'preloaded'   => StatBlock::where('user_id', null)->monsters()->paginate(10),
             'permissions' => [
-                // TODO: Implement character permissions
-                'canManageMonsters' => true,
+                'canManageStatBlocks' => true,
             ],
         ]);
     }
@@ -67,10 +62,7 @@ class MonsterController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $creator = app(CreateStatBlock::class);
-
-        $creator->create($request->user(), $request->all());
-
+        app(CreateStatBlock::class)->create($request->user(), $request->all());
         return back(303);
     }
 
@@ -78,11 +70,11 @@ class MonsterController extends Controller
      * Update a monster.
      *
      * @param Request $request
-     * @param Monster $monster
+     * @param StatBlock $monster
      * @return RedirectResponse
      * @throws ValidationException|AuthorizationException
      */
-    public function update(Request $request, Monster $monster): RedirectResponse
+    public function update(Request $request, StatBlock $monster): RedirectResponse
     {
         $creator = app(UpdateMonster::class);
 
@@ -95,18 +87,18 @@ class MonsterController extends Controller
      * Remove the given monster.
      *
      * @param Request $request
-     * @param Monster $monster
+     * @param StatBlock $monster
      * @return RedirectResponse
      * @throws AuthorizationException
      */
-    public function destroy(Request $request, Monster $monster): RedirectResponse
+    public function destroy(Request $request, StatBlock $monster): RedirectResponse
     {
-        app(RemoveMonster::class)->remove($request->user(), $monster);
+        app(RemoveStatBlock::class)->remove($request->user(), $monster);
 
         return back(303);
     }
 
-    public function monster(Monster $monster): JsonResponse
+    public function monster(StatBlock $monster): JsonResponse
     {
         $monster->setAppends([
             'experience_points',

@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { AppLayout } from '@/Layouts/AppLayout';
-import { ManageCharacters } from '@/Domains/Characters/ManageCharacters';
-import { CharacterPermissions, StatBlock } from '@/types';
+import { StatBlock, StatBlockPermissions } from '@/types';
+import { ManageStatBlocks } from '@/Domains/StatBlocks/ManageStatBlocks';
 
 type Props = {
   characters: StatBlock[];
-  permissions: CharacterPermissions;
+  permissions: StatBlockPermissions;
 };
 
 const Index = ({ characters, permissions }: Props) => (
   <AppLayout>
-    <ManageCharacters characters={characters} permissions={permissions} />
+    <ManageStatBlocks statBlocks={characters} permissions={permissions} type="character" />
   </AppLayout>
 );
 

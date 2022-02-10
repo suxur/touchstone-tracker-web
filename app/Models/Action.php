@@ -16,6 +16,12 @@ class Action extends Model
      */
     protected $visible = ['id', 'name', 'description'];
 
+    protected $casts = [
+        'is_reaction'  => 'boolean',
+        'is_legendary' => 'boolean',
+        'is_special'   => 'boolean',
+    ];
+
     protected $guarded = [];
 
     public function statBlock()

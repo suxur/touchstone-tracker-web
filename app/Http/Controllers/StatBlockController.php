@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Jetstream\CreateStatBlock;
 use App\Actions\Jetstream\DeleteStatBlock;
-use App\Actions\Jetstream\RemoveCharacter;
 use App\Actions\Jetstream\UpdateCharacter;
+use App\Actions\StatBlock\CreateStatBlock;
 use App\Models\StatBlock;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;

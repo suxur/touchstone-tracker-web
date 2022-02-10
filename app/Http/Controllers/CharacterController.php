@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Jetstream\CreateStatBlock;
-use App\Actions\Jetstream\RemoveCharacter;
+use App\Actions\Jetstream\RemoveStatBlock;
 use App\Actions\Jetstream\UpdateCharacter;
+use App\Actions\StatBlock\CreateStatBlock;
 use App\Models\StatBlock;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -27,8 +27,7 @@ class CharacterController extends Controller
         return Inertia::render('Characters/Index', [
             'characters'  => $user->characters()->sortBy('name')->values(),
             'permissions' => [
-                // TODO: Implement character permissions
-                'canManageCharacters' => true,
+                'canManageStatBlocks' => true,
             ],
         ]);
     }
@@ -76,7 +75,7 @@ class CharacterController extends Controller
      */
     public function destroy(Request $request, StatBlock $character): RedirectResponse
     {
-        app(RemoveCharacter::class)->remove($request->user(), $character);
+        app(RemoveStatBlock::class)->remove($request->user(), $character);
 
         return back(303);
     }

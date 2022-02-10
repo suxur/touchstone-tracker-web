@@ -23,6 +23,10 @@ class Combatant extends Model
         'order'        => 'integer'
     ];
 
+    protected $with = [
+        'statBlock'
+    ];
+
     public function encounter()
     {
         return $this->belongsTo(Encounter::class);

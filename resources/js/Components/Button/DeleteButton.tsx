@@ -7,6 +7,7 @@ export const DeleteButton = ({ className, ...props }: IconButtonProps) => (
   <IconButton
     {...props}
     icon="trash-alt"
+    title="Delete"
     className={clsx(
       'hover:bg-red-100 hover:text-red-400',
       className,

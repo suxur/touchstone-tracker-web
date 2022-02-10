@@ -21,7 +21,8 @@
     "laravel/telescope": "^4.6",
     "laravel/tinker": "^2.5",
     "tightenco/ziggy": "^1.0",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-simplexml": "*"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.10",

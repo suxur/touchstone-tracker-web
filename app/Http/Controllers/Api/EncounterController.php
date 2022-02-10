@@ -25,10 +25,9 @@ use function session;
 
 class EncounterController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): EncounterResource
     {
         $slug = session('encounter_slug') ?? Str::random(8);
-//        $slug = 'zPq6XQ0h';
 
         $encounter = Encounter::firstOrCreate([
             'slug' => $slug,
@@ -36,7 +35,7 @@ class EncounterController extends Controller
 
         session(['encounter_slug' => $encounter->slug]);
 
-        return response()->json($encounter);
+        return new EncounterResource($encounter);
     }
 
     public function show(Encounter $encounter): EncounterResource

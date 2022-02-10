@@ -17,6 +17,7 @@ class CreateStatBlocksTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('team_id')->nullable()->constrained();
+            $table->string('session_id')->nullable();
             $table->string('name');
             $table->string('size')->nullable();
             $table->string('stat_block_type')->nullable(); // monster | character | npc
@@ -76,6 +77,8 @@ class CreateStatBlocksTable extends Migration
             $table->string('armor_description')->nullable();
             $table->string('collection')->nullable();
             $table->timestamps();
+
+            $table->foreign('session_id')->references('id')->on('sessions')->cascadeOnDelete();
         });
     }
 

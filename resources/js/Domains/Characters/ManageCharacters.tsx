@@ -10,6 +10,7 @@ import { DeleteButton } from '@/Components/Button/DeleteButton';
 import { CloneButton } from '@/Components/Button/CloneButton';
 import { CreateStatBlockForm } from '@/Components/Modals/CreateStatBlockForm';
 import { DeleteStatBlockModal } from '@/Components/Modals/DeleteStatBlockModal';
+import { EditButton } from '@/Components/Button/EditButton';
 
 interface Props {
   characters: StatBlock[];
@@ -23,6 +24,7 @@ type DeleteModal = {
 
 export const ManageCharacters = ({ characters, permissions }: Props) => {
   const route = useRoute();
+  const [statBlock, setStatBlock] = useState<StatBlock>();
 
   const [createCharacterModal, setCreateCharacterModal] = useState({
     isOpen: false,
@@ -33,8 +35,13 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
   });
 
   const clone = useForm({});
-  const cloneCharacter = (monster: StatBlock) => {
-    clone.post(route('stat_block.clone', { stat_block: monster, type: 'character' }));
+  const cloneCharacter = (character: StatBlock) => {
+    clone.post(route('stat_block.clone', { stat_block: character, type: 'character' }));
+  };
+
+  const editCharacter = (character: StatBlock) => {
+    setStatBlock(character);
+    setCreateCharacterModal({ isOpen: true });
   };
 
   const confirmCharacterRemoval = (character: StatBlock) => {
@@ -46,15 +53,20 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
       title="Characters"
       description="All of the characters that are part of this team."
       actions={(
-        <JetButton onClick={() => setCreateCharacterModal({ isOpen: true })}>
+        <JetButton
+          onClick={() => {
+            setStatBlock(undefined);
+            setCreateCharacterModal({ isOpen: true });
+          }}
+        >
           Add Character
         </JetButton>
       )}
     >
       {characters.length > 0 ? (
-        <div className="space-y-6">
+        <div className="space-y-4 divide-y divide-gray-200">
           {characters.map(character => (
-            <div key={character.id} className="flex items-center justify-between">
+            <div key={character.id} className="flex items-center justify-between pt-4 first:pt-0">
               <div className="flex items-center">
                 {character.subtype ? (
                   <ClassIcon icon={character.subtype as Classes} size="sm" />
@@ -70,6 +82,7 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
               <div className="flex items-center">
                 {permissions.canManageCharacters && (
                   <>
+                    <EditButton onClick={() => editCharacter(character)} />
                     <CloneButton onClick={() => cloneCharacter(character)} />
                     <DeleteButton onClick={() => confirmCharacterRemoval(character)} />
                   </>
@@ -84,6 +97,7 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
       <CreateStatBlockForm
         isOpen={createCharacterModal.isOpen}
         onClose={() => setCreateCharacterModal({ isOpen: false })}
+        statBlock={statBlock}
         type="character"
       />
       <DeleteStatBlockModal

@@ -38,7 +38,7 @@ export const Codex = () => {
         <Card.Body>
           <Tab.Group
             defaultIndex={localStorage.codex_tab ?? 0}
-            onChange={index => { localStorage.codex_tab = index }}
+            onChange={index => { localStorage.codex_tab = index; }}
           >
             <Tab.List className="bg-gray-600 flex rounded-t-md h-10">
               <Tab className={({ selected }) => clsx('tab', { 'tab-selected': selected })}>

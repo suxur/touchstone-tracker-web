@@ -5,18 +5,19 @@ import axios from 'axios';
 
 import { StatBlock as SB } from '@/types';
 import { StatBlock } from '@/Components/StatBlock/StatBlock';
+import useRoute from '@/Hooks/useRoute';
 
 interface Props {
   id: number;
 }
 
-export const getStatBlock = async (id: number) => {
-  const { data } = await axios.get<SB>(`/api/stat-block/${id}`);
-  return data;
-};
-
 export const StatBlockQuery = forwardRef<HTMLButtonElement, Props>(({ id }: Props, ref) => {
-  const { data: statBlock } = useQuery<SB>(['stat_block', id], () => getStatBlock(id));
+  const route = useRoute();
+
+  const { data: statBlock } = useQuery<SB>(['stat-block', id], async () => {
+    const { data } = await axios.get<SB>(route('api.stat-blocks.show', { stat_block: id }));
+    return data;
+  });
 
   if (statBlock) {
     return (

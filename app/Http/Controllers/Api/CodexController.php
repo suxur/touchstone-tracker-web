@@ -9,6 +9,7 @@ use App\Http\Resources\CodexMonsterResource;
 use App\Http\Resources\CodexSpellResource;
 use App\Models\Spell;
 use App\Models\StatBlock;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CodexController extends Controller
@@ -21,7 +22,7 @@ class CodexController extends Controller
 
     public function characters(): AnonymousResourceCollection
     {
-        $characters = StatBlock::select(['id', 'name', 'subtype'])->characters()->get();
+        $characters = auth()->user()->characters() ?? [];
         return CodexCharacterResource::collection($characters);
     }
 

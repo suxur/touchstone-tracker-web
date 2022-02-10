@@ -19,7 +19,7 @@ export const DeleteStatBlockModal = ({ statBlock, type, isOpen, onClose }: Props
 
   const confirm = useCallback(() => {
     if (statBlock) {
-      form.delete(route('stat-blocks.destroy', { statBlock }), {
+      form.delete(route('stat-blocks.destroy', { stat_block: statBlock }), {
         onSuccess: () => onClose(),
       });
     }

@@ -1,92 +1,39 @@
 import * as React from 'react';
+import { useReducer } from 'react';
 import { JetButton, JetDialogModal, JetInput, JetLabel, ModalProps } from '@/Components/Jetstream';
-import { StatBlock } from '@/types';
-import { useForm } from '@inertiajs/inertia-react';
+import { StatBlock, StatBlockType } from '@/types';
 import useRoute from '@/Hooks/useRoute';
 import { ABILITIES, ALIGNMENTS, CLASSES, RACES, SIZES, SKILLS } from '@/constants';
 import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
 import clsx from 'clsx';
 import { Dropdown } from '@/Components/Form/Dropdown';
 import { Divider } from '@/Components/StatBlock/Divider';
-import { DragItems, DynamicInput } from '@/Components/Form/DynamicInput';
-import { SkillDragItems, Skills } from '@/Components/Form/Skills';
-import { ActionDragItems, Actions } from '@/Components/Form/Actions';
+import { DynamicInput } from '@/Components/Form/DynamicInput';
+import { Skills } from '@/Components/Form/Skills';
+import { Actions } from '@/Components/Form/Actions';
 import { startCase } from 'lodash';
+import { Autocomplete } from '@/Components/Form/Autocomplete';
+import useTypedPage from '@/Hooks/useTypedPage';
+import { PageProps } from '@inertiajs/inertia';
+import { useStatBlockForm } from '@/Hooks/useStatBlockForm';
 
 interface Props extends ModalProps {
   statBlock?: StatBlock;
-  type: 'monster' | 'character';
+  type: StatBlockType;
 }
 
-interface FormProps {
-  name: string;
-  race: string;
-  class: string;
-  armor_class: number;
-  armor_description: string;
-  stat_block_type: 'monster' | 'character';
-  hit_points: number;
-  hit_dice: string;
-  strength: number;
-  dexterity: number;
-  constitution: number;
-  intelligence: number;
-  wisdom: number;
-  charisma: number;
-  size: string;
-  alignment: string;
-  speed: DragItems[];
-  senses: DragItems[];
-  damage_vulnerabilities: DragItems[];
-  damage_resistances: DragItems[];
-  damage_immunities: DragItems[];
-  condition_immunities: DragItems[];
-  languages: DragItems[];
-  saves: SkillDragItems[];
-  skills: SkillDragItems[];
-  traits: ActionDragItems[];
-  actions: ActionDragItems[];
-  reactions: ActionDragItems[];
+interface TypedPageProps extends PageProps {
+  collections: string[];
 }
 
 export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props) => {
   const route = useRoute();
-
-  const [advancedForm, toggleAdvancedForm] = React.useReducer(previous => !previous, true);
-
-  const form = useForm<FormProps>({
-    name: '',
-    race: '',
-    class: '',
-    armor_class: 0,
-    armor_description: '',
-    stat_block_type: type,
-    hit_points: 0,
-    hit_dice: '',
-    strength: 10,
-    dexterity: 10,
-    constitution: 10,
-    intelligence: 10,
-    wisdom: 10,
-    charisma: 10,
-    size: '',
-    alignment: '',
-    speed: [],
-    senses: [],
-    damage_vulnerabilities: [],
-    damage_resistances: [],
-    damage_immunities: [],
-    condition_immunities: [],
-    languages: [],
-    saves: [],
-    skills: [],
-    traits: [],
-    actions: [],
-    reactions: [],
-  });
+  const form = useStatBlockForm({ statBlock, type });
+  const { collections } = useTypedPage<TypedPageProps>().props;
+  const [advancedForm, toggleAdvancedForm] = useReducer(previous => !previous, true);
 
   const onSubmit = () => {
-    form.post(route('stat_block.store'), {
+    form.post(route('stat-blocks.store'), {
       preserveScroll: true,
       onSuccess: () => {
         onClose();
@@ -99,7 +46,7 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
     <JetDialogModal isOpen={isOpen} onClose={onClose}>
       <JetDialogModal.Content title={`Create ${startCase(type)}`}>
         <div className="grid grid-cols-6 gap-6">
-          <div className="col-span-6">
+          <div className={type === 'monster' ? 'col-span-4' : 'col-span-6'}>
             <JetLabel htmlFor="name" value="Name" required />
             <JetInput
               id="name"
@@ -111,28 +58,59 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
               required
             />
           </div>
-
+          {type === 'monster' && (
+            <div className="col-span-2">
+              <Autocomplete label="Collection" items={collections || []} />
+            </div>
+          )}
           <div className="col-span-6 grid grid-cols-6 gap-6">
-            <div className="col-span-3">
-              <Dropdown
-                value={form.data.race}
-                label="Race"
-                onChange={(value => form.setData('race', value))}
-                data={RACES}
-                required
-              />
-            </div>
-            <div className="col-span-3">
-              <Dropdown
-                value={form.data.class}
-                label="Class"
-                onChange={(value => form.setData('class', value))}
-                data={CLASSES}
-                required
-              />
-            </div>
+            {type === 'monster' ? (
+              <>
+                <div className="col-span-3">
+                  <JetLabel htmlFor="type" value="Type" required />
+                  <JetInput
+                    id="type"
+                    type="text"
+                    className="mt-1 w-full"
+                    value={form.data.race}
+                    onChange={e => form.setData('race', e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="col-span-3">
+                  <JetLabel htmlFor="sub-type" value="Sub Type" />
+                  <JetInput
+                    id="sub-type"
+                    type="text"
+                    className="mt-1 w-full"
+                    value={form.data.class}
+                    onChange={e => form.setData('class', e.target.value)}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="col-span-3">
+                  <Dropdown
+                    value={form.data.race}
+                    label="Race"
+                    onChange={(value => form.setData('race', value))}
+                    data={RACES}
+                    required
+                  />
+                </div>
+                <div className="col-span-3">
+                  <Dropdown
+                    value={form.data.class}
+                    label="Class"
+                    onChange={(value => form.setData('class', value))}
+                    data={CLASSES}
+                    required
+                  />
+                </div>
+              </>
+            )}
           </div>
-
           <div className="col-span-6 grid grid-cols-6 gap-6">
             <div className="col-span-1">
               <JetLabel htmlFor="armor_class" value="Armor Class" />
@@ -272,6 +250,20 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
                 />
               </div>
             </div>
+            {type === 'monster' && (
+              <div className="col-span-6">
+                <JetLabel htmlFor="cr">
+                  Challenge Rating
+                </JetLabel>
+                <JetInput
+                  id="cr"
+                  type="text"
+                  className="mt-1 block w-full"
+                  value={form.data.cr}
+                  onChange={e => form.setData('cr', e.target.value)}
+                />
+              </div>
+            )}
             <div className="col-span-6">
               <Divider />
               <DynamicInput title="Speed" items={form.data.speed} setItems={items => form.setData('speed', items)} />
@@ -333,8 +325,27 @@ export const CreateStatBlockForm = ({ statBlock, type, isOpen, onClose }: Props)
               <Actions
                 title="Reactions"
                 items={form.data.reactions}
-                setItems={items => form.setData('reactions', items)}
+                setItems={items => form.setData('actions', items)}
               />
+              {type === 'monster' && (
+                <>
+                  <Divider />
+                  <Actions
+                    title="Legendary Actions"
+                    items={form.data.legendary_actions}
+                    setItems={items => form.setData('legendary_actions', items)}
+                  />
+                  <Divider />
+                  <div className="col-span-6">
+                    <JetLabel htmlFor="legendary_description" value="Legendary Description" />
+                    <textarea
+                      className="mt-1 block w-full border-gray-300 focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50 rounded-md"
+                      onChange={e => form.setData('legendary_description', e.target.value)}
+                      value={form.data.legendary_description}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <button

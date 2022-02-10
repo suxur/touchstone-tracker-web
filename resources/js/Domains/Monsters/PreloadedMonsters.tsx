@@ -28,7 +28,7 @@ export const PreloadedMonsters = ({ preloaded }: Props) => {
           <div className="space-y-4 divide-y divide-gray-200">
             {monsters.map(monster => (
               <div key={monster.id}>
-                <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center justify-between mt-2 first:mt-0">
                   <div className="flex flex-col">
                     <div>{monster.name}</div>
                   </div>

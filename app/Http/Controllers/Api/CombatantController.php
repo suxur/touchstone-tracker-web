@@ -83,10 +83,6 @@ class CombatantController extends Controller
         return CombatantResource::collection($encounter->combatants()->get());
     }
 
-
-
-
-
     /**
      * @param Request $request
      * @param Combatant $combatant

@@ -28,7 +28,7 @@ class StatBlockFactory extends Factory
             'type'                   => $this->faker->randomElement(StatBlock::RACES),
             'subtype'                => $this->faker->randomElement(StatBlock::CLASSES),
             'size'                   => $this->faker->randomElement(['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan']),
-            'stat_block_type'         => $this->faker->randomElement(['monster', 'character', 'npc']),
+            'stat_block_type'        => $this->faker->randomElement(['monster', 'character', 'npc']),
             'alignment'              => $this->faker->randomElement(['lawful good', 'lawful neutral', 'lawful evil', 'neutral good', 'neutral', 'neutral evil', 'chaotic good', 'chaotic neutral', 'chaotic evil']),
             'armor_class'            => $this->faker->numberBetween(5, 25),
             'hit_points'             => $this->faker->numberBetween(1, 676),

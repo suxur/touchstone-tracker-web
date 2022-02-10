@@ -1401,8 +1401,16 @@ select {
     z-index: 20;
 }
 
+.col-span-4 {
+    grid-column: span 4 / span 4;
+}
+
 .col-span-6 {
     grid-column: span 6 / span 6;
+}
+
+.col-span-2 {
+    grid-column: span 2 / span 2;
 }
 
 .col-span-3 {
@@ -1411,10 +1419,6 @@ select {
 
 .col-span-1 {
     grid-column: span 1 / span 1;
-}
-
-.col-span-2 {
-    grid-column: span 2 / span 2;
 }
 
 .col-span-12 {
@@ -1433,6 +1437,11 @@ select {
 .mx-auto {
     margin-left: auto;
     margin-right: auto;
+}
+
+.mx-8 {
+    margin-left: 2rem;
+    margin-right: 2rem;
 }
 
 .mx-2 {
@@ -1543,6 +1552,10 @@ select {
 
 .mb-2 {
     margin-bottom: 0.5rem;
+}
+
+.mb-10 {
+    margin-bottom: 2.5rem;
 }
 
 .ml-10 {
@@ -1671,10 +1684,6 @@ select {
 
 .max-h-12 {
     max-height: 3rem;
-}
-
-.max-h-14 {
-    max-height: 3.5rem;
 }
 
 .max-h-60 {
@@ -1882,6 +1891,10 @@ select {
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.cursor-not-allowed {
+    cursor: not-allowed;
 }
 
 .cursor-move {
@@ -2471,6 +2484,11 @@ select {
     padding-bottom: 0.25rem;
 }
 
+.py-10 {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+
 .py-5 {
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
@@ -2484,11 +2502,6 @@ select {
 .py-8 {
     padding-top: 2rem;
     padding-bottom: 2rem;
-}
-
-.py-10 {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
 }
 
 .pt-8 {
@@ -2629,6 +2642,11 @@ select {
 .text-5xl {
     font-size: 3rem;
     line-height: 1;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
 }
 
 .font-medium {
@@ -3064,6 +3082,14 @@ select {
     }
 }
 
+.first\:mt-0:first-child {
+    margin-top: 0px;
+}
+
+.first\:pt-0:first-child {
+    padding-top: 0px;
+}
+
 .odd\:bg-white:nth-child(odd) {
     --tw-bg-opacity: 1;
     background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -3114,6 +3140,11 @@ select {
     background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-purple-100:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(243 232 255 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-green-600:hover {
     --tw-bg-opacity: 1;
     background-color: rgb(22 163 74 / var(--tw-bg-opacity));
@@ -3162,6 +3193,11 @@ select {
 .hover\:text-red-400:hover {
     --tw-text-opacity: 1;
     color: rgb(248 113 113 / var(--tw-text-opacity));
+}
+
+.hover\:text-purple-900:hover {
+    --tw-text-opacity: 1;
+    color: rgb(88 28 135 / var(--tw-text-opacity));
 }
 
 .hover\:text-gray-800:hover {

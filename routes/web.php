@@ -42,6 +42,7 @@ Route::post('/encounter/{encounter}/add/monster/{monster}', [EncounterController
 Route::post('/combatant/{combatant}', [CombatantController::class, 'update'])->name('combatants.update');
 
 Route::post('/stat-blocks', [StatBlockController::class, 'store'])->name('stat_block.store');
+Route::delete('/stat-blocks/{stat_block}', [StatBlockController::class, 'destroy'])->name('stat-blocks.destroy');
 Route::put('/stat-blocks/{stat_block}', [StatBlockController::class, 'update'])->name('stat_block.update');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

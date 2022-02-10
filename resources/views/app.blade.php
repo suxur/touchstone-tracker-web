@@ -17,7 +17,7 @@
     @routes
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
-<body class="font-sans antialiased min-h-full h-full">
+<body class="font-sans antialiased min-h-full h-full bg-gray-100">
 <div id="app" class="w-full min-h-full h-full" data-page="{{ json_encode($page) }}"></div>
 {{--@env ('local')--}}
 {{--    <script src="{{ mix('js/bundle.js') }}"></script>--}}

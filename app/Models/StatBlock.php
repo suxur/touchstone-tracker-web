@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Encounters\DifficultyCalculator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,12 +10,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Str;
 
 class StatBlock extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $guarded = [
+        'traits',
+        'actions',
+        'reactions',
+        'legendary_actions'
+    ];
 
     protected $casts = [
         'armor_class' => 'integer',
@@ -73,6 +80,11 @@ class StatBlock extends Model
     public function combatant(): HasOne
     {
         return $this->hasOne(Combatant::class);
+    }
+
+    public function actionsRelationship(): HasMany
+    {
+        return $this->hasMany(Action::class);
     }
 
     public function specialAbilities(): HasMany
