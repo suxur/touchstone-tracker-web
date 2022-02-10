@@ -18,7 +18,7 @@ task('mix:production', function () {
 set('application', 'touchstonetracker.app');
 
 // Project repository
-set('repository', 'git@github.com:suxur/touchstone.git');
+set('repository', 'git@github.com:suxur/touchstone-tracker-web.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true);
