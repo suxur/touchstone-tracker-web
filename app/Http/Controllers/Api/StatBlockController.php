@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\StatBlock\CreateStatBlock;
+use App\Actions\StatBlock\UpdateStatBlock;
 use App\Http\Controllers\Controller;
 use App\Models\StatBlock;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
 use function app;
 
 class StatBlockController extends Controller
@@ -45,6 +42,14 @@ class StatBlockController extends Controller
     public function store(Request $request): JsonResponse
     {
         $statBlock = app(CreateStatBlock::class)->create($request->user(), $request->all());
+
+        return response()->json($statBlock);
+    }
+
+    /* @throws ValidationException */
+    public function update(Request $request, StatBlock $statBlock)
+    {
+        $statBlock = app(UpdateStatBlock::class)->update($request->user(), $statBlock, $request->all());
 
         return response()->json($statBlock);
     }

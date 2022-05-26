@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { memo, useEffect, useState } from 'react';
 
-type Props = {
-  date: string;
-};
+interface Props {
+  date: string | null;
+}
 
 const intervals = {
   second: 1000,

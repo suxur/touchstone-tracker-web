@@ -54,12 +54,11 @@
     "webpack-dev-server": "^4.6.0"
   },
   "dependencies": {
-    "laravel-mix": "^6.0.6",
-    "postcss-import": "^12.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
     "@headlessui/react": "^1.4.2",
+    "@hookform/resolvers": "^2.8.10",
     "@inertiajs/inertia": "^0.10.1",
     "@inertiajs/inertia-react": "^0.7.1",
     "@inertiajs/progress": "^0.2.6",
@@ -71,88 +70,31 @@
     "clsx": "^1.1.1",
     "immer": "^9.0.7",
     "laravel-echo": "^1.11.3",
+    "laravel-mix": "^6.0.6",
     "lodash": "^4.17.21",
     "mathjs": "^10.0.0",
+    "postcss-import": "^12.0.1",
     "pusher-js": "^7.0.4",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.31.2",
     "react-markdown": "^7.1.1",
     "react-moveable": "^0.30.3",
     "react-popper": "^2.2.5",
     "react-query": "^3.34.11",
     "webpack": "^5.65.0",
+    "yup": "^0.32.11",
     "ziggy-js": "^1.4.2"
   },
   "eslintConfig": {
-    "extends": [
-      "airbnb",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
-    ],
-    "env": {
-      "browser": true,
-      "node": true
-    },
     "parser": "@typescript-eslint/parser",
     "plugins": [
-      "@typescript-eslint",
-      "react-hooks"
+      "@typescript-eslint"
     ],
-    "rules": {
-      "arrow-parens": 0,
-      "import/extensions": [
-        2,
-        {
-          "js": "never",
-          "jsx": "never",
-          "ts": "never",
-          "tsx": "never"
-        }
-      ],
-      "import/prefer-default-export": 0,
-      "jsx-a11y/control-has-associated-label": "off",
-      "jsx-a11y/label-has-associated-control": "off",
-      "max-len": "off",
-      "no-param-reassign": "off",
-      "no-use-before-define": "off",
-      "object-curly-newline": 0,
-      "react/function-component-definition": 0,
-      "react/jsx-filename-extension": [
-        1,
-        {
-          "extensions": [
-            ".js",
-            ".jsx",
-            ".ts",
-            ".tsx"
-          ]
-        }
-      ],
-      "react/button-has-type": "off",
-      "react/jsx-props-no-spreading": 0,
-      "react/jsx-one-expression-per-line": "off",
-      "react/prop-types": 0,
-      "react/require-default-props": 0,
-      "react-hooks/rules-of-hooks": 2,
-      "react-hooks/exhaustive-deps": 1,
-      "@typescript-eslint/no-explicit-any": "off"
-    },
-    "settings": {
-      "import/resolver": {
-        "eslint-import-resolver-custom-alias": {
-          "alias": {
-            "@": "./resources/js"
-          },
-          "extensions": [
-            ".js",
-            ".jsx",
-            ".ts",
-            ".tsx",
-            ".d.ts"
-          ]
-        }
-      }
-    }
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ]
   }
 }

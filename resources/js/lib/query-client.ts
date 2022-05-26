@@ -6,9 +6,7 @@ interface DefaultQueryProps {
 }
 
 const defaultQueryFn = async ({ queryKey }: DefaultQueryProps) => {
-  const { data } = await axios.get(
-    `http://localhost/api/${queryKey[0]}`,
-  );
+  const { data } = await axios.get(`/api/${queryKey[0]}`);
   return data;
 };
 

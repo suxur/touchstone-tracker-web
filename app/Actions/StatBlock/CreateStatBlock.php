@@ -6,10 +6,9 @@ use App\Contracts\StatBlockRequestParser;
 use App\Models\StatBlock;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class CreateStatBlock
+class CreateStatBlock extends StatBlockActions
 {
     public ?User $user = null;
     public StatBlockRequestParser $parser;
@@ -29,13 +28,7 @@ class CreateStatBlock
     {
         $this->user = $user;
 
-        Validator::make($requestData, [
-            'name'        => ['required', 'string', 'max:255'],
-            'armor_class' => ['required', 'integer'],
-            'hit_points'  => ['required', 'integer'],
-            'race'        => ['string'],
-            'class'       => ['string'],
-        ])->validate();
+        $this->validate($requestData);
 
         $parsedFormData = $this->parser->parse($requestData);
         $statBlock = StatBlock::create($parsedFormData);

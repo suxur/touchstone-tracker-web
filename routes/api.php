@@ -70,11 +70,13 @@ Route::get('/codex/monsters', [CodexController::class, 'monsters'])->name('codex
 Route::get('/codex/characters', [CodexController::class, 'characters'])->name('codex.characters');
 Route::get('/codex/spells', [CodexController::class, 'spells'])->name('codex.spells');
 
-Route::get('/stat-blocks/monsters', [StatBlockController::class, 'monsters'])->name('api.stat-blocks.monsters');
-Route::get('/stat-blocks/characters', [StatBlockController::class, 'characters'])->name('api.stat-blocks.characters');
+Route::get('/stat-blocks/monsters', [StatBlockController::class, 'monsters'])->name('api.stat-blocks.monster');
+Route::get('/stat-blocks/characters', [StatBlockController::class, 'characters'])->name('api.stat-blocks.character');
 Route::get('/stat-blocks/{stat_block}', [StatBlockController::class, 'show'])->name('api.stat-blocks.show');
 Route::post('/stat-blocks', [StatBlockController::class, 'store'])->name('api.stat-blocks.store');
+Route::put('/stat-blocks/{stat_block}', [StatBlockController::class, 'update'])->name('api.stat-blocks.update');
 
+Route::get('/monster/preloaded', [MonsterController::class, 'preloaded'])->name('monster.preloaded');
 Route::get('/monster/{monster}', [MonsterController::class, 'monster'])->name('monster');
 Route::get('/spell/{spell}', [SpellController::class, 'spell'])->name('api.spell');
 

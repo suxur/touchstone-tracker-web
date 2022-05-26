@@ -15,7 +15,7 @@ export const JetLabel = ({ value, htmlFor, children, className, required, help }
     <span>
       {value || children}
       {required && (
-        <span className="ml-1 text-red-600 text-xs">(required)</span>
+        <span className="ml-1 text-red-600 text-xs">*</span>
       )}
     </span>
     {help ? (

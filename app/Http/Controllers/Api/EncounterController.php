@@ -10,7 +10,6 @@ use App\Models\Combatant;
 use App\Models\Encounter;
 use App\Models\StatBlock;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -145,82 +144,108 @@ class EncounterController extends Controller
     {
         $this->authorize('update', $encounter);
 
-        $encounter->fill($request->except(['is_active']));
+        $encounter->fill($request->all());
 
-        // Update During Encounter
-        if ($request->get('is_active') && $encounter->is_active) {
-            foreach ($request->get('combatants') as $index => $requestCombatant) {
-                $combatant = $encounter->combatants()->where('id', $requestCombatant['id'])->first();
-                $combatant->order = $index;
-                $combatant->save();
-            }
+        foreach ($request->get('combatants') as $index => $requestCombatant) {
+            $combatant = $encounter->combatants()->where('id', $requestCombatant['id'])->first();
+            $combatant->fill($requestCombatant);
+            $combatant->save();
         }
-
-        // End Encounter
-        if (!$request->get('is_active') && $encounter->is_active) {
-            $encounter->is_active = false;
-            $encounter->round = 1;
-            $encounter->active_index = 0;
-            $encounter->started_at = null;
-
-            if (count($request->get('combatants')) === 0) {
-                $encounter->combatants()->delete();
-            }
-
-            foreach ($encounter->combatants as $combatant) {
-                $combatant->action = false;
-                $combatant->bonus_action = false;
-                $combatant->reaction = false;
-                $combatant->death_save_success = 0;
-                $combatant->death_save_failure = 0;
-                $combatant->initiative = $combatant->statBlock->initiative ?? 0;
-                $combatant->save();
-            }
-        }
-
-        // Start Encounter
-        if ($request->get('is_active') && !$encounter->is_active) {
-            $encounter->is_active = true;
-            $encounter->started_at = Carbon::now();
-
-            foreach ($encounter->combatants->sortByDesc('initiative')->values() as $index => $combatant) {
-                $combatant->order = $index;
-                $combatant->save();
-            }
-        }
-//        $encounter->is_active = $request->get('is_active');
-
-//        $requestCombatants = $request->get('combatants');
-//        $requestEncounter = $request->get('encounter');
-//
-//        if ($requestCombatants) {
-
-//        }
-//
-//        if ($requestEncounter) {
-//            if ($requestEncounter['is_active'] === false) {
-//                $encounter->round = 1;
-//                $encounter->active_index = 0;
-//            } else {
-//                $encounter->started_at = Carbon::now();
-//                foreach ($encounter->combatants->sortByDesc('initiative')->values() as $index => $combatant) {
-//                    $combatant->order = $index;
-//                    $combatant->save();
-//                }
-//            }
-//
-//            if (isset($requestEncounter['combatants']) && count($requestEncounter['combatants']) === 0) {
-//                $encounter->combatants()->delete();
-//            }
-//
-//            $encounter->is_active = $requestEncounter['is_active'];
-//        }
 
         $encounter->save();
         $encounter->fresh();
 
         return $this->returnResponse($encounter);
     }
+
+    /*/***/
+    /* * Update*/
+    /* **/
+    /* * @param Request $request*/
+    /* * @param Encounter $encounter*/
+    /* * @return EncounterResource*/
+    /* * @throws AuthorizationException*/
+    /* */
+    /*public function update(Request $request, Encounter $encounter): EncounterResource*/
+    /*{*/
+    /*    $this->authorize('update', $encounter);*/
+
+    /*    $encounter->fill($request->except(['is_active']));*/
+
+    /*    // Update During Encounter*/
+    /*    if ($request->get('is_active') && $encounter->is_active) {*/
+    /*        foreach ($request->get('combatants') as $index => $requestCombatant) {*/
+    /*            $combatant = $encounter->combatants()->where('id', $requestCombatant['id'])->first();*/
+    /*            $combatant->order = $index;*/
+    /*            $combatant->save();*/
+    /*        }*/
+    /*    }*/
+
+    /*    // End Encounter*/
+    /*    if (!$request->get('is_active') && $encounter->is_active) {*/
+    /*        $encounter->is_active = false;*/
+    /*        $encounter->round = 1;*/
+    /*        $encounter->active_index = 0;*/
+    /*        $encounter->started_at = null;*/
+
+    /*        if (count($request->get('combatants')) === 0) {*/
+    /*            $encounter->combatants()->delete();*/
+    /*        }*/
+
+    /*        foreach ($encounter->combatants as $combatant) {*/
+    /*            $combatant->action = false;*/
+    /*            $combatant->bonus_action = false;*/
+    /*            $combatant->reaction = false;*/
+    /*            $combatant->death_save_success = 0;*/
+    /*            $combatant->death_save_failure = 0;*/
+    /*            $combatant->initiative = $combatant->statBlock->initiative ?? 0;*/
+    /*            $combatant->save();*/
+    /*        }*/
+    /*    }*/
+
+    /*    // Start Encounter*/
+    /*    if ($request->get('is_active') && !$encounter->is_active) {*/
+    /*        $encounter->is_active = true;*/
+    /*        $encounter->started_at = Carbon::now();*/
+
+    /*        foreach ($encounter->combatants->sortByDesc('initiative')->values() as $index => $combatant) {*/
+    /*            $combatant->order = $index;*/
+    /*            $combatant->save();*/
+    /*        }*/
+    /*    }*/
+/*//        $encounter->is_active = $request->get('is_active');*/
+
+/*//        $requestCombatants = $request->get('combatants');*/
+/*//        $requestEncounter = $request->get('encounter');*/
+/*//*/
+/*//        if ($requestCombatants) {*/
+
+/*//        }*/
+/*//*/
+/*//        if ($requestEncounter) {*/
+/*//            if ($requestEncounter['is_active'] === false) {*/
+/*//                $encounter->round = 1;*/
+/*//                $encounter->active_index = 0;*/
+/*//            } else {*/
+/*//                $encounter->started_at = Carbon::now();*/
+/*//                foreach ($encounter->combatants->sortByDesc('initiative')->values() as $index => $combatant) {*/
+/*//                    $combatant->order = $index;*/
+/*//                    $combatant->save();*/
+/*//                }*/
+/*//            }*/
+/*//*/
+/*//            if (isset($requestEncounter['combatants']) && count($requestEncounter['combatants']) === 0) {*/
+/*//                $encounter->combatants()->delete();*/
+/*//            }*/
+/*//*/
+/*//            $encounter->is_active = $requestEncounter['is_active'];*/
+/*//        }*/
+
+    /*    $encounter->save();*/
+    /*    $encounter->fresh();*/
+
+    /*    return $this->returnResponse($encounter);*/
+    /*}*/
 
     public function order(Request $request, Encounter $encounter): EncounterResource
     {
@@ -278,5 +303,4 @@ class EncounterController extends Controller
         UpdateEncounter::dispatch($encounter);
         return new EncounterResource($encounter->fresh());
     }
-
 }

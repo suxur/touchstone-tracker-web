@@ -1,36 +1,48 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import * as React from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { DynamicInput } from '@/Components/Form/DynamicInput';
+import { DynamicInput } from "@/Components/Form/DynamicInput";
+import { FormProps } from "@/Hooks/useStatBlockForm";
 
 export default {
-  title: 'DynamicInput',
+  title: "DynamicInput",
   component: DynamicInput,
 } as ComponentMeta<typeof DynamicInput>;
 
-const Template: ComponentStory<typeof DynamicInput> = ({ items, ...args }) => {
-  const [data, setData] = useState(items);
-  return <DynamicInput {...args} items={data} setItems={i => setData(i)} />;
+const Template: ComponentStory<typeof DynamicInput> = ({ ...args }) => {
+  return <DynamicInput {...args} />;
 };
 
 export const Default = Template.bind({});
 Default.args = {
-  title: 'Damage Vulnerabilities',
-  items: [],
+  title: "Damage Vulnerabilities",
+  name: "damage_vulnerabilities",
 };
+
+Default.decorators = [
+  (Story) => {
+    const methods = useForm<FormProps>();
+    return (
+      <FormProvider {...methods}>
+        <Story />
+      </FormProvider>
+    );
+  },
+];
 
 export const WithData = Template.bind({});
 WithData.args = {
-  title: 'Damage Vulnerabilities',
-  items: [
-    {
-      key: Math.random().toString(16).slice(2),
-      value: 'Fire',
-    },
-    {
-      key: Math.random().toString(16).slice(2),
-      value: 'Acid',
-    },
-  ],
+  title: "Damage Vulnerabilities",
+  name: "damage_vulnerabilities",
 };
+WithData.decorators = [
+  (Story) => {
+    const methods = useForm<FormProps>();
+    return (
+      <FormProvider {...methods}>
+        <Story />
+      </FormProvider>
+    );
+  },
+];

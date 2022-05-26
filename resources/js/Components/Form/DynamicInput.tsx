@@ -1,45 +1,70 @@
-import * as React from 'react';
-import { KeyboardEventHandler, useMemo } from 'react';
-import { kebabCase, last } from 'lodash';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as React from "react";
+import { KeyboardEventHandler, useMemo } from "react";
+import { kebabCase, last } from "lodash";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { reorder } from '@/lib/helpers';
-import { JetButton, JetInput } from '@/Components/Jetstream';
-import { DeleteButton } from '@/Components/Button/DeleteButton';
+import { reorder } from "@/lib/helpers";
+import { JetButton, JetInput } from "@/Components/Jetstream";
+import { DeleteButton } from "@/Components/Button/DeleteButton";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { FormProps } from "@/Hooks/useStatBlockForm";
+import { DraggablePortalHandler } from "../DraggablePortalHandler";
 
 export type DragItems = {
-  key: string,
-  value: string
-}
-
-type Props = {
-  title: string
-  items: DragItems[];
-  setItems: (items: DragItems[]) => void;
+  value: string;
 };
 
-export const DynamicInput = ({ title, items, setItems }: Props) => {
-  const addItem = () => {
-    const key = Math.random().toString(16).slice(2);
-    setItems([...items, { key, value: '' }]);
-  };
+type Props = {
+  title: string;
+  name:
+    | "speed"
+    | "senses"
+    | "damage_vulnerabilities"
+    | "damage_resistances"
+    | "damage_immunities"
+    | "condition_immunities"
+    | "languages";
+};
 
-  const editItem = (value: string, index: number) => {
-    setItems(items.map((i, id) => (id === index ? { ...i, value } : i)));
+export const DynamicInput = ({ name, title }: Props) => {
+  const { control, register, watch } = useFormContext<FormProps>();
+  const { fields, append, replace, remove } = useFieldArray<
+    FormProps,
+    typeof name
+  >({
+    control,
+    name,
+  });
+
+  const watchFieldArray = watch(name);
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchFieldArray[index],
+    };
+  });
+
+  const addItem = () => {
+    append({ value: "" });
   };
 
   const removeItem = (index: number) => {
-    setItems(items.filter((i, idx) => idx !== index));
+    remove(index);
   };
 
   const canAdd = useMemo(() => {
-    const lastAdded = last(items);
-    return items.length === 0 || !lastAdded || lastAdded.value !== '';
-  }, [items]);
+    const lastAdded = last(controlledFields);
+    return fields.length === 0 || !lastAdded || lastAdded.value !== "";
+  }, [controlledFields]);
 
   const onKeyUp: KeyboardEventHandler = (e) => {
-    if (canAdd && e.nativeEvent.code === 'Enter') {
+    if (canAdd && e.nativeEvent.code === "Enter") {
       addItem();
     }
   };
@@ -50,18 +75,23 @@ export const DynamicInput = ({ title, items, setItems }: Props) => {
       return;
     }
 
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
       return;
     }
 
-    setItems(reorder<DragItems>(items, source.index, destination.index));
+    replace(
+      reorder<DragItems>(controlledFields, source.index, destination.index)
+    );
   };
 
   return (
     <div className="flex flex-col w-full">
       <div className="flex items-center justify-between h-8">
         <h2>{title}</h2>
-        {items.length === 0 && (
+        {controlledFields.length === 0 && (
           <button
             type="button"
             className="ml-4 text-purple-600 bg-purple-200 h-8 w-8 rounded-md flex justify-center items-center px-4"
@@ -73,34 +103,35 @@ export const DynamicInput = ({ title, items, setItems }: Props) => {
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={kebabCase(title)}>
-          {dropProvided => (
+          {(dropProvided) => (
             <div
               ref={dropProvided.innerRef}
               className="flex flex-col w-full"
               {...dropProvided.droppableProps}
             >
-              {items.map((item, index) => (
-                <Draggable draggableId={item.key} index={index} key={item.key}>
-                  {dragProvided => (
-                    <div
-                      ref={dragProvided.innerRef}
-                      className="mt-2 w-full bg-white py-2 rounded-md flex items-center"
-                      {...dragProvided.draggableProps}
-                      {...dragProvided.dragHandleProps}
-                    >
-                      <div className="flex justify-center items-center cursor-move handle w-10">
-                        <FontAwesomeIcon icon="grip-lines" />
+              {controlledFields.map((item, index) => (
+                <Draggable draggableId={item.id} index={index} key={item.id}>
+                  {(dragProvided, snapshot) => (
+                    <DraggablePortalHandler snapshot={snapshot}>
+                      <div
+                        ref={dragProvided.innerRef}
+                        className="mt-2 w-full bg-white py-2 rounded-md flex items-center"
+                        {...dragProvided.draggableProps}
+                        {...dragProvided.dragHandleProps}
+                      >
+                        <div className="flex justify-center items-center cursor-move handle w-10">
+                          <FontAwesomeIcon icon="grip-lines" />
+                        </div>
+                        <JetInput
+                          type="text"
+                          className="flex flex-grow mr-2"
+                          onKeyUp={onKeyUp}
+                          autoFocus
+                          {...register(`${name}.${index}.value` as const)}
+                        />
+                        <DeleteButton onClick={() => removeItem(index)} />
                       </div>
-                      <JetInput
-                        type="text"
-                        value={item.value}
-                        className="flex flex-grow mr-2"
-                        onChange={e => editItem(e.target.value, index)}
-                        onKeyUp={onKeyUp}
-                        autoFocus
-                      />
-                      <DeleteButton onClick={() => removeItem(index)} />
-                    </div>
+                    </DraggablePortalHandler>
                   )}
                 </Draggable>
               ))}
@@ -109,7 +140,7 @@ export const DynamicInput = ({ title, items, setItems }: Props) => {
           )}
         </Droppable>
       </DragDropContext>
-      {items.length > 0 && (
+      {controlledFields.length > 0 && (
         <div className="w-full">
           <JetButton
             type="button"

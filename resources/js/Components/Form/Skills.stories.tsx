@@ -1,48 +1,50 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { Skills } from '@/Components/Form/Skills';
+import { FormProvider, useForm } from 'react-hook-form';
+import { FormProps } from '@/Hooks/useStatBlockForm';
+import { SKILLS } from '@/constants';
 
 export default {
   title: 'Skills',
   component: Skills,
 } as ComponentMeta<typeof Skills>;
 
-const Template: ComponentStory<typeof Skills> = ({ items, ...args }) => {
-  const [data, setData] = useState(items);
-  return <Skills {...args} items={data} setItems={i => setData(i)} />;
+const Template: ComponentStory<typeof Skills> = ({ ...args }) => {
+  return <Skills {...args} />;
 };
 
 export const Default = Template.bind({});
 Default.args = {
-  title: 'Damage Vulnerabilities',
-  items: [],
-  values: [
-    'Acid',
-    'Fire',
-    'Cold',
-  ],
+  title: 'Skills',
+  name: 'skills',
+  values: SKILLS
 };
+Default.decorators = [
+  (Story) => {
+    const methods = useForm<FormProps>();
+    return (
+      <FormProvider {...methods}>
+        <Story />
+      </FormProvider>
+    );
+  },
+];
 
 export const WithData = Template.bind({});
 WithData.args = {
-  title: 'Damage Vulnerabilities',
-  items: [
-    {
-      key: Math.random().toString(16).slice(2),
-      name: 'Fire',
-      value: 2,
-    },
-    {
-      key: Math.random().toString(16).slice(2),
-      name: 'Acid',
-      value: 1,
-    },
-  ],
-  values: [
-    'Acid',
-    'Fire',
-    'Cold',
-  ],
+  title: 'Skills',
+  name: 'skills',
+  values: SKILLS
 };
+WithData.decorators = [
+  (Story) => {
+    const methods = useForm<FormProps>();
+    return (
+      <FormProvider {...methods}>
+        <Story />
+      </FormProvider>
+    );
+  },
+];

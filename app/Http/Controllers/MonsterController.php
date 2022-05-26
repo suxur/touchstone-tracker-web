@@ -53,6 +53,13 @@ class MonsterController extends Controller
         ]);
     }
 
+    public function preloaded()
+    {
+        $preloaded = StatBlock::where('user_id', null)->monsters()->paginate(10);
+
+        return response()->json($preloaded);
+    }
+
     /**
      * Create a new monster.
      *

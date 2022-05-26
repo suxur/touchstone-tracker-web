@@ -17,9 +17,9 @@ class StatBlockPolicy
      * @param StatBlock $character
      * @return bool
      */
-    public function update(User $user, StatBlock $character): bool
+    public function update(User $user, StatBlock $statBlock): bool
     {
-        return $user->ownsStatBlock($character);
+        return $user->ownsStatBlock($statBlock);
     }
 
     public function claim(User $user, StatBlock $character): bool

@@ -1,38 +1,47 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { FormProvider, useForm } from "react-hook-form";
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { Actions } from '@/Components/Form/Actions';
+import { FormProps } from "@/Hooks/useStatBlockForm";
 
 export default {
   title: 'Form Actions',
   component: Actions,
 } as ComponentMeta<typeof Actions>;
 
-const Template: ComponentStory<typeof Actions> = ({ items, ...args }) => {
-  const [data, setData] = useState(items);
-  return <Actions {...args} items={data} setItems={i => setData(i)} />;
+const Template: ComponentStory<typeof Actions> = ({ ...args }) => {
+  return <Actions {...args} />;
 };
 
 export const Default = Template.bind({});
 Default.args = {
-  title: 'Damage Vulnerabilities',
-  items: [],
+  title: 'Actions',
+  name: 'actions'
 };
+Default.decorators = [
+  (Story) => {
+    const methods = useForm<FormProps>();
+    return (
+      <FormProvider {...methods}>
+        <Story />
+      </FormProvider>
+    );
+  },
+];
 
 export const WithData = Template.bind({});
 WithData.args = {
-  title: 'Damage Vulnerabilities',
-  items: [
-    {
-      key: Math.random().toString(16).slice(2),
-      name: 'Fire',
-      description: 'Very very hot!',
-    },
-    {
-      key: Math.random().toString(16).slice(2),
-      name: 'Acid',
-      description: '',
-    },
-  ],
+  title: 'Actions',
+  name: 'actions'
 };
+WithData.decorators = [
+  (Story) => {
+    const methods = useForm<FormProps>();
+    return (
+      <FormProvider {...methods}>
+        <Story />
+      </FormProvider>
+    );
+  },
+];

@@ -22,7 +22,7 @@ class CodexController extends Controller
 
     public function characters(): AnonymousResourceCollection
     {
-        $characters = auth()->user()->characters() ?? [];
+        $characters = optional(auth()->user())->characters() ?? [];
         return CodexCharacterResource::collection($characters);
     }
 

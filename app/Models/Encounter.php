@@ -29,6 +29,7 @@ class Encounter extends Model
         'hide_monsters_while_not_active',
         'active_index',
         'is_active',
+        'started_at',
     ];
 
     protected $with = [

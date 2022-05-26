@@ -7,7 +7,11 @@ export const EndButton = ({ ...props }: JetDangerButtonProps) => {
 
   const onClick = () => {
     if (encounter) {
-      return mutation.mutate({ ...encounter, is_active: false });
+      return mutation.mutate({
+        ...encounter,
+        is_active: false,
+        started_at: null,
+      });
     }
 
     return null;

@@ -90,6 +90,34 @@ export const useEncounter = () => {
     },
   });
 
+  const updateCombatantsInitiative = useMutation((data: Encounter) => axios.post(route('api.encounters.update', { encounter }), { ...data }), {
+    onMutate: async (updatedEncounter: Encounter) => {
+      await queryClient.cancelQueries(['encounter', updatedEncounter.id]);
+      const previousEncounter = queryClient.getQueryData<Encounter>(['encounter', updatedEncounter.id]);
+
+      if (!previousEncounter?.is_active && updatedEncounter.is_active) {
+        const orderedCombatants = orderBy(encounter.combatants, ['initiative']).map((c, i) => {
+          c.order = i;
+          return c;
+        });
+        queryClient.setQueryData(['encounter', updatedEncounter.id], {
+          ...updatedEncounter,
+          combatants: orderedCombatants,
+        });
+      }
+
+      return { previousEncounter, updatedEncounter };
+    },
+    onError: (err, updatedEncounter, context) => {
+      if (context?.previousEncounter) {
+        queryClient.setQueryData<Encounter>(['encounter', context.updatedEncounter.id], context.previousEncounter);
+      }
+    },
+    onSuccess: (response) => {
+      queryClient.setQueryData(['encounter', encounter.id], response.data);
+    },
+  });
+
   return {
     encounter: query.data || encounter,
     query,
@@ -98,5 +126,6 @@ export const useEncounter = () => {
     addCombatant,
     removeCombatant,
     updateCombatantsOrder,
+    updateCombatantsInitiative,
   };
 };

@@ -134,7 +134,7 @@ export interface Encounter {
   character_hp_status: number;
   active_index: number;
   is_active: boolean;
-  started_at: string;
+  started_at: string | null;
 }
 
 export interface Role {

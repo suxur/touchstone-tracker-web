@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "ignorePaths": ["node_modules"],
+  "words": [
+    "axios",
+    "fortawesome",
+    "fontawesome",
+    "inertiajs",
+    "Jetstream",
+    "clsx",
+    "ength",
+    "terity",
+    "stitution",
+    "elligence",
+    "risma"
+  ],
+  "dictionaries": [
+    "css",
+    "fonts",
+    "html",
+    "lorem-ipsum",
+    "typescript"
+  ]
+}
+

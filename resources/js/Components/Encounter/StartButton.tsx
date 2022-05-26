@@ -1,20 +1,29 @@
 import * as React from 'react';
+import { orderBy } from 'lodash';
 
 import { useEncounter } from '@/Hooks/useEncounter';
 import { JetButton } from '@/Components/Jetstream';
+import { Combatant } from '@/types';
+
+const orderCombatants = (combatants: Combatant[]) =>
+  orderBy(combatants, ['initiative'], ['desc']).map((c: Combatant, i: number) => {
+    c.order = i;
+    return c;
+  });
 
 export const StartButton = () => {
   const { mutation, encounter } = useEncounter();
 
   const onClick = () => {
     if (encounter) {
-      mutation.mutate({ ...encounter, is_active: true });
+      mutation.mutate({
+        ...encounter,
+        is_active: true,
+        started_at: new Date().toISOString(),
+        combatants: orderCombatants(encounter.combatants),
+      });
     }
   };
 
-  return (
-    <JetButton onClick={onClick}>
-      Start Encounter
-    </JetButton>
-  );
+  return <JetButton onClick={onClick}>Start Encounter</JetButton>;
 };

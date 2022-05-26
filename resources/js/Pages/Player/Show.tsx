@@ -10,7 +10,7 @@ import { useEncounterSubscription } from '@/Hooks/useEncounterSubscription';
 import { GameTime } from '@/Components/GameTime';
 
 const Show = () => {
-  // useEncounterSubscription();
+  useEncounterSubscription();
   const { encounter } = useEncounter();
 
   return (

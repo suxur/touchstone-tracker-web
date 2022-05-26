@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { useForm } from '@inertiajs/inertia-react';
 
 import { StatBlock, StatBlockPermissions, StatBlockType } from '@/types';
-import useRoute from '@/Hooks/useRoute';
 import { JetActionSection, JetButton } from '@/Components/Jetstream';
 import { DeleteButton } from '@/Components/Button/DeleteButton';
 import { CloneButton } from '@/Components/Button/CloneButton';
@@ -12,9 +10,9 @@ import { DeleteStatBlockModal } from '@/Components/Modals/DeleteStatBlockModal';
 import { EditButton } from '@/Components/Button/EditButton';
 import { startCase } from 'lodash';
 import { useStatBlocks } from '@/Hooks/useStatBlocks';
+import {useCloneStatBlock} from '@/Hooks/StatBlocks/useCloneStatBlock';
 
 interface Props {
-  statBlocks: StatBlock[];
   permissions: StatBlockPermissions;
   type: StatBlockType;
 }
@@ -24,10 +22,9 @@ type ModalProps = {
   statBlock?: StatBlock;
 }
 
-export const ManageStatBlocks = ({ statBlocks: init, type, permissions }: Props) => {
-  const route = useRoute();
-
-  const { statBlocks } = useStatBlocks(init, type);
+export const ManageStatBlocks = ({ type, permissions }: Props) => {
+  const { statBlocks } = useStatBlocks(type);
+  const cloneStatBlock = useCloneStatBlock();
 
   const [createModal, setCreateModal] = useState<ModalProps>({
     isOpen: false,
@@ -44,9 +41,8 @@ export const ManageStatBlocks = ({ statBlocks: init, type, permissions }: Props)
     });
   };
 
-  const cloneForm = useForm({});
   const clone = (statBlock: StatBlock) => {
-    cloneForm.post(route('stat_block.clone', { stat_block: statBlock, type }));
+    cloneStatBlock.mutate({ statBlock, type })
   };
 
   const confirmDelete = (statBlock: StatBlock) => {
@@ -68,8 +64,8 @@ export const ManageStatBlocks = ({ statBlocks: init, type, permissions }: Props)
       {statBlocks.length > 0 ? (
         <div className="space-y-4 divide-y divide-gray-200">
           {statBlocks.map(statBlock => (
-            <div key={statBlock.id}>
-              <div className="flex items-center justify-between mt-2 first:mt-0">
+            <div key={statBlock.id} className="pt-2 first:pt-0">
+              <div className="flex items-center justify-between">
                 <div className="flex flex-col">
                   <div>{statBlock.name}</div>
                 </div>
