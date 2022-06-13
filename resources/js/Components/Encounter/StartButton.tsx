@@ -21,6 +21,8 @@ export const StartButton = () => {
         is_active: true,
         started_at: new Date().toISOString(),
         combatants: orderCombatants(encounter.combatants),
+        round: 1,
+        active_index: 0,
       });
     }
   };
