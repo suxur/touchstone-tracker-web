@@ -4,58 +4,55 @@ import {
   KeyboardEvent,
   Fragment,
   useCallback,
-  useEffect,
-  useRef,
   useState,
 } from "react";
 import clsx from "clsx";
-import { useFormContext } from "react-hook-form";
 
 import { Transition } from "@headlessui/react";
 import { JetInput, JetLabel } from "@/Components/Jetstream";
 import { useOnClickOutside } from "@/Hooks/useOnClickOutside";
 import { Keys } from "@/lib/keyboard";
-import { FormProps } from "@/Hooks/useStatBlockForm";
 
 interface Props {
+  onChange: (value: string) => void;
+  onBlur: () => void;
+  value: string;
   label: string;
   items: string[];
   required?: boolean;
 }
 
-export const Autocomplete = ({ label, required, items }: Props) => {
-  const { register, setValue, getValues } = useFormContext<FormProps>();
-  const ref = useRef(null);
+export const Autocomplete = React.forwardRef<
+  HTMLInputElement,
+  Props
+>(({ onChange, value, label, items, required }, ref) => {
+  const containerRef = React.useRef(null);
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState(items);
   const [arrowCounter, setArrowCounter] = useState(-1);
 
-  const result = getValues("collection");
-  useEffect(() => {
-    register("collection");
-  }, []);
-
-  useOnClickOutside(ref, () => {
+  useOnClickOutside(containerRef, () => {
     setOpen(false);
     setArrowCounter(-1);
   });
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue("collection", e.target.value);
+  const onChangeEvent = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
     filter(e.target.value);
     // filter results
     setOpen(results.length > 0);
   };
 
   const onFocus = () => {
-    if (result === "") {
+    if (value === "") {
       // filter results
       setOpen(true);
     }
   };
 
   const setItem = (item: string) => {
-    setValue("collection", item);
+    onChange(item);
+    // setValue("collection", item);
     setOpen(false);
   };
 
@@ -72,11 +69,12 @@ export const Autocomplete = ({ label, required, items }: Props) => {
       switch (event.key) {
         // Ref: https://www.w3.org/TR/wai-aria-practices-1.2/#keyboard-interaction-13
 
-        case Keys.Space:
+        // case Keys.Space:
         case Keys.Enter:
           event.preventDefault();
           event.stopPropagation();
-          setValue("collection", results[arrowCounter]);
+          // setValue("collection", results[arrowCounter]);
+          onChange(results[arrowCounter]);
           setOpen(false);
           setArrowCounter(-1);
           break;
@@ -103,7 +101,7 @@ export const Autocomplete = ({ label, required, items }: Props) => {
   );
 
   return (
-    <div className="relative w-full" ref={ref} onKeyDown={handleKeyDown}>
+    <div ref={containerRef} className="relative w-full" onKeyDown={handleKeyDown}>
       <JetLabel
         htmlFor={label.toLowerCase()}
         value={label}
@@ -111,11 +109,12 @@ export const Autocomplete = ({ label, required, items }: Props) => {
         className="mb-1"
       />
       <JetInput
+        ref={ref}
         id={label.toLowerCase()}
+        value={value}
         type="text"
         required={required}
-        value={result}
-        onChange={(e) => onChange(e)}
+        onChange={(e) => onChangeEvent(e)}
         onFocus={onFocus}
       />
       <Transition
@@ -137,18 +136,17 @@ export const Autocomplete = ({ label, required, items }: Props) => {
               className={clsx("", {
                 "rounded-md bg-purple-200": i === arrowCounter,
               })}
+              onClick={() => setItem(item)}
             >
-              <button
-                type="button"
-                onClick={() => setItem(item)}
-                className="w-full px-4 py-2 text-left hover:bg-purple-100 hover:text-purple-900"
+              <div
+                className="w-full px-4 py-2 text-left cursor-pointer hover:bg-purple-100 hover:text-purple-900"
               >
                 {item}
-              </button>
+              </div>
             </li>
           ))}
         </ul>
       </Transition>
     </div>
   );
-};
+});

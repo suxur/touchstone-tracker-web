@@ -3,7 +3,7 @@
 namespace App\Actions\Jetstream;
 
 use App\Models\Action;
-use App\Models\Monster;
+use App\Models\StatBlock;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Arr;
@@ -24,7 +24,7 @@ class UpdateMonster
      * @throws AuthorizationException
      * @throws ValidationException
      */
-    public function update(User $user, Monster $monster, array $input): void
+    public function update(User $user, StatBlock $monster, array $input): void
     {
         $this->authorize($user, $monster);
 

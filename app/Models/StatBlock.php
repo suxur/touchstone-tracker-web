@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Collections\StatBlockCollection;
 use App\Encounters\DifficultyCalculator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,6 +46,7 @@ class StatBlock extends Model
         'Dwarf',
         'Elf',
         'Genasi',
+        'Gnome',
         'Goliath',
         'Half-Elf',
         'Half-Orc',
@@ -269,6 +271,11 @@ class StatBlock extends Model
         }
 
         return $saves;
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new StatBlockCollection($models);
     }
 
     private function getDynamicValueArray($data): array

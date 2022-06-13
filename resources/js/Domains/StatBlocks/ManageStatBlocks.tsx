@@ -11,6 +11,7 @@ import { EditButton } from '@/Components/Button/EditButton';
 import { startCase } from 'lodash';
 import { useStatBlocks } from '@/Hooks/useStatBlocks';
 import {useCloneStatBlock} from '@/Hooks/StatBlocks/useCloneStatBlock';
+import { ImportStatBlocksForm } from '@/Components/Modals/ImportStatBlocksForm';
 
 interface Props {
   permissions: StatBlockPermissions;
@@ -25,6 +26,10 @@ type ModalProps = {
 export const ManageStatBlocks = ({ type, permissions }: Props) => {
   const { statBlocks } = useStatBlocks(type);
   const cloneStatBlock = useCloneStatBlock();
+
+  const [importModal, setImportModal] = useState<ModalProps>({
+    isOpen: false,
+  });
 
   const [createModal, setCreateModal] = useState<ModalProps>({
     isOpen: false,
@@ -56,9 +61,14 @@ export const ManageStatBlocks = ({ type, permissions }: Props) => {
       title={displayTitle}
       description={`All of the ${displayTitle.toLowerCase()} that are part of this team.`}
       actions={(
-        <JetButton onClick={() => setCreateModal({ statBlock: undefined, isOpen: true })}>
-          Add {displayTitle}
-        </JetButton>
+        <div>
+          <JetButton className="mr-2" onClick={() => setImportModal({ isOpen: true })}>
+            Import {displayTitle}
+          </JetButton>
+          <JetButton onClick={() => setCreateModal({ statBlock: undefined, isOpen: true })}>
+            Add {displayTitle}
+          </JetButton>
+        </div>
       )}
     >
       {statBlocks.length > 0 ? (
@@ -88,6 +98,11 @@ export const ManageStatBlocks = ({ type, permissions }: Props) => {
       ) : (
         <p>No {type}s found...</p>
       )}
+      <ImportStatBlocksForm
+        isOpen={importModal.isOpen}
+        onClose={() => setImportModal({ isOpen: false })}
+        type={type}
+      />
       <CreateStatBlockForm
         isOpen={createModal.isOpen}
         onClose={() => setCreateModal({ isOpen: false })}

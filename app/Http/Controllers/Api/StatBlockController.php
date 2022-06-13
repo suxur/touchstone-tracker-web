@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\StatBlock\CreateStatBlock;
 use App\Actions\StatBlock\UpdateStatBlock;
 use App\Http\Controllers\Controller;
+use Facades\App\Import\XML;
 use App\Models\StatBlock;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -53,4 +54,24 @@ class StatBlockController extends Controller
 
         return response()->json($statBlock);
     }
+
+    public function import(Request $request)
+    {
+        /* $type = $request->get('type'); */
+        $collection = $request->get('collection');
+        if ($path = optional($request->file('file'))->getRealPath()) {
+            /* switch ($type) { */
+            /*     case 'dndappfile': */
+            $parsed = XML::parse($path, $collection);
+            foreach ($parsed as $item) {
+                $statBlock = app(CreateStatBlock::class)->create($request->user(), $item);
+            }
+                    /* break; */
+                /* case 'json': */
+                    /* break; */
+        }
+
+        return $request->wantsJson() ? new JsonResponse('', 200) : back()->with('status', 'monster-import-success');
+    }
+
 }

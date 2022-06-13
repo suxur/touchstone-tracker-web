@@ -1,13 +1,13 @@
-import { RefObject, useEffect } from 'react';
+import { Ref, useEffect } from 'react';
 
-export const useOnClickOutside = (ref: RefObject<HTMLElement>, handler: (event: UIEvent) => void) => {
+export const useOnClickOutside = (ref: Ref<HTMLElement>, handler: (event: UIEvent) => void) => {
   useEffect(
     () => {
       const listener = (event: UIEvent) => {
         // Do nothing if clicking ref's element or descendent elements
-        if (!ref.current || ref.current.contains(event.target as Node)) {
-          return;
-        }
+        // if (!ref || ref.contains(event.target as Node)) {
+        //   return;
+        // }
 
         handler(event);
       };

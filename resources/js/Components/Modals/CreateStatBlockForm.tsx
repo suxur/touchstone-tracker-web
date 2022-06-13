@@ -1,38 +1,38 @@
+import clsx from "clsx";
+import { startCase } from "lodash";
 import * as React from "react";
 import { useReducer } from "react";
-import clsx from "clsx";
 
-import {
-  JetButton,
-  JetDialogModal,
-  JetInput,
-  JetLabel,
-  ModalProps,
-} from "@/Components/Jetstream";
-import { StatBlock, StatBlockType } from "@/types";
-import {
-  ABILITIES,
-  ALIGNMENTS,
-  CLASSES,
-  RACES,
-  SIZES,
-  SKILLS,
-} from "@/constants";
-import { JetTransparentButton } from "@/Components/Jetstream/TransparentButton";
+import { Actions } from "@/Components/Form/Actions";
+import { Autocomplete } from "@/Components/Form/Autocomplete";
 import { Dropdown } from "@/Components/Form/Dropdown";
-import { Divider } from "@/Components/StatBlock/Divider";
 import { DynamicInput } from "@/Components/Form/DynamicInput";
 import { Skills } from "@/Components/Form/Skills";
-import { Actions } from "@/Components/Form/Actions";
-import { startCase } from "lodash";
-import { Autocomplete } from "@/Components/Form/Autocomplete";
-import useTypedPage from "@/Hooks/useTypedPage";
-import { PageProps } from "@inertiajs/inertia";
-import { FormProps, useStatBlockForm } from "@/Hooks/useStatBlockForm";
-import { Controller, FormProvider } from "react-hook-form";
-import { JetInputError } from "../Jetstream/InputError";
+import {
+    JetButton,
+    JetDialogModal,
+    JetInput,
+    JetLabel,
+    ModalProps
+} from "@/Components/Jetstream";
+import { JetTransparentButton } from "@/Components/Jetstream/TransparentButton";
+import { Divider } from "@/Components/StatBlock/Divider";
+import {
+    ABILITIES,
+    ALIGNMENTS,
+    CLASSES,
+    RACES,
+    SIZES,
+    SKILLS,
+} from "@/constants";
 import { useCreateStatBlock } from "@/Hooks/StatBlocks/useCreateStatBlock";
 import { useUpdateStatBlock } from "@/Hooks/StatBlocks/useUpdateStatBlock";
+import { FormProps, useStatBlockForm } from "@/Hooks/useStatBlockForm";
+import useTypedPage from "@/Hooks/useTypedPage";
+import { StatBlock, StatBlockType } from "@/types";
+import { PageProps } from "@inertiajs/inertia";
+import { Controller, FormProvider } from "react-hook-form";
+import { JetInputError } from "../Jetstream/InputError";
 
 interface Props extends ModalProps {
   statBlock?: StatBlock;
@@ -61,6 +61,10 @@ export const CreateStatBlockForm = ({
     formState: { errors },
     register,
   } = methods;
+
+  React.useEffect(() => {
+    register("collection");
+  });
 
   const { collections } = useTypedPage<TypedPageProps>().props;
   const [advancedForm, toggleAdvancedForm] = useReducer(
@@ -97,7 +101,17 @@ export const CreateStatBlockForm = ({
             </div>
             {type === "monster" && (
               <div className="col-span-2">
-                <Autocomplete label="Collection" items={collections || []} />
+                <Controller
+                  name="collection"
+                  control={methods.control}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      label="Collection"
+                      items={collections || []}
+                    />
+                  )}
+                />
               </div>
             )}
             <div className="col-span-6 grid grid-cols-6 gap-6">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\EncounterController;
 use App\Http\Controllers\Api\SpellController;
 use App\Http\Controllers\MonsterController;
 use App\Http\Controllers\Api\StatBlockController;
+use App\Http\Controllers\StatBlockController as ControllersStatBlockController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -75,6 +76,7 @@ Route::get('/stat-blocks/characters', [StatBlockController::class, 'characters']
 Route::get('/stat-blocks/{stat_block}', [StatBlockController::class, 'show'])->name('api.stat-blocks.show');
 Route::post('/stat-blocks', [StatBlockController::class, 'store'])->name('api.stat-blocks.store');
 Route::put('/stat-blocks/{stat_block}', [StatBlockController::class, 'update'])->name('api.stat-blocks.update');
+Route::post('/stat-blocks/import', [StatBlockController::class, 'import'])->name('api.stat-blocks.import');
 
 Route::get('/monster/preloaded', [MonsterController::class, 'preloaded'])->name('monster.preloaded');
 Route::get('/monster/{monster}', [MonsterController::class, 'monster'])->name('monster');
