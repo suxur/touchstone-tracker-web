@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const JetDropdownLink = ({ as, href, children, onClick }: PropsWithChildren<Props>) => (
-  <div>
+  <>
     {(() => {
       switch (as) {
         case 'button':
@@ -43,5 +43,5 @@ export const JetDropdownLink = ({ as, href, children, onClick }: PropsWithChildr
           );
       }
     })()}
-  </div>
+  </>
 );

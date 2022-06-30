@@ -29,10 +29,12 @@ class CombatantResource extends JsonResource
             'action'               => $this->action,
             'bonus_action'         => $this->bonus_action,
             'reaction'             => $this->reaction,
+            'status'               => $this->status,
             'death_save_success'   => $this->death_save_success,
             'death_save_failure'   => $this->death_save_failure,
             'is_hidden'            => $this->is_hidden,
             'order'                => $this->order,
+            'conditions'           => $this->conditions,
         ];
     }
 }

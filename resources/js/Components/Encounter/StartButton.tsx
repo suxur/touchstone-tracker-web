@@ -4,9 +4,10 @@ import { orderBy } from 'lodash';
 import { useEncounter } from '@/Hooks/useEncounter';
 import { JetButton } from '@/Components/Jetstream';
 import { Combatant } from '@/types';
+import { clone } from 'mathjs';
 
 const orderCombatants = (combatants: Combatant[]) =>
-  orderBy(combatants, ['initiative'], ['desc']).map((c: Combatant, i: number) => {
+  orderBy(clone(combatants), ['initiative'], ['desc']).map((c: Combatant, i: number) => {
     c.order = i;
     return c;
   });

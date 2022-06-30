@@ -11,14 +11,18 @@ import {
 import { DeleteButton } from '@/Components/Button/DeleteButton';
 import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
 import { JetDangerButton } from '@/Components/Jetstream';
+import { UseMutationResult} from 'react-query';
+import { AxiosResponse } from 'axios';
 
 interface Props {
   combatant: Combatant;
+  mutation?: UseMutationResult<AxiosResponse<any>, unknown, number, unknown>;
 }
 
-export const DeleteCombatantModal = ({ combatant }: Props) => {
-  const { removeCombatant } = useEncounter();
-  const confirm = () => removeCombatant.mutate(combatant.id);
+export const DeleteCombatantModal = ({ combatant, mutation }: Props) => {
+  if (!mutation) return null;
+
+  const confirm = () => mutation.mutate(combatant.id);
 
   return (
     <ConfirmModal>
@@ -35,7 +39,7 @@ export const DeleteCombatantModal = ({ combatant }: Props) => {
               </JetTransparentButton>
             </ConfirmModalDismissButton>
             <ConfirmModalDismissAsyncButton>
-              <JetDangerButton processing={removeCombatant.isLoading} onClick={confirm}>
+              <JetDangerButton processing={mutation.isLoading} onClick={confirm}>
                 Remove
               </JetDangerButton>
             </ConfirmModalDismissAsyncButton>

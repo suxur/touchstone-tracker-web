@@ -9,7 +9,6 @@ use App\Http\Resources\CodexMonsterResource;
 use App\Http\Resources\CodexSpellResource;
 use App\Models\Spell;
 use App\Models\StatBlock;
-use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CodexController extends Controller
@@ -22,7 +21,7 @@ class CodexController extends Controller
 
     public function characters(): AnonymousResourceCollection
     {
-        $characters = optional(auth()->user())->characters() ?? [];
+        $characters = optional($this->user())->characters() ?? [];
         return CodexCharacterResource::collection($characters);
     }
 
@@ -34,6 +33,7 @@ class CodexController extends Controller
 
     public function encounters(): AnonymousResourceCollection
     {
-        return CodexEncounterResource::collection(auth()->user()->encounters()->orderByDesc('created_at')->get());
+        $encounters = $this->user()->encounters()->orderByDesc('created_at')->get();
+        return CodexEncounterResource::collection($encounters);
     }
 }

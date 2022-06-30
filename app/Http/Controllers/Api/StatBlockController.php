@@ -21,6 +21,7 @@ class StatBlockController extends Controller
 
         $statBlocks = $user->monsters()->sortBy('name');
 
+
         return response()->json($statBlocks->values());
     }
 

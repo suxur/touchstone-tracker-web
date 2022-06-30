@@ -33,11 +33,13 @@ Default.args = {
     initiative: 13,
     action: false,
     bonus_action: false,
+    status: null,
     death_save_failure: 0,
     death_save_success: 0,
     order: 0,
     reaction: false,
     is_hidden: false,
+    conditions: []
   },
   encounter: {
     id: 1,

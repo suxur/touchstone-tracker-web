@@ -30,40 +30,40 @@ export const Actions = ({ combatant, active, disabled }: Props) => {
     <div className="flex flex-col sm:flex-row">
       <div className={clsx('bg-gray-100 rounded-md px-2 h-10 text-sm flex justify-around sm:justify-center items-center space-x-4', { 'bg-purple-400': active })}>
         <label className={labelClass}>
-          <span>Action</span>
           <JetCheckbox
-            className="ml-1"
+            className="mr-1"
             name="action"
             disabled={disabled}
             checked={combatant.action}
             onChange={() => update({ ...combatant, action: !combatant.action })}
           />
+          <span>Action</span>
         </label>
         <label className={labelClass}>
-          <span>
-            Bonus
-            <span className="ml-1 hidden sm:inline-block">Action</span>
-          </span>
           <JetCheckbox
-            className="ml-1"
+            className="mr-2"
             disabled={disabled}
             checked={combatant.bonus_action}
             onChange={() => update({ ...combatant, bonus_action: !combatant.bonus_action })}
           />
+          <span>
+            Bonus
+            <span className="ml-1 hidden sm:inline-block">Action</span>
+          </span>
         </label>
         <label className={labelClass}>
-          <span>Reaction</span>
           <JetCheckbox
-            className="ml-1"
+            className="mr-1"
             disabled={disabled}
             checked={combatant.reaction}
             onChange={() => update({ ...combatant, reaction: !combatant.reaction })}
           />
+          <span>Reaction</span>
         </label>
       </div>
       {!disabled && (
         <JetTransparentButton
-          className={clsx('mt-2 sm:ml-1 sm:mt-0', active ? 'text-gray-700' : 'text-gray-500')}
+         className={clsx('mt-2 sm:ml-1 sm:mt-0', active ? 'text-gray-700' : 'text-gray-500')}
           onClick={clear}
         >
           Clear

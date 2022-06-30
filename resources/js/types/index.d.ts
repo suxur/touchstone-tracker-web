@@ -1,34 +1,48 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from "react";
 
 type VoidFn<T = unknown> = (param?: T) => void;
-type SetAction<T> = Dispatch<SetStateAction<T>>
+type SetAction<T> = Dispatch<SetStateAction<T>>;
+type OneOnly<Obj, Key extends keyof Obj> = { [key in Exclude<keyof Obj, Key>]: null } & Pick<Obj, Key>;
+type OneOfByKey<T> = { [key in keyof T]: OneOnly<T, key> };
 
 // TODO: need to confirm type
 type ResponseErrors = Record<string, string>;
 
 type Routes =
-  | 'CODEX_MONSTERS'
-  | 'CODEX_ENCOUNTERS'
-  | 'CODEX_SPELLS'
-  | 'CODEX_CHARACTERS'
-  | 'ENCOUNTER'
-  | 'ENCOUNTER_LOOKUP'
-  | 'USER';
+  | "CODEX_MONSTERS"
+  | "CODEX_ENCOUNTERS"
+  | "CODEX_SPELLS"
+  | "CODEX_CHARACTERS"
+  | "ENCOUNTER"
+  | "ENCOUNTER_LOOKUP"
+  | "USER";
 
 export type Classes =
-  | 'artificer'
-  | 'barbarian'
-  | 'bard'
-  | 'cleric'
-  | 'druid'
-  | 'fighter'
-  | 'monk'
-  | 'paladin'
-  | 'ranger'
-  | 'rogue'
-  | 'sorcerer'
-  | 'warlock'
-  | 'wizard';
+  | "artificer"
+  | "barbarian"
+  | "bard"
+  | "cleric"
+  | "druid"
+  | "fighter"
+  | "monk"
+  | "paladin"
+  | "ranger"
+  | "rogue"
+  | "sorcerer"
+  | "warlock"
+  | "wizard";
+
+export type Sizes =
+  | "tiny"
+  | "small"
+  | "medium"
+  | "large"
+  | "huge"
+  | "gargantuan";
+
+export type HitDiceBySize = {
+  [size in Sizes]: number;
+}
 
 export type InertiaSharedProps<T = Record<string, unknown>> = T & {
   jetstream: {
@@ -53,7 +67,7 @@ export type InertiaSharedProps<T = Record<string, unknown>> = T & {
 
 export interface Pagination<T> {
   current_page: number;
-  data: T[],
+  data: T[];
   first_page_url: string;
   from: number;
   last_page: number;
@@ -63,7 +77,7 @@ export interface Pagination<T> {
     label: string;
     active: boolean;
   }[];
-  next_page_url: string | null
+  next_page_url: string | null;
   path: string;
   per_page: number;
   prev_page_url: string | null;
@@ -104,12 +118,17 @@ export interface Action {
   is_legendary: boolean;
 }
 
+export interface Condition {
+  id: number;
+  name: string;
+}
+
 export interface Combatant {
   id: number;
   encounter_id: number;
   stat_block: StatBlock | null;
   name: string;
-  type: 'monster' | 'character';
+  type: "monster" | "character";
   hit_point_maximum: number;
   current_hit_points: number;
   temporary_hit_points: number;
@@ -118,10 +137,12 @@ export interface Combatant {
   action: boolean;
   bonus_action: boolean;
   reaction: boolean;
+  status: string | null;
   death_save_success: number;
   death_save_failure: number;
   is_hidden: boolean;
   order: number;
+  conditions: Condition[];
 }
 
 export interface Encounter {
@@ -174,7 +195,7 @@ export interface Session {
   last_active: DateTime;
 }
 
-export type StatBlockType = 'monster' | 'character';
+export type StatBlockType = "monster" | "character";
 
 // Codex
 export interface CodexMonster {
@@ -205,7 +226,7 @@ export interface StatBlock {
   team_id: number | null;
   name: string;
   size: string | null;
-  stat_block_type: StatBlockType
+  stat_block_type: StatBlockType;
   type: string | null;
   subtype: string | null;
   alignment: string | null;
@@ -271,9 +292,9 @@ export interface StatBlock {
 }
 
 export interface Membership {
-  user_id: number,
-  team_id: number,
-  role: string,
+  user_id: number;
+  team_id: number;
+  role: string;
   created_at: string;
   updated_at: string;
 }

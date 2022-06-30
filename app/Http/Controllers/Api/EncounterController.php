@@ -146,7 +146,7 @@ class EncounterController extends Controller
 
         $encounter->fill($request->all());
 
-        foreach ($request->get('combatants') as $index => $requestCombatant) {
+        foreach ($request->get('combatants') as $requestCombatant) {
             $combatant = $encounter->combatants()->where('id', $requestCombatant['id'])->first();
             $combatant->fill($requestCombatant);
             $combatant->save();

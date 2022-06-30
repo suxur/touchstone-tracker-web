@@ -75,11 +75,17 @@ export const CreateStatBlockForm = ({
   const onSubmit = (data: FormProps) => {
     if (statBlock?.id) {
       update.mutate({ statBlock, data }, {
-        onSuccess: () => onClose(),
+        onSuccess: () => {
+          onClose();
+          methods.reset();
+        },
       });
     } else {
       create.mutate(data, {
-        onSuccess: () => onClose(),
+        onSuccess: () => {
+          onClose();
+          methods.reset();
+        },
       });
     }
   };

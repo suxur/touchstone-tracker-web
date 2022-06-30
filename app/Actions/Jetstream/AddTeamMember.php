@@ -10,14 +10,6 @@ use Laravel\Jetstream\Events\TeamMemberAdded;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\Rules\Role;
 
-class Something
-{
-    public function add($user, $team, string $email, string $role = null)
-    {
-
-    }
-}
-
 class AddTeamMember implements AddsTeamMembers
 {
     /**

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { InactiveCombatantRow } from './InactiveCombatantRow';
+import { InactiveCombatantRowComponent } from './InactiveCombatantRow';
 
 export default {
   title: 'InactiveCombatantRow',
-  component: InactiveCombatantRow,
-} as ComponentMeta<typeof InactiveCombatantRow>;
+  component: InactiveCombatantRowComponent,
+} as ComponentMeta<typeof InactiveCombatantRowComponent>;
 
-const Template: ComponentStory<typeof InactiveCombatantRow> = (args) => <InactiveCombatantRow {...args} />;
+const Template: ComponentStory<typeof InactiveCombatantRowComponent> = (args) => <InactiveCombatantRowComponent {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -25,10 +25,13 @@ Default.args = {
     initiative: 13,
     action: false,
     bonus_action: false,
+    status: null,
     death_save_failure: 0,
     death_save_success: 0,
     order: 0,
     reaction: false,
     is_hidden: false,
+    conditions: [],
   },
+  destroyMutation: undefined,
 };

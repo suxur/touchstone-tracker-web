@@ -37,7 +37,8 @@ class Combatant extends Model
     ];
 
     protected $with = [
-        'statBlock'
+        'statBlock',
+        'conditions',
     ];
 
     public function encounter()
@@ -48,5 +49,10 @@ class Combatant extends Model
     public function statBlock()
     {
         return $this->belongsTo(StatBlock::class);
+    }
+
+    public function conditions()
+    {
+        return $this->belongsToMany(Condition::class);
     }
 }

@@ -41,7 +41,6 @@ export const ImportStatBlocksForm = ({ type, isOpen, onClose }: Props) => {
   const mutation = useImportStatBlocks(type);
 
   const onSubmit = (data: FormProps) => {
-    console.log(data);
     mutation.mutate({ data });
   };
 

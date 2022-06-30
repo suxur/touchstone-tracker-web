@@ -1,5 +1,7 @@
 import '../public/css/app.css';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { QueryClientProvider } from 'react-query';
 import {
   faBook,
   faPlus,
@@ -22,6 +24,9 @@ import {
 
 library.add(faBook, faPlus, faPlusSquare, faTimes, faSkullCrossbones, faGripLines, faTrashAlt, faTimesCircle, faSearch, faChevronRight, faCopy, faCog, faEdit, faClone, faEye, faHeart, faShieldAlt);
 
+initialize();
+
+const client = require('../resources/js/lib/query-client').default;
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -32,3 +37,12 @@ export const parameters = {
     },
   },
 }
+
+export const decorators = [
+  mswDecorator,
+  (story) => (
+    <QueryClientProvider client={client}>
+      {story()}
+    </QueryClientProvider>
+  ),
+];

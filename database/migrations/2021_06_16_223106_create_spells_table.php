@@ -51,6 +51,7 @@ class CreateSpellsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('spell_stat_block');
         Schema::dropIfExists('spells');
     }
 }

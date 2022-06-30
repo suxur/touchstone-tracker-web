@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Facades\App\Combatant\CalculateAbilityModifier;
 use App\Encounters\DifficultyCalculator;
 use App\Models\Action;
 use App\Models\Combatant;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
 use function collect;
 use function explode;
-use function floor;
 use function number_format;
 use function str_replace;
 use function trim;
@@ -21,7 +21,7 @@ trait IsCombatant
     public function getStrengthModifierAttribute()
     {
         if (isset($this->attributes['strength'])) {
-            return $this->getModifier($this->attributes['strength']);
+            return CalculateAbilityModifier::calculate($this->attributes['strength']);
         }
 
         return null;
@@ -29,54 +29,33 @@ trait IsCombatant
 
     public function getDexterityModifierAttribute()
     {
-        return $this->getModifier($this->attributes['dexterity']);
+        return CalculateAbilityModifier::calculate($this->attributes['dexterity']);
     }
 
     public function getConstitutionModifierAttribute()
     {
-        return $this->getModifier($this->attributes['constitution']);
+        return CalculateAbilityModifier::calculate($this->attributes['constitution']);
     }
 
     public function getIntelligenceModifierAttribute()
     {
-        return $this->getModifier($this->attributes['intelligence']);
+        return CalculateAbilityModifier::calculate($this->attributes['intelligence']);
     }
 
     public function getWisdomModifierAttribute()
     {
-        return $this->getModifier($this->attributes['wisdom']);
+        return CalculateAbilityModifier::calculate($this->attributes['wisdom']);
     }
 
     public function getCharismaModifierAttribute()
     {
-        return $this->getModifier($this->attributes['charisma']);
+        return CalculateAbilityModifier::calculate($this->attributes['charisma']);
     }
 
     public function getInitiativeAttribute()
     {
-        // 00 = -5
-        // 01 = -5
-        // 02 = -4
-        // 03 = -4
-        // 04 = -3
-        // 05 = -3
-        // 06 = -2
-        // 07 = -2
-        // 08 = -1
-        // 09 = -1
-        // 10 = 0
-        // 11 = 0
-        // 12 = 1
-        // 13 = 1
-        // 14 = 2
-        // 15 = 2
-        // 16 = 3
-        // 17 = 4
-        // 18 = 4
-        // 19 = 4
-        // 20 = 5
         if (isset($this->attributes['dexterity'])) {
-            return $this->getModifier($this->attributes['dexterity']);
+            return CalculateAbilityModifier::calculate($this->attributes['dexterity']);
         }
 
         return 0;
@@ -199,16 +178,5 @@ trait IsCombatant
         }
 
         return [];
-    }
-
-    private function getModifier($value)
-    {
-        return intval(floor(($value - 10) / 2));
-//        $modifier = intval(floor(($value - 10) / 2));
-//        if ($modifier > 0) {
-//            return $modifier;
-//        }
-//
-//        return $modifier;
     }
 }

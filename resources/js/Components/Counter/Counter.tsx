@@ -12,6 +12,7 @@ interface Props {
 }
 
 export const Counter = ({ active, combatant, type }: Props) => {
+  console.log(combatant);
   const { mutation } = useCombatant(combatant);
 
   const toggle = (index: number) => {

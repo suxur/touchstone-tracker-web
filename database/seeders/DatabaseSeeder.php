@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             Team::factory()->state(function (array $attributes, User $user) {
                 return [
                     'user_id'       => $user->id,
-                    'name'          => 'The Pthumerians',
+                    'name'          => 'Hellmouth Alcolytes',
                     'personal_team' => true
                 ];
             }),

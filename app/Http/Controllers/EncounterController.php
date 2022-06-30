@@ -6,6 +6,7 @@ use App\Encounters\Encounters;
 use App\Events\UpdateEncounter;
 use App\Http\Resources\EncounterResource;
 use App\Models\Combatant;
+use App\Models\Condition;
 use App\Models\StatBlock;
 use App\Models\Encounter;
 use App\Models\Spell;
@@ -114,7 +115,8 @@ class EncounterController extends Controller
 //        ])->sortBy('name')->groupBy('collection');
 
         return Inertia::render('Encounter', [
-            'encounter' => $encounter,
+            'encounter'  => $encounter,
+            'conditions' => Condition::all(),
 //            'monsters'         => Monster::select(['id', 'name', 'hit_points', 'dexterity'])->without('specialAbilities', 'actions', 'reactions', 'legendaryActions')->get(),
 //            'characters'       => $characters,
 //            'combatants'       => $encounter->combatants,

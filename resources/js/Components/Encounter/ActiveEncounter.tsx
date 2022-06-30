@@ -1,21 +1,27 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { orderBy } from 'lodash';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { orderBy } from "lodash";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Combatant } from '@/types';
-import { reorder } from '@/lib/helpers';
-import { useEncounter } from '@/Hooks/useEncounter';
-import { ListBody, ListHeader } from '@/Components/List';
-import { CombatantRow } from '@/Components/Encounter/CombatantRow';
+import { Combatant } from "@/types";
+import { reorder } from "@/lib/helpers";
+import { useEncounter } from "@/Hooks/useEncounter";
+import { ListBody, ListHeader } from "@/Components/List";
+import { CombatantRow } from "@/Components/Encounter/CombatantRow";
 
 export const ActiveEncounter = () => {
+
   const { encounter, updateCombatantsOrder } = useEncounter();
   const [orderedCombatants, setOrderedCombatants] = useState<Combatant[]>([]);
 
   useEffect(() => {
-    setOrderedCombatants(orderBy(encounter.combatants, ['order']));
+    setOrderedCombatants(orderBy(encounter.combatants, ["order"]));
   }, [encounter.combatants]);
 
   const onDragEnd = (result: DropResult) => {
@@ -24,12 +30,18 @@ export const ActiveEncounter = () => {
       return;
     }
 
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
       return;
     }
 
-    const reorderedCombatants = reorder<Combatant>(encounter?.combatants || [], source.index, destination.index)
-      .map((c, i) => ({ ...c, order: i }));
+    const reorderedCombatants = reorder<Combatant>(
+      encounter?.combatants || [],
+      source.index,
+      destination.index
+    ).map((c, i) => ({ ...c, order: i }));
     updateCombatantsOrder.mutate(reorderedCombatants);
     setOrderedCombatants(reorderedCombatants);
   };
@@ -43,7 +55,9 @@ export const ActiveEncounter = () => {
           </div>
           <div className="flex flex-col flex-grow">
             <div className="flex flex-row flex-grow justify-between space-x-2 md:space-x-4">
-              <div className="flex flex-grow items-center ml-2 md:ml-4">Name</div>
+              <div className="flex flex-grow items-center ml-2 md:ml-4">
+                Name
+              </div>
               <div className="flex space-x-2 md:space-x-4 mr-2 md:mr-4">
                 <div className="flex justify-center items-center w-28">HP</div>
                 <div className="flex justify-center items-center w-12">AC</div>
@@ -61,12 +75,20 @@ export const ActiveEncounter = () => {
                   className="divide-y divide-gray-200"
                 >
                   {orderedCombatants.map((combatant, i) => (
-                    <Draggable draggableId={combatant.id.toString()} index={i} key={combatant.id}>
-                      {dragProvided => (
+                    <Draggable
+                      draggableId={combatant.id.toString()}
+                      index={i}
+                      key={combatant.id}
+                    >
+                      {(dragProvided) => (
                         <CombatantRow
                           ref={dragProvided.innerRef}
                           key={combatant.id}
-                          active={encounter.is_active && encounter.active_index === i && !snapshot.isDraggingOver}
+                          active={
+                            encounter.is_active &&
+                            encounter.active_index === i &&
+                            !snapshot.isDraggingOver
+                          }
                           combatant={combatant}
                           encounter={encounter}
                           draggableProps={dragProvided.draggableProps}

@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 
 type Props = {
-  value: string;
+  value: string | null;
   label?: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | null) => void;
   data: string[];
   required?: boolean;
   placeholder?: string;
@@ -45,7 +45,18 @@ export const Dropdown = forwardRef<HTMLDivElement, Props>(
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute top-10 z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Listbox.Options className="absolute top-10 z-50 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Listbox.Option
+              className={({ active }) =>
+                clsx(
+                  active ? "text-purple-900 bg-purple-100" : "text-gray-900",
+                  "cursor-default select-none relative py-2 pl-10 pr-4"
+                )
+              }
+              value=""
+            >
+              {placeholder || `Select a ${label}`}
+            </Listbox.Option>
             {data.map((datum) => (
               <Listbox.Option
                 key={datum}
