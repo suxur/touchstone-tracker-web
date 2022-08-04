@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * Class Encounters
  *
  * @package App\Encounters
- * @method static lookup($param): string
+ * @method lookup($param): string
  */
 class Encounters extends Facade
 {

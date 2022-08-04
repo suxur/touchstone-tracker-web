@@ -51,6 +51,7 @@ createInertiaApp({
     render(
       <QueryClientProvider client={client}>
         <App {...props} />
+        <ReactQueryDevtools/>
       </QueryClientProvider>,
       el,
     );

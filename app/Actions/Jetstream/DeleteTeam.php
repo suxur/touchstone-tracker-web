@@ -12,7 +12,7 @@ class DeleteTeam implements DeletesTeams
      * @param  mixed  $team
      * @return void
      */
-    static public function delete($team)
+    public function delete($team)
     {
         $team->purge();
     }

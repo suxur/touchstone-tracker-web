@@ -43,6 +43,7 @@ class StatBlockRequestParserTest extends TestCase
     {
         return [
             'user_id'                => 1,
+            'session_id'             => null,
             'name'                   => 'Skeleton',
             'size'                   => null,
             'stat_block_type'        => 'monster',

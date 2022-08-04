@@ -43,6 +43,7 @@ export const useCombatant = (combatant: Combatant) => {
       return { previous, updated };
     },
     onError: (err, updated, context) => {
+      console.log(err);
       if (context?.previous) {
         queryClient.setQueryData<Encounter>(['encounter', context.updated.encounter_id], context.previous);
       }

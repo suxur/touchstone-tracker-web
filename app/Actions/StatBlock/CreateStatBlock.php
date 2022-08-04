@@ -19,15 +19,11 @@ class CreateStatBlock extends StatBlockActions
     }
 
     /**
-     * @param User|null $user
      * @param array $requestData
      * @return StatBlock|Model
-     * @throws ValidationException
      */
-    public function create(?User $user, array $requestData)
+    public function create(array $requestData)
     {
-        $this->user = $user;
-
         $this->validate($requestData);
 
         $parsedFormData = $this->parser->parse($requestData);

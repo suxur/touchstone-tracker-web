@@ -69,10 +69,12 @@ export const StatBlock = forwardRef<HTMLButtonElement, Props>(({ statBlock }: Pr
           <StatLine title="Damage Immunities" stat={statBlock.damage_immunities} />
           <StatLine title="Condition Immunities" stat={statBlock.condition_immunities} />
           <StatLine title="Senses" stat={statBlock.senses} />
-          <div className="flex-row">
-            <StatLine title="Challenge" stat={statBlock.challenge_rating} />
-            <p> ({statBlock.experience_points} XP)</p>
-          </div>
+          {statBlock.experience_points && (
+            <div className="flex-row">
+              <StatLine title="Challenge" stat={statBlock.challenge_rating} />
+              <p> ({statBlock.experience_points} XP)</p>
+            </div>
+          )}
           {statBlock.special_abilities.length > 0 && (
             <>
               <Divider />

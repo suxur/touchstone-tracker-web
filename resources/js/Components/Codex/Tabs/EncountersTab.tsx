@@ -5,7 +5,6 @@ import { useForm } from '@inertiajs/inertia-react';
 
 import { CodexEncounter } from '@/types';
 import { ONE_MINUTE, routes } from '@/constants';
-import useRoute from '@/Hooks/useRoute';
 import { useEncounter } from '@/Hooks/useEncounter';
 import { EncounterRow } from '@/Components/Codex/Encounters/EncounterRow';
 import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
@@ -18,9 +17,8 @@ type DeleteModal = {
 }
 
 export const EncountersTab = () => {
-  const route = useRoute();
   const queryClient = useQueryClient();
-  const { encounter: activeEncounter } = useEncounter();
+  const { encounter: activeEncounter, store } = useEncounter();
 
   const [deleteModal, setDeleteModal] = useState<DeleteModal>({
     isOpen: false,
@@ -33,8 +31,7 @@ export const EncountersTab = () => {
   const form = useForm({});
 
   const createEncounter = () => {
-    form.post(route('encounters.create'));
-    queryClient.invalidateQueries(routes.CODEX_ENCOUNTERS);
+    store.mutate(null);
   };
 
   const cancelDeleteAction = useCallback(() => {

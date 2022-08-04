@@ -1,17 +1,20 @@
 import * as React from 'react';
+import { useQuery } from 'react-query';
 import { useMemo, useState } from 'react';
+import { startCase } from 'lodash';
+import axios from 'axios';
 
-import { StatBlock, StatBlockPermissions, StatBlockType } from '@/types';
+import { Pagination as PaginationType, StatBlock, StatBlockPermissions, StatBlockType } from '@/types';
 import { JetActionSection, JetButton } from '@/Components/Jetstream';
 import { DeleteButton } from '@/Components/Button/DeleteButton';
 import { CloneButton } from '@/Components/Button/CloneButton';
 import { CreateStatBlockForm } from '@/Components/Modals/CreateStatBlockForm';
 import { DeleteStatBlockModal } from '@/Components/Modals/DeleteStatBlockModal';
 import { EditButton } from '@/Components/Button/EditButton';
-import { startCase } from 'lodash';
-import { useStatBlocks } from '@/Hooks/useStatBlocks';
-import {useCloneStatBlock} from '@/Hooks/StatBlocks/useCloneStatBlock';
+import useRoute from '@/Hooks/useRoute';
+import { useCloneStatBlock } from '@/Hooks/StatBlocks/useCloneStatBlock';
 import { ImportStatBlocksForm } from '@/Components/Modals/ImportStatBlocksForm';
+import { Pagination } from '@/Components/Pagination';
 
 interface Props {
   permissions: StatBlockPermissions;
@@ -24,8 +27,20 @@ type ModalProps = {
 }
 
 export const ManageStatBlocks = ({ type, permissions }: Props) => {
-  const { statBlocks } = useStatBlocks(type);
+  const route = useRoute();
+  const [page, setPage] = useState(1);
   const cloneStatBlock = useCloneStatBlock();
+
+  const { isSuccess, data } = useQuery<PaginationType<StatBlock>>(
+    [type, page],
+    async () => {
+      const { data } = await axios.get(route(`api.stat-blocks.${type}`, { page }));
+      return data;
+    },
+    {
+      keepPreviousData: true,
+    },
+  );
 
   const [importModal, setImportModal] = useState<ModalProps>({
     isOpen: false,
@@ -71,30 +86,37 @@ export const ManageStatBlocks = ({ type, permissions }: Props) => {
         </div>
       )}
     >
-      {statBlocks.length > 0 ? (
-        <div className="space-y-4 divide-y divide-gray-200">
-          {statBlocks.map(statBlock => (
-            <div key={statBlock.id} className="pt-2 first:pt-0">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col">
-                  <div>{statBlock.name}</div>
+      {isSuccess && data && data.data.length > 0 ? (
+        <>
+          <div className="space-y-4 divide-y divide-gray-200">
+            {data.data.map(statBlock => (
+              <div key={statBlock.id} className="pt-2 first:pt-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <div>{statBlock.name}</div>
+                  </div>
+                  <div className="flex items-center">
+                    {permissions.canManageStatBlocks && (
+                      <>
+                        <EditButton onClick={() => edit(statBlock)} />
+                        <CloneButton onClick={() => clone(statBlock)} />
+                        <DeleteButton onClick={() => confirmDelete(statBlock)} />
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  {permissions.canManageStatBlocks && (
-                    <>
-                      <EditButton onClick={() => edit(statBlock)} />
-                      <CloneButton onClick={() => clone(statBlock)} />
-                      <DeleteButton onClick={() => confirmDelete(statBlock)} />
-                    </>
-                  )}
-                </div>
+                {statBlock.collection && (
+                  <span className="mt-2 text-xs py-1 px-2 bg-gray-200 rounded-md">{statBlock.collection}</span>
+                )}
               </div>
-              {statBlock.collection && (
-                <span className="mt-2 text-xs py-1 px-2 bg-gray-200 rounded-md">{statBlock.collection}</span>
-              )}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <Pagination
+            pagination={data}
+            prev={() => setPage(page - 1)}
+            next={() => setPage(page + 1)}
+          />
+        </>
       ) : (
         <p>No {type}s found...</p>
       )}

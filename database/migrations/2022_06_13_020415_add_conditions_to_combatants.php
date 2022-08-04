@@ -19,7 +19,7 @@ class AddConditionsToCombatants extends Migration
         });
 
         Schema::create('combatant_condition', function (Blueprint $table) {
-            $table->foreignId('combatant_id')->constrained();
+            $table->foreignId('combatant_id')->constrained()->cascadeOnDelete();
             $table->foreignId('condition_id')->constrained();
         });
     }

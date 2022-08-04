@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\Combatant\CreateCombatant;
 use App\Actions\Combatant\UpdateCombatant;
 use App\Events\UpdateEncounter;
 use App\Http\Controllers\Controller;
@@ -17,18 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 class CombatantController extends Controller
 {
-    public function index(Encounter $encounter): AnonymousResourceCollection
-    {
-        return CombatantResource::collection($encounter->combatants()->get());
-    }
-
-    public function add(Request $request, Encounter $encounter): AnonymousResourceCollection
-    {
-        app(CreateCombatant::class)->create($encounter, $request->all());
-        UpdateEncounter::dispatch($encounter);
-        return CombatantResource::collection($encounter->combatants()->get());
-    }
-
     public function addCombatants(Request $request, Encounter $encounter): AnonymousResourceCollection
     {
         $data = Validator::make($request->all(), [
@@ -51,15 +38,17 @@ class CombatantController extends Controller
         $encounter->combatants()->createMany($combatants);
 
         UpdateEncounter::dispatch($encounter);
+
         return CombatantResource::collection($encounter->combatants()->get());
     }
 
     public function update(Request $request, Combatant $combatant): EncounterResource
     {
         app(UpdateCombatant::class)->update($combatant, $request->all());
-        $encounter = $combatant->encounter->fresh();
-        UpdateEncounter::dispatch($encounter);
-        return new EncounterResource($encounter);
+        
+        $encounter = $combatant->encounter;
+
+        UpdateEncounter::dispatch($encounter->fresh());
+        return new EncounterResource($encounter->fresh());
     }
 }
-

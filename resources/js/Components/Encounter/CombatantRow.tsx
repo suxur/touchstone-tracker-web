@@ -12,13 +12,9 @@ import { Actions } from "@/Components/Encounter/Actions";
 import { InlineInput } from "@/Components/InlineInput";
 import { COMBATANT_MONSTER } from "@/constants";
 import { useCombatant } from "@/Hooks/useCombatant";
-import useTypedPage from "@/Hooks/useTypedPage";
-import { Combatant, Condition, Encounter } from "@/types";
+import { Combatant, Encounter } from "@/types";
 import { ConditionDropdown } from "../Combatant/ConditionDropdown";
-
-interface PageProps {
-  conditions: Condition[];
-}
+import { useConditions } from "@/Hooks/useConditions";
 
 interface Props {
   active: boolean;
@@ -34,7 +30,7 @@ export const CombatantRow = forwardRef<HTMLDivElement, Props>(
     ref
   ) => {
     const { mutation } = useCombatant(combatant);
-    const { conditions } = useTypedPage<PageProps>().props;
+    const { conditions } = useConditions();
 
     const showStatBlock = useCallback(() => {}, []);
 

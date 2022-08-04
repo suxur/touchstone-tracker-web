@@ -18,7 +18,7 @@ export const PreloadedMonsters = () => {
   const { isSuccess, data } = useQuery<PaginationType<StatBlock>>(
     ['preloaded', page],
     async () => {
-      const { data } = await axios.get(route('monster.preloaded', { page }));
+      const { data } = await axios.get(route('api.monster.preloaded', { page }));
       return data;
     },
     {

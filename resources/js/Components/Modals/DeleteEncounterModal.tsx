@@ -1,39 +1,43 @@
-import * as React from 'react';
-import { useCallback } from 'react';
-import { useForm } from '@inertiajs/inertia-react';
+import * as React from "react";
+import { useCallback } from "react";
 
-import { CodexEncounter } from '@/types';
-import useRoute from '@/Hooks/useRoute';
-import { JetConfirmationModal, JetDangerButton, ModalProps } from '@/Components/Jetstream';
-import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
+import { CodexEncounter } from "@/types";
+import {
+  JetConfirmationModal,
+  JetDangerButton,
+  ModalProps,
+} from "@/Components/Jetstream";
+import { JetTransparentButton } from "@/Components/Jetstream/TransparentButton";
+import { useEncounter } from "@/Hooks/useEncounter";
 
 interface Props extends ModalProps {
   encounter?: CodexEncounter;
 }
 
 export const DeleteEncounterModal = ({ encounter, isOpen, onClose }: Props) => {
-  const route = useRoute();
-  const form = useForm({});
+  const { destroy } = useEncounter();
 
   const confirm = useCallback(() => {
     if (encounter) {
-      form.delete(route('encounter.destroy', { encounter }), {
-        only: ['encounter'],
+      destroy.mutate(encounter, {
         onSuccess: () => onClose(),
       });
     }
-  }, [encounter, form, onClose, route]);
+  }, [encounter, destroy, onClose]);
 
   return (
     <JetConfirmationModal isOpen={isOpen} onClose={onClose}>
       <JetConfirmationModal.Content title="Remove Encounter?">
-        <p>Are you sure you want to remove the <strong>{encounter?.slug}</strong> encounter?</p>
+        <p>
+          Are you sure you want to remove the <strong>{encounter?.slug}</strong>{" "}
+          encounter?
+        </p>
       </JetConfirmationModal.Content>
       <JetConfirmationModal.Footer>
         <JetTransparentButton className="mr-2" onClick={onClose}>
           Cancel
         </JetTransparentButton>
-        <JetDangerButton processing={form.processing} onClick={confirm}>
+        <JetDangerButton processing={destroy.isLoading} onClick={confirm}>
           Remove
         </JetDangerButton>
       </JetConfirmationModal.Footer>

@@ -13,14 +13,15 @@ class StatBlockRequestParser
 
     public array $formFields = [
         'user_id'                => 'user',
+        'session_id'             => 'session',
         'name'                   => 'string',
         'size'                   => 'string',
         'stat_block_type'        => 'string',
         'type'                   => 'string',
         'subtype'                => 'string',
         'alignment'              => 'string',
-        'armor_class'            => 'string',
-        'hit_points'             => 'string',
+        'armor_class'            => 'string|default:0:int',
+        'hit_points'             => 'string|default:0:int',
         'hit_dice'               => 'string',
         'armor_description'      => 'string',
         'speed'                  => 'implode',
@@ -76,6 +77,8 @@ class StatBlockRequestParser
             switch ($formOption->getType()) {
                 case 'user':
                     return optional(auth()->user())->id;
+                case 'session':
+                    return auth()->user() ? null : session()->getId();
                 case 'string':
                     return $this->getValueOrNull($data, $field) ?? $formOption->getDefault();
                 case 'array':

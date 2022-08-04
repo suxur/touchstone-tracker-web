@@ -6,12 +6,8 @@ use Tests\TestCase;
 
 class WelcomeControllerTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function test_example()
+    /** @test */
+    public function it_should_get_index()
     {
         $response = $this->get('/');
 

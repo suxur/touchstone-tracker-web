@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Encounter extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes;
+    use HasFactory;
 
     public const COMBATANT_MONSTER = 'monster';
     public const COMBATANT_CHARACTER = 'character';
 
     protected $combatantPivotColumns = [
-        'unique_id', 'unique_name', 'combatant_type', 'hit_points', 'initiative', 'action', 'bonus_action', 'reaction', 'extra_action', 'death_save_success', 'death_save_failure', 'order'
+        'unique_id', 'unique_name', 'combatant_type', 'hit_points', 'initiative', 'action', 'bonus_action', 'reaction', 'extra_action', 'death_save_success', 'death_save_failure', 'order',
     ];
 
     protected $fillable = [
@@ -37,16 +37,16 @@ class Encounter extends Model
     ];
 
     protected $appends = [
-        'created_at_diff'
+        'created_at_diff',
     ];
 
     protected $casts = [
         'user_id'   => 'integer',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     protected $dates = [
-        'started_at'
+        'started_at',
     ];
 
     public function path()
@@ -57,6 +57,16 @@ class Encounter extends Model
     public function combatants()
     {
         return $this->hasMany(Combatant::class)->orderBy('order');
+    }
+
+    public function characters()
+    {
+        return $this->combatants()->where('type', 'character');
+    }
+
+    public function monsters()
+    {
+        return $this->combatants()->where('type', 'monster');
     }
 
     public function getCombatantsCountAttribute()
@@ -76,7 +86,6 @@ class Encounter extends Model
     /**
      * Scope a query to only include expired sessions.
      *
-     * @param Builder $query
      * @return Builder
      */
     public function scopeExpired(Builder $query)
@@ -87,7 +96,6 @@ class Encounter extends Model
     /**
      * Scope a query to only include expired trash.
      *
-     * @param Builder $query
      * @return Builder
      */
     public function scopeTrash(Builder $query)
@@ -104,7 +112,7 @@ class Encounter extends Model
                 'hit_points'  => $character->hit_points,
                 'initiative'  => $character->dexterity,
                 'order'       => $this->combatants_count,
-            ]
+            ],
         ]);
     }
 
@@ -119,11 +127,11 @@ class Encounter extends Model
         ];
 
         if (($count = $this->combatants()->where('id', $character->id)->count()) > 0) {
-            $updateData['unique_name'] = $character->name . ' ' . $count;
+            $updateData['unique_name'] = $character->name.' '.$count;
         }
 
         $this->combatants()->attach([
-            $character->id => $updateData
+            $character->id => $updateData,
         ]);
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class CodexControllerTest extends TestCase
+class ConditionControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -58,7 +58,6 @@ class CodexControllerTest extends TestCase
         $response = $this->getJson('/api/codex/encounters');
         $response->assertUnauthorized();
     }
-
 
     /** @test */
     public function a_user_can_get_a_list_of_encounters(): void

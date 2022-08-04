@@ -16,24 +16,29 @@ class CodexController extends Controller
     public function monsters(): AnonymousResourceCollection
     {
         $monsters = StatBlock::select(['id', 'name'])->monsters()->get();
-        return CodexMonsterResource::collection($monsters);
-    }
+        $userMonsters = StatBlock::select(['id', 'name'])->userMonsters()->get();
+
+        return CodexMonsterResource::collection($monsters->merge($userMonsters)->sortBy('name'));
+   }
 
     public function characters(): AnonymousResourceCollection
     {
-        $characters = optional($this->user())->characters() ?? [];
+        $characters = StatBlock::select(['id', 'name'])->userCharacters()->orderBy('name')->get();
+
         return CodexCharacterResource::collection($characters);
     }
 
     public function spells(): AnonymousResourceCollection
     {
         $spells = Spell::select(['id', 'name'])->orderBy('name')->get();
+
         return CodexSpellResource::collection($spells);
     }
 
     public function encounters(): AnonymousResourceCollection
     {
         $encounters = $this->user()->encounters()->orderByDesc('created_at')->get();
+
         return CodexEncounterResource::collection($encounters);
     }
 }

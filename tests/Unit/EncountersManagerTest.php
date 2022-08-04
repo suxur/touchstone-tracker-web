@@ -6,8 +6,14 @@ use App\Encounters\Encounters;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class EncountersTest extends TestCase
+class EncountersManagerTest extends TestCase
 {
+    /** @test */
+    public function it_gets_session_or_last_encounter_slug(): void
+    {
+
+    }
+
     /** @test */
     public function it_parses_a_url_for_a_slug(): void
     {
@@ -30,5 +36,4 @@ class EncountersTest extends TestCase
 
         self::assertEquals($slug, $encounterSlug);
     }
-
 }

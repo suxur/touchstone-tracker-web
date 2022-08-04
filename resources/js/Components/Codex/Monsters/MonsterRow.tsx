@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { useCallback } from 'react';
+import * as React from "react";
+import { useCallback } from "react";
 
-import { CodexMonster } from '@/types';
-import { CodexRow } from '@/Components/Codex/CodexRow';
-import { useCodex } from '@/Components/Codex/CodexContext';
-import { useEncounter } from '@/Hooks/useEncounter';
+import { CodexMonster } from "@/types";
+import { useEncounter } from "@/Hooks/useEncounter";
+import { useCodex } from "@/Components/Codex/CodexContext";
+import { CodexRow } from "@/Components/Codex/CodexRow";
 
 interface Props {
   monster: CodexMonster;

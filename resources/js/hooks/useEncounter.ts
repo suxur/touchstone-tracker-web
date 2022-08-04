@@ -3,7 +3,7 @@ import { orderBy } from 'lodash';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { PageProps } from '@inertiajs/inertia';
 
-import { Combatant, Encounter } from '@/types';
+import { CodexEncounter, Combatant, Encounter } from '@/types';
 import useRoute from '@/Hooks/useRoute';
 import useTypedPage from '@/Hooks/useTypedPage';
 
@@ -25,9 +25,21 @@ export const useEncounter = () => {
     refetchOnMount: false,
   });
 
-  const mutation = useMutation((data: Encounter) => axios.post(route('api.encounters.update', { encounter }), { ...data }), {
+  const mutation = useMutation((data: Encounter) => axios.put(route('api.encounters.update', { encounter }), { ...data }), {
     onSuccess: (response) => {
       queryClient.setQueryData(['encounter', encounter.id], response.data);
+    },
+  });
+
+  const store = useMutation((data: null) => axios.post(route('api.encounters.store')), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['codex/encounters']);
+    },
+  });
+
+  const destroy = useMutation((encounter: CodexEncounter) => axios.delete(route('api.encounters.destroy', { encounter })), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['codex/encounters']);
     },
   });
 
@@ -65,6 +77,18 @@ export const useEncounter = () => {
     },
   });
 
+  const add = useMutation(({
+    name, type
+  }: { name: string, type: string }) => axios.post(route('api.encounters.combatants.store', {
+    encounter, name, stat_block_type: type,
+  })), {
+    onSuccess: response => {
+      queryClient.setQueryData(['encounter', encounter.id], response.data);
+      queryClient.invalidateQueries(['codex/characters']);
+      queryClient.invalidateQueries(['codex/monsters']);
+    },
+  });
+
   const addCombatant = useMutation((id: number) => axios.post(route('api.encounters.add.stat-block', {
     encounter, stat_block: id,
   })), {
@@ -73,7 +97,7 @@ export const useEncounter = () => {
     },
   });
 
-  const removeCombatant = useMutation((id: number) => axios.post(route('api.encounters.remove', {
+  const removeCombatant = useMutation((id: number) => axios.delete(route('api.encounters.combatants.destroy', {
     encounter, combatant: id,
   })), {
     onSuccess: response => {
@@ -123,9 +147,12 @@ export const useEncounter = () => {
     query,
     mutation,
     optimistic,
+    add,
     addCombatant,
     removeCombatant,
     updateCombatantsOrder,
     updateCombatantsInitiative,
+    store,
+    destroy,
   };
 };

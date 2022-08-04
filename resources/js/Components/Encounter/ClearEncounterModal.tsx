@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { useForm } from '@inertiajs/inertia-react';
 
-import useRoute from '@/Hooks/useRoute';
 import { useEncounter } from '@/Hooks/useEncounter';
 import {
   ConfirmModal,
@@ -13,22 +11,14 @@ import {
 } from '@/Components/Modals/ConfirmModal';
 import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
 import { JetDangerButton } from '@/Components/Jetstream';
-import { useMutation } from 'react-query';
-import axios from 'axios';
-import queryClient from '@/lib/query-client';
 
 export const ClearEncounterModal = () => {
-  const route = useRoute();
-  const { encounter } = useEncounter();
-
-  const mutation = useMutation(() => axios.post(route('api.encounter.clear', { encounter })), {
-    onSuccess: (response) => {
-      queryClient.setQueryData(['encounter', encounter?.id], response.data);
-    },
-  });
+  const { mutation, encounter } = useEncounter();
 
   const confirm = useCallback(() => {
-    mutation.mutate();
+    if (encounter) {
+      mutation.mutateAsync({ ...encounter, combatants: [] });
+    }
   }, [mutation]);
 
   if (encounter) {

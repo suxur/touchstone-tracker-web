@@ -1,17 +1,17 @@
-import * as React from 'react';
-import { createContext, useMemo, useState } from 'react';
-import { useQuery } from 'react-query';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as React from "react";
+import { createContext, useMemo, useState } from "react";
+import { useQuery } from "react-query";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { CodexMonster, Combatant, SetAction } from '@/types';
-import { ONE_MINUTE, routes } from '@/constants';
-import { noop } from '@/lib/helpers';
-import { QuickAdd } from '@/Components/Codex/QuickAdd';
-import { NoResults } from '@/Components/Codex/NoResults';
-import { MonsterRow } from '@/Components/Codex/Monsters/MonsterRow';
-import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
-import { SearchInput } from '@/Components/Codex/SearchInput';
-import { CreateStatBlockForm } from '@/Components/Modals/CreateStatBlockForm';
+import { CodexMonster, Combatant, SetAction } from "@/types";
+import { ONE_MINUTE, routes } from "@/constants";
+import { noop } from "@/lib/helpers";
+import { QuickAdd } from "@/Components/Codex/QuickAdd";
+import { NoResults } from "@/Components/Codex/NoResults";
+import { MonsterRow } from "@/Components/Codex/Monsters/MonsterRow";
+import { JetTransparentButton } from "@/Components/Jetstream/TransparentButton";
+import { SearchInput } from "@/Components/Codex/SearchInput";
+import { CreateStatBlockForm } from "@/Components/Modals/CreateStatBlockForm";
 
 interface StatBlock {
   id: number;
@@ -30,7 +30,7 @@ const MonstersContext = createContext<Context>({
 });
 
 export const MonstersTab = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [statBlocks, setStatBlocks] = useState<StatBlock[]>([]);
   const [createMonsterModal, setCreateMonsterModal] = useState({
     isOpen: false,
@@ -40,13 +40,16 @@ export const MonstersTab = () => {
     staleTime: ONE_MINUTE,
   });
 
-  const value = useMemo(() => ({
-    statBlocks,
-    setStatBlocks,
-  }), [statBlocks]);
+  const value = useMemo(
+    () => ({
+      statBlocks,
+      setStatBlocks,
+    }),
+    [statBlocks]
+  );
 
-  const filtered = data?.filter(combatant => {
-    const regex = new RegExp(query, 'gi');
+  const filtered = data?.filter((combatant) => {
+    const regex = new RegExp(query, "gi");
     return combatant.name.match(regex);
   });
 
@@ -56,7 +59,7 @@ export const MonstersTab = () => {
     }
 
     if (filtered) {
-      return filtered?.map(monster => (
+      return filtered?.map((monster) => (
         <MonsterRow key={monster.id} monster={monster} highlight={query} />
       ));
     }

@@ -20,24 +20,24 @@ class StatBlock extends Model
         'traits',
         'actions',
         'reactions',
-        'legendary_actions'
+        'legendary_actions',
     ];
 
     protected $casts = [
         'armor_class' => 'integer',
         'initiative'  => 'integer',
-        'hit_points'  => 'integer'
+        'hit_points'  => 'integer',
     ];
 
     protected $appends = [
-        'initiative'
+        'initiative',
     ];
 
     protected $with = [
         'specialAbilities',
         'actions',
         'reactions',
-        'legendaryActions'
+        'legendaryActions',
     ];
 
     public const RACES = [
@@ -54,7 +54,7 @@ class StatBlock extends Model
         'Human',
         'Kenku',
         'Tiefling',
-        'Aasimar'
+        'Aasimar',
     ];
 
     public const CLASSES = [
@@ -70,7 +70,7 @@ class StatBlock extends Model
         'Rogue',
         'Sorcerer',
         'Warlock',
-        'Wizard'
+        'Wizard',
     ];
 
     public function team(): BelongsTo
@@ -117,14 +117,44 @@ class StatBlock extends Model
         return $this->belongsToMany(Spell::class);
     }
 
+    public function scopePreloadedMonsters($query)
+    {
+        return $query->select(['id', 'name', 'collection'])->monsters();
+    }
+
     public function scopeMonsters($query)
     {
-        return $query->where('stat_block_type', 'monster');
+        return $query->where('stat_block_type', 'monster')
+                     ->whereNull('user_id')
+                     ->whereNull('team_id')
+                     ->whereNull('session_id');
+    }
+
+    public function scopeUserMonsters($query)
+    {
+        if (auth()->user()) {
+            return $query->where('stat_block_type', 'monster')
+                ->where('user_id', auth()->user()->id);
+        }
+
+        return $query->where('stat_block_type', 'monster')
+            ->where('session_id', session()->getId());
     }
 
     public function scopeCharacters($query)
     {
         return $query->where('stat_block_type', 'character');
+    }
+
+    public function scopeUserCharacters($query)
+    {
+        if (auth()->user()) {
+            return $query->where('stat_block_type', 'character')
+                ->where('user_id', auth()->user()->id);
+        }
+
+        return $query->where('stat_block_type', 'character')
+            ->where('session_id', session()->getId());
     }
 
     public function scopeNpcs($query)
@@ -168,27 +198,6 @@ class StatBlock extends Model
 
     public function getInitiativeAttribute()
     {
-        // 00 = -5
-        // 01 = -5
-        // 02 = -4
-        // 03 = -4
-        // 04 = -3
-        // 05 = -3
-        // 06 = -2
-        // 07 = -2
-        // 08 = -1
-        // 09 = -1
-        // 10 = 0
-        // 11 = 0
-        // 12 = 1
-        // 13 = 1
-        // 14 = 2
-        // 15 = 2
-        // 16 = 3
-        // 17 = 4
-        // 18 = 4
-        // 19 = 4
-        // 20 = 5
         if (isset($this->attributes['dexterity'])) {
             return $this->getModifier($this->attributes['dexterity']);
         }
@@ -204,7 +213,6 @@ class StatBlock extends Model
 
         return null;
     }
-
 
     public function getSpeedArrayAttribute(): array
     {
@@ -249,7 +257,7 @@ class StatBlock extends Model
                 $skills[] = [
                     'id'    => Str::random(),
                     'name'  => $skill,
-                    'value' => $value
+                    'value' => $value,
                 ];
             }
         }
@@ -261,11 +269,11 @@ class StatBlock extends Model
     {
         $saves = [];
         foreach (Combatant::ABILITIES as $ability) {
-            if ($value = $this->attributes[$ability . '_save']) {
+            if ($value = $this->attributes[$ability.'_save']) {
                 $saves[] = [
                     'id'    => Str::random(),
                     'name'  => $ability,
-                    'value' => $value
+                    'value' => $value,
                 ];
             }
         }
@@ -284,7 +292,7 @@ class StatBlock extends Model
             return collect(explode(',', str_replace(';', ',', $data)))->map(static function ($attribute) {
                 return [
                     'id'    => Str::random(),
-                    'value' => trim($attribute)
+                    'value' => trim($attribute),
                 ];
             })->toArray();
         }

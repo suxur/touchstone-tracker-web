@@ -84,5 +84,4 @@ class FormOption
             return str_contains($option, $key);
         });
     }
-
 }

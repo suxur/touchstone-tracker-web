@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useCallback } from "react";
 import { AxiosResponse } from "axios";
 import { UseMutationResult } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +11,7 @@ import { DeleteCombatantModal } from "@/Components/Modals/DeleteCombatantModal";
 import { roll } from "@/Dice";
 import { useCombatant } from "@/Hooks/useCombatant";
 import { useEncounter } from "@/Hooks/useEncounter";
+import { useCodex } from "../Codex/CodexContext";
 
 type Props = {
   combatant: Combatant;
@@ -18,28 +20,46 @@ type Props = {
 export const InactiveCombatantRow = ({ combatant }: Props) => {
   const { removeCombatant } = useEncounter();
   const { mutation } = useCombatant(combatant);
+  const { dispatch } = useCodex();
 
   const update = (newData: Combatant) => {
     mutation.mutate(newData);
   };
 
+  const onViewClick = () => {
+    if (combatant?.stat_block?.id) {
+      dispatch({ type: "open_stat_block", id: combatant.stat_block.id });
+    }
+  }
+
   return (
     <InactiveCombatantRowComponent
       combatant={combatant}
       update={update}
+      view={onViewClick}
       destroyMutation={removeCombatant}
     />
   );
 };
 
-
 type ComponentProps = {
   combatant: Combatant;
   update: (combatant: Combatant) => void;
-  destroyMutation: UseMutationResult<AxiosResponse<any>, unknown, number, unknown>
+  destroyMutation: UseMutationResult<
+    AxiosResponse<any>,
+    unknown,
+    number,
+    unknown
+  >;
+  view: () => void;
 };
 
-export const InactiveCombatantRowComponent = ({ combatant, update, destroyMutation }: ComponentProps) => (
+export const InactiveCombatantRowComponent = ({
+  combatant,
+  update,
+  destroyMutation,
+  view,
+}: ComponentProps) => (
   <div className="bg-white border-b border-gray-200 p-2">
     <div className="flex flex-row">
       <div>
@@ -64,7 +84,10 @@ export const InactiveCombatantRowComponent = ({ combatant, update, destroyMutati
       </div>
       <div className="ml-4 flex flex-row justify-between w-full">
         <div className="w-full">
-          <span className="font-medium text-xl mb-2 text-purple-600">
+          <span
+            className="font-medium text-xl mb-2 text-purple-600"
+            onClick={view}
+          >
             {combatant.name}
           </span>
           <div className="flex flex-row w-full">
@@ -119,7 +142,10 @@ export const InactiveCombatantRowComponent = ({ combatant, update, destroyMutati
           </div>
         </div>
         <div>
-          <DeleteCombatantModal combatant={combatant} mutation={destroyMutation} />
+          <DeleteCombatantModal
+            combatant={combatant}
+            mutation={destroyMutation}
+          />
         </div>
       </div>
     </div>

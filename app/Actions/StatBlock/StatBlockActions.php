@@ -10,8 +10,6 @@ class StatBlockActions
     {
         Validator::make($requestData, [
             'name'        => ['required', 'string', 'max:255'],
-            'armor_class' => ['required', 'integer'],
-            'hit_points'  => ['required', 'integer'],
             'race'        => ['string', 'nullable'],
             'class'       => ['string', 'nullable'],
         ])->validate();

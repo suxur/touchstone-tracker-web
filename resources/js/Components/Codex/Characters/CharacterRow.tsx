@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { useForm } from '@inertiajs/inertia-react';
 
 import { CodexCharacter } from '@/types';
-import useRoute from '@/Hooks/useRoute';
 import { useEncounter } from '@/Hooks/useEncounter';
 import { useCodex } from '@/Components/Codex/CodexContext';
 import { ViewButton } from '@/Components/Button/ViewButton';

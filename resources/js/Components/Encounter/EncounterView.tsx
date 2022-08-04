@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ScrollContent } from '@/Components/ScrollContent';
 import { EncounterLink } from '@/Components/EncounterLink';
 import { TimeSince } from '@/Components/TimeSince';
-import { StartButton } from '@/Components/Encounter/StartButton';
+import { StartButton } from '@/Components/Button/StartButton';
 import { NextButton } from '@/Components/Encounter/NextButton';
 import { ClearEncounterModal } from '@/Components/Encounter/ClearEncounterModal';
 import { EndEncounterModal } from '@/Components/Encounter/EndEncounterModal';
@@ -10,7 +10,7 @@ import { useEncounter } from '@/Hooks/useEncounter';
 import { ActiveEncounter } from '@/Components/Encounter/ActiveEncounter';
 import { InactiveEncounter } from '@/Components/Encounter/InactiveEncounter';
 import { GameTime } from '@/Components/GameTime';
-import { RollAllButton } from './RollAllButton';
+import { RollAllButton } from '@/Components/Button/RollAllButton';
 
 export const EncounterView = () => {
   const { encounter } = useEncounter();
