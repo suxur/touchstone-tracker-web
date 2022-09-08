@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useForm } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
-import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { ActionMessage } from '@/Components/ActionMessage';
+import { Button } from '@/Components/Button';
 import { JetFormSection } from '@/Components/Jetstream/FormSection';
 import { JetInput } from '@/Components/Jetstream/Input';
 import { JetInputError } from '@/Components/Jetstream/InputError';
@@ -37,15 +37,15 @@ export const UpdateTeamNameForm = ({ team, permissions }: Props) => {
       description={'The team\'s name and owner information.'}
       renderActions={() => (permissions.canUpdateTeam ? (
         <>
-          <JetButton
+          <Button
             className={clsx({ 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Save
-          </JetButton>
-          <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+          </Button>
+          <ActionMessage on={form.recentlySuccessful} className="ml-3">
             Saved.
-          </JetActionMessage>
+          </ActionMessage>
         </>
       ) : <div />)}
     >

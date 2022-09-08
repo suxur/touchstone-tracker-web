@@ -3,8 +3,8 @@ import { useForm, usePage } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
-import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { ActionMessage } from '@/Components/ActionMessage';
+import { Button } from '@/Components/Button';
 import { JetFormSection } from '@/Components/Jetstream/FormSection';
 import { JetInput } from '@/Components/Jetstream/Input';
 import { JetInputError } from '@/Components/Jetstream/InputError';
@@ -82,15 +82,15 @@ export default function UpdateProfileInformationForm({ user }: Props) {
       description={'Update your account\'s profile information and email address.'}
       renderActions={() => (
         <>
-          <JetButton
+          <Button
             className={clsx({ 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Save
-          </JetButton>
-          <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+          </Button>
+          <ActionMessage on={form.recentlySuccessful} className="ml-3">
             Saved.
-          </JetActionMessage>
+          </ActionMessage>
         </>
       )}
     >

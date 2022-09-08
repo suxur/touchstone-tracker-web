@@ -1,37 +1,25 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-import axios from 'axios';
 
-import { Pagination as PaginationType, StatBlock } from '@/types';
-import useRoute from '@/Hooks/useRoute';
-import { JetActionSection } from '@/Components/Jetstream';
+import { StatBlock } from '@/types';
+import { ActionSection } from '@/Components/Jetstream';
 import { CloneButton } from '@/Components/Button/CloneButton';
 import { Pagination } from '@/Components/Pagination';
 import {useCloneStatBlock} from '@/Hooks/StatBlocks/useCloneStatBlock';
+import { usePreloadedMonsters } from '@/Hooks/StatBlocks/usePreloadedMonsters';
 
 export const PreloadedMonsters = () => {
-  const route = useRoute();
   const [page, setPage] = useState(1);
   const cloneStatBlock = useCloneStatBlock();
 
-  const { isSuccess, data } = useQuery<PaginationType<StatBlock>>(
-    ['preloaded', page],
-    async () => {
-      const { data } = await axios.get(route('api.monster.preloaded', { page }));
-      return data;
-    },
-    {
-      keepPreviousData: true,
-    },
-  );
+  const { isSuccess, data } = usePreloadedMonsters({ page });
 
   const clone = (statBlock: StatBlock) => {
     cloneStatBlock.mutate({ statBlock, type: 'monster' });
   };
 
   return (
-    <JetActionSection
+    <ActionSection
       title="Preloaded Monsters"
       description="All of the monsters that are preloaded."
     >
@@ -63,6 +51,6 @@ export const PreloadedMonsters = () => {
       ) : (
         <p>No preloaded monsters? Something must be wrong.</p>
       )}
-    </JetActionSection>
+    </ActionSection>
   );
 };

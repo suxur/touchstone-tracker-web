@@ -12,7 +12,7 @@ interface Props {
 const Index = ({ permissions }: Props) => (
   <AppLayout>
     <div className="bg-gray-100">
-      <ManageStatBlocks permissions={permissions} type="monster" />
+      <ManageStatBlocks permissions={permissions} route="monsters" type="monster" />
       <PreloadedMonsters />
     </div>
   </AppLayout>

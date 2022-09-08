@@ -1,21 +1,21 @@
-import { useForm, usePage } from '@inertiajs/inertia-react';
-import clsx from 'clsx';
-import React, { useState } from 'react';
-import useRoute from '@/Hooks/useRoute';
-import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
-import { JetActionSection } from '@/Components/Jetstream/ActionSection';
-import { JetButton } from '@/Components/Jetstream/Button';
-import { JetCheckbox } from '@/Components/Jetstream/Checkbox';
-import { JetConfirmationModal } from '@/Components/Jetstream/ConfirmationModal';
-import { JetDangerButton } from '@/Components/Jetstream/DangerButton';
-import { JetDialogModal } from '@/Components/Jetstream/DialogModal';
-import { JetFormSection } from '@/Components/Jetstream/FormSection';
-import { JetInput } from '@/Components/Jetstream/Input';
-import { JetInputError } from '@/Components/Jetstream/InputError';
-import { JetLabel } from '@/Components/Jetstream/Label';
-import { JetSecondaryButton } from '@/Components/Jetstream/SecondaryButton';
-import { JetSectionBorder } from '@/Components/Jetstream/SectionBorder';
-import { ApiToken } from '@/types';
+import { useForm, usePage } from "@inertiajs/inertia-react";
+import clsx from "clsx";
+import React, { useState } from "react";
+import useRoute from "@/Hooks/useRoute";
+import { ActionMessage } from "@/Components/ActionMessage";
+import { ActionSection } from "@/Components/ActionSection";
+import { Button } from "@/Components/Button";
+import { JetConfirmationModal } from "@/Components/Jetstream/ConfirmationModal";
+import { JetDangerButton } from "@/Components/Jetstream/DangerButton";
+import { JetDialogModal } from "@/Components/Jetstream/DialogModal";
+import { JetFormSection } from "@/Components/Jetstream/FormSection";
+import { JetInput } from "@/Components/Jetstream/Input";
+import { JetInputError } from "@/Components/Jetstream/InputError";
+import { JetLabel } from "@/Components/Jetstream/Label";
+import { JetSecondaryButton } from "@/Components/Jetstream/SecondaryButton";
+import { JetSectionBorder } from "@/Components/Jetstream/SectionBorder";
+import { ApiToken } from "@/types";
+import { Checkbox } from '@/Components/Checkbox';
 
 interface Props {
   tokens: ApiToken[];
@@ -30,7 +30,7 @@ export default function APITokenManager({
 }: Props) {
   const route = useRoute();
   const createApiTokenForm = useForm({
-    name: '',
+    name: "",
     permissions: defaultPermissions,
   });
   const updateApiTokenForm = useForm({
@@ -38,12 +38,14 @@ export default function APITokenManager({
   });
   const deleteApiTokenForm = useForm({});
   const [displayingToken, setDisplayingToken] = useState(false);
-  const [managingPermissionsFor, setManagingPermissionsFor] = useState<ApiToken | null>(null);
-  const [apiTokenBeingDeleted, setApiTokenBeingDeleted] = useState<ApiToken | null>(null);
+  const [managingPermissionsFor, setManagingPermissionsFor] =
+    useState<ApiToken | null>(null);
+  const [apiTokenBeingDeleted, setApiTokenBeingDeleted] =
+    useState<ApiToken | null>(null);
   const page = usePage<any>();
 
   function createApiToken() {
-    createApiTokenForm.post(route('api-tokens.store'), {
+    createApiTokenForm.post(route("api-tokens.store"), {
       preserveScroll: true,
       onSuccess: () => {
         setDisplayingToken(true);
@@ -53,7 +55,7 @@ export default function APITokenManager({
   }
 
   function manageApiTokenPermissions(token: ApiToken) {
-    updateApiTokenForm.setData('permissions', token.abilities);
+    updateApiTokenForm.setData("permissions", token.abilities);
     setManagingPermissionsFor(token);
   }
 
@@ -62,12 +64,12 @@ export default function APITokenManager({
       return;
     }
     updateApiTokenForm.put(
-      route('api-tokens.update', [managingPermissionsFor]),
+      route("api-tokens.update", [managingPermissionsFor]),
       {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => setManagingPermissionsFor(null),
-      },
+      }
     );
   }
 
@@ -80,12 +82,12 @@ export default function APITokenManager({
       return;
     }
     deleteApiTokenForm.delete(
-      route('api-tokens.destroy', [apiTokenBeingDeleted]),
+      route("api-tokens.destroy", [apiTokenBeingDeleted]),
       {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => setApiTokenBeingDeleted(null),
-      },
+      }
     );
   }
 
@@ -98,21 +100,21 @@ export default function APITokenManager({
         description="API tokens allow third-party services to authenticate with our application on your behalf."
         renderActions={() => (
           <>
-            <JetActionMessage
+            <ActionMessage
               on={createApiTokenForm.recentlySuccessful}
               className="mr-3"
             >
               Created.
-            </JetActionMessage>
+            </ActionMessage>
 
-            <JetButton
+            <Button
               className={clsx({
-                'opacity-25': createApiTokenForm.processing,
+                "opacity-25": createApiTokenForm.processing,
               })}
               disabled={createApiTokenForm.processing}
             >
               Create
-            </JetButton>
+            </Button>
           </>
         )}
       >
@@ -124,7 +126,9 @@ export default function APITokenManager({
             type="text"
             className="mt-1 block w-full"
             value={createApiTokenForm.data.name}
-            onChange={e => createApiTokenForm.setData('name', e.currentTarget.value)}
+            onChange={(e) =>
+              createApiTokenForm.setData("name", e.currentTarget.value)
+            }
             autoFocus
           />
           <JetInputError
@@ -139,28 +143,28 @@ export default function APITokenManager({
             <JetLabel htmlFor="permissions">Permissions</JetLabel>
 
             <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {availablePermissions.map(permission => (
+              {availablePermissions.map((permission) => (
                 <div key={permission}>
                   <label className="flex items-center">
-                    <JetCheckbox
+                    <Checkbox
                       value={permission}
                       checked={createApiTokenForm.data.permissions.includes(
-                        permission,
+                        permission
                       )}
-                      onChange={e => {
+                      onChange={(e) => {
                         if (
                           createApiTokenForm.data.permissions.includes(
-                            e.currentTarget.value,
+                            e.currentTarget.value
                           )
                         ) {
                           createApiTokenForm.setData(
-                            'permissions',
+                            "permissions",
                             createApiTokenForm.data.permissions.filter(
-                              p => p !== e.currentTarget.value,
-                            ),
+                              (p) => p !== e.currentTarget.value
+                            )
                           );
                         } else {
-                          createApiTokenForm.setData('permissions', [
+                          createApiTokenForm.setData("permissions", [
                             e.currentTarget.value,
                             ...createApiTokenForm.data.permissions,
                           ]);
@@ -184,13 +188,13 @@ export default function APITokenManager({
 
           {/* <!-- Manage API Tokens --> */}
           <div className="mt-10 sm:mt-0">
-            <JetActionSection
+            <ActionSection
               title="Manage API Tokens"
               description="You may delete any of your existing tokens if they are no longer needed."
             >
               {/* <!-- API Token List --> */}
               <div className="space-y-6">
-                {tokens.map(token => (
+                {tokens.map((token) => (
                   <div
                     className="flex items-center justify-between"
                     key={token.id}
@@ -223,7 +227,7 @@ export default function APITokenManager({
                   </div>
                 ))}
               </div>
-            </JetActionSection>
+            </ActionSection>
           </div>
         </div>
       ) : null}
@@ -235,7 +239,8 @@ export default function APITokenManager({
       >
         <JetDialogModal.Content title="API Token">
           <div>
-            Please copy your new API token. For your security, it won't be shown again.
+            Please copy your new API token. For your security, it won't be shown
+            again.
           </div>
 
           <div className="mt-4 bg-gray-100 px-4 py-2 rounded font-mono text-sm text-gray-500">
@@ -256,28 +261,28 @@ export default function APITokenManager({
       >
         <JetDialogModal.Content title="API Token Permissions">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {availablePermissions.map(permission => (
+            {availablePermissions.map((permission) => (
               <div key={permission}>
                 <label className="flex items-center">
-                  <JetCheckbox
+                  <Checkbox
                     value={permission}
                     checked={updateApiTokenForm.data.permissions.includes(
-                      permission,
+                      permission
                     )}
-                    onChange={e => {
+                    onChange={(e) => {
                       if (
                         updateApiTokenForm.data.permissions.includes(
-                          e.currentTarget.value,
+                          e.currentTarget.value
                         )
                       ) {
                         updateApiTokenForm.setData(
-                          'permissions',
+                          "permissions",
                           updateApiTokenForm.data.permissions.filter(
-                            p => p !== e.currentTarget.value,
-                          ),
+                            (p) => p !== e.currentTarget.value
+                          )
                         );
                       } else {
-                        updateApiTokenForm.setData('permissions', [
+                        updateApiTokenForm.setData("permissions", [
                           e.currentTarget.value,
                           ...updateApiTokenForm.data.permissions,
                         ]);
@@ -297,15 +302,15 @@ export default function APITokenManager({
             Cancel
           </JetSecondaryButton>
 
-          <JetButton
+          <Button
             onClick={updateApiToken}
-            className={clsx('ml-2', {
-              'opacity-25': updateApiTokenForm.processing,
+            className={clsx("ml-2", {
+              "opacity-25": updateApiTokenForm.processing,
             })}
             disabled={updateApiTokenForm.processing}
           >
             Save
-          </JetButton>
+          </Button>
         </JetDialogModal.Footer>
       </JetDialogModal>
 
@@ -324,8 +329,8 @@ export default function APITokenManager({
 
           <JetDangerButton
             onClick={deleteApiToken}
-            className={clsx('ml-2', {
-              'opacity-25': deleteApiTokenForm.processing,
+            className={clsx("ml-2", {
+              "opacity-25": deleteApiTokenForm.processing,
             })}
             disabled={deleteApiTokenForm.processing}
           >

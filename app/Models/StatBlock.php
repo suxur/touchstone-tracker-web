@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\Collections\StatBlockCollection;
-use App\Encounters\DifficultyCalculator;
+use Facades\App\Encounters\DifficultyCalculator;
+use Facades\App\Combatant\CalculateAbilityModifier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -73,6 +74,9 @@ class StatBlock extends Model
         'Wizard',
     ];
 
+    public const ABILITIES = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+    public const SKILLS = ['acrobatics', 'animal handling', 'arcana', 'athletics', 'deception', 'history', 'insight', 'intimidation', 'investigation', 'medicine', 'nature', 'perception', 'performance', 'persuasion', 'religion', 'sleight of hand', 'stealth', 'survival'];
+
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
@@ -90,12 +94,12 @@ class StatBlock extends Model
 
     public function specialAbilities(): HasMany
     {
-        return $this->hasMany(Action::class)->where('is_special', '=', true)->orderBy('sort');
+        return $this->actionsRelationship()->where('is_special', '=', true)->orderBy('sort');
     }
 
     public function actions(): HasMany
     {
-        return $this->hasMany(Action::class)
+        return $this->actionsRelationship()
             ->where('is_special', '=', false)
             ->where('is_reaction', '=', false)
             ->where('is_legendary', '=', false)
@@ -104,12 +108,12 @@ class StatBlock extends Model
 
     public function reactions(): HasMany
     {
-        return $this->hasMany(Action::class)->where('is_reaction', '=', true)->orderBy('sort');
+        return $this->actionsRelationship()->where('is_reaction', '=', true)->orderBy('sort');
     }
 
     public function legendaryActions(): HasMany
     {
-        return $this->hasMany(Action::class)->where('is_legendary', '=', true)->orderBy('sort');
+        return $this->actionsRelationship()->where('is_legendary', '=', true)->orderBy('sort');
     }
 
     public function spells(): BelongsToMany
@@ -124,51 +128,31 @@ class StatBlock extends Model
 
     public function scopeMonsters($query)
     {
-        return $query->where('stat_block_type', 'monster')
-                     ->whereNull('user_id')
-                     ->whereNull('team_id')
-                     ->whereNull('session_id');
+        return $query
+            ->where('stat_block_type', 'monster')
+            ->whereNull('user_id')
+            ->whereNull('team_id')
+            ->whereNull('session_id');
     }
 
     public function scopeUserMonsters($query)
     {
-        if (auth()->user()) {
-            return $query->where('stat_block_type', 'monster')
-                ->where('user_id', auth()->user()->id);
-        }
-
-        return $query->where('stat_block_type', 'monster')
-            ->where('session_id', session()->getId());
-    }
-
-    public function scopeCharacters($query)
-    {
-        return $query->where('stat_block_type', 'character');
+        return $this->scopedByType($query, 'monster');
     }
 
     public function scopeUserCharacters($query)
     {
-        if (auth()->user()) {
-            return $query->where('stat_block_type', 'character')
-                ->where('user_id', auth()->user()->id);
-        }
-
-        return $query->where('stat_block_type', 'character')
-            ->where('session_id', session()->getId());
+        return $this->scopedByType($query, 'character');
     }
 
-    public function scopeNpcs($query)
+    public function scopeUserNpcs($query)
     {
-        return $query->where('stat_block_type', 'npc');
+        return $this->scopedByType($query, 'npc');
     }
 
     public function getStrengthModifierAttribute()
     {
-        if (isset($this->attributes['strength'])) {
-            return $this->getModifier($this->attributes['strength']);
-        }
-
-        return null;
+        return $this->getModifier($this->attributes['strength']);
     }
 
     public function getDexterityModifierAttribute()
@@ -207,11 +191,7 @@ class StatBlock extends Model
 
     public function getExperiencePointsAttribute(): ?string
     {
-        if (isset($this->attributes['challenge_rating'])) {
-            return number_format(DifficultyCalculator::EXPERIENCE_POINTS_BY_CHALLENGE_RATING[$this->attributes['challenge_rating']]);
-        }
-
-        return null;
+        return DifficultyCalculator::experiencePoints($this->attributes['challenge_rating']);
     }
 
     public function getSpeedArrayAttribute(): array
@@ -251,34 +231,20 @@ class StatBlock extends Model
 
     public function getSkillsArrayAttribute(): array
     {
-        $skills = [];
-        foreach (Combatant::SKILLS as $skill) {
-            if ($value = $this->attributes[Str::snake($skill)]) {
-                $skills[] = [
-                    'id'    => Str::random(),
-                    'name'  => $skill,
-                    'value' => $value,
-                ];
-            }
-        }
-
-        return $skills;
+        return array_reduce(self::SKILLS, function($carry, $item) {
+            $value = $this->attributes[Str::snake($item)];
+            $this->addAttributeToArray($carry, $item, $value);
+            return $carry;
+        }, []);
     }
 
     public function getSavesArrayAttribute(): array
     {
-        $saves = [];
-        foreach (Combatant::ABILITIES as $ability) {
-            if ($value = $this->attributes[$ability.'_save']) {
-                $saves[] = [
-                    'id'    => Str::random(),
-                    'name'  => $ability,
-                    'value' => $value,
-                ];
-            }
-        }
-
-        return $saves;
+        return array_reduce(self::ABILITIES, function($carry, $item) {
+            $value = $this->attributes[$item . '_save'];
+            $this->addAttributeToArray($carry, $item, $value);
+            return $carry;
+        }, []);
     }
 
     public function newCollection(array $models = [])
@@ -286,12 +252,22 @@ class StatBlock extends Model
         return new StatBlockCollection($models);
     }
 
+    private function addAttributeToArray(&$array, $item, $value)
+    {
+        if ($value !== null) {
+            $array[] = [
+                'name'  => $item,
+                'value' => $value,
+            ];
+        }
+    }
+
     private function getDynamicValueArray($data): array
     {
         if ($data) {
             return collect(explode(',', str_replace(';', ',', $data)))->map(static function ($attribute) {
                 return [
-                    'id'    => Str::random(),
+                    'id'    => Str::kebab($attribute),
                     'value' => trim($attribute),
                 ];
             })->toArray();
@@ -302,12 +278,21 @@ class StatBlock extends Model
 
     private function getModifier($value)
     {
-        return intval(floor(($value - 10) / 2));
-//        $modifier = intval(floor(($value - 10) / 2));
-//        if ($modifier > 0) {
-//            return $modifier;
-//        }
-//
-//        return $modifier;
+        return CalculateAbilityModifier::calculate($value);
+    }
+
+    private function scopedByType($query, $type)
+    {
+        if (!in_array($type, ['character', 'monster', 'npc'])) return $query;
+
+        if (auth()->user()) {
+            return $query
+                ->where('stat_block_type', $type)
+                ->where('user_id', auth()->user()->id);
+        }
+
+        return $query
+            ->where('stat_block_type', $type)
+            ->where('session_id', session()->getId());
     }
 }

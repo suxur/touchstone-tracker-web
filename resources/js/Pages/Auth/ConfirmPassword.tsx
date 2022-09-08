@@ -3,8 +3,8 @@ import { FormEvent } from 'react';
 import { Head, useForm } from '@inertiajs/inertia-react';
 
 import useRoute from '@/Hooks/useRoute';
-import { JetAuthenticationCard } from '@/Components/Jetstream/AuthenticationCard';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { AuthenticationCard } from '@/Components/AuthenticationCard';
+import { Button } from '@/Components/Button';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
 
@@ -22,7 +22,7 @@ export default function ConfirmPassword() {
   };
 
   return (
-    <JetAuthenticationCard>
+    <AuthenticationCard>
       <Head title="Secure Area" />
 
       <div className="mb-4 text-sm text-gray-600">
@@ -46,11 +46,11 @@ export default function ConfirmPassword() {
         </div>
 
         <div className="flex justify-end mt-4">
-          <JetButton processing={form.processing}>
+          <Button processing={form.processing}>
             Confirm
-          </JetButton>
+          </Button>
         </div>
       </form>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
   );
 }

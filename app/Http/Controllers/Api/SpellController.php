@@ -9,7 +9,7 @@ use function response;
 
 class SpellController extends Controller
 {
-    public function spell(Spell $spell): JsonResponse
+    public function show(Spell $spell): JsonResponse
     {
         return response()->json($spell);
     }

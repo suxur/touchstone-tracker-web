@@ -10,23 +10,14 @@ use Illuminate\Support\Str;
 
 class EncounterFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Encounter::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition(): array
     {
         return [
             'user_id'                        => null,
             'slug'                           => Str::random(8),
+            'name'                           => null,
             'is_active'                      => false,
             'active_index'                   => 0,
             'round'                          => 1,

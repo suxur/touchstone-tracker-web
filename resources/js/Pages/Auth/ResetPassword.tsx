@@ -4,7 +4,7 @@ import { Head, useForm } from '@inertiajs/inertia-react';
 
 import useRoute from '@/Hooks/useRoute';
 import { GuestLayout } from '@/Layouts/GuestLayout';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { Button } from '@/Components/Button';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
 
@@ -76,9 +76,9 @@ export default function ResetPassword({ token, email }: Props) {
         </div>
 
         <div className="flex items-center justify-end mt-4">
-          <JetButton processing={form.processing}>
+          <Button processing={form.processing}>
             Reset Password
-          </JetButton>
+          </Button>
         </div>
       </form>
     </GuestLayout>

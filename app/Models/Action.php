@@ -4,16 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Action extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that should be visible in arrays.
-     *
-     * @var array
-     */
     protected $visible = ['id', 'name', 'description'];
 
     protected $casts = [
@@ -22,9 +18,7 @@ class Action extends Model
         'is_special'   => 'boolean',
     ];
 
-    protected $guarded = [];
-
-    public function statBlock()
+    public function statBlock(): BelongsTo
     {
         return $this->belongsTo(StatBlock::class);
     }

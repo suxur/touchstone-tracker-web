@@ -1,17 +1,16 @@
 import * as React from "react";
-import { useCallback } from "react";
 import { AxiosResponse } from "axios";
 import { UseMutationResult } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Combatant } from "@/types";
 import { InlineInput } from "@/Components/InlineInput";
-import { JetButton } from "@/Components/Jetstream";
 import { DeleteCombatantModal } from "@/Components/Modals/DeleteCombatantModal";
 import { roll } from "@/Dice";
 import { useCombatant } from "@/Hooks/useCombatant";
 import { useEncounter } from "@/Hooks/useEncounter";
 import { useCodex } from "../Codex/CodexContext";
+import { Button } from '@/Components/Button';
 
 type Props = {
   combatant: Combatant;
@@ -70,7 +69,7 @@ export const InactiveCombatantRowComponent = ({
             shouldHighlight
           />
         </div>
-        <JetButton
+        <Button
           bg="transparent"
           onClick={() =>
             update({
@@ -80,7 +79,7 @@ export const InactiveCombatantRowComponent = ({
           }
         >
           Roll
-        </JetButton>
+        </Button>
       </div>
       <div className="ml-4 flex flex-row justify-between w-full">
         <div className="w-full">

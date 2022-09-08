@@ -2,9 +2,9 @@ import * as React from 'react';
 import { orderBy } from 'lodash';
 
 import { useEncounter } from '@/Hooks/useEncounter';
-import { JetButton } from '@/Components/Jetstream';
 import { Combatant } from '@/types';
 import { clone } from 'mathjs';
+import { Button } from '@/Components/Button';
 
 const orderCombatants = (combatants: Combatant[]) =>
   orderBy(clone(combatants), ['initiative'], ['desc']).map((c: Combatant, i: number) => {
@@ -28,5 +28,5 @@ export const StartButton = () => {
     }
   };
 
-  return <JetButton onClick={onClick}>Start Encounter</JetButton>;
+  return <Button onClick={onClick}>Start Encounter</Button>;
 };

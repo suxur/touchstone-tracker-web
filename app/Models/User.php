@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Traits\HasStatBlocks;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
@@ -13,6 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    use Billable;
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
@@ -47,7 +50,7 @@ class User extends Authenticatable
         'ownedTeams'
     ];
 
-    public function encounters()
+    public function encounters(): HasMany
     {
         return $this->hasMany(Encounter::class);
     }

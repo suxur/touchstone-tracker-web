@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent } from 'react';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 
 import useRoute from '@/Hooks/useRoute';
 import { GuestLayout } from '@/Layouts/GuestLayout';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
-import { JetBanner, JetButton, JetCheckbox } from '@/Components/Jetstream';
+import { Banner } from '@/Components/Jetstream';
 import useTypedPage from '@/Hooks/useTypedPage';
+import { Checkbox } from '@/Components/Checkbox';
+import { Button } from '@/Components/Button';
 
 interface Props {
   status: string;
@@ -33,8 +35,8 @@ export default function Login({ status, canResetPassword }: Props) {
     <GuestLayout>
       <Head title="Login" />
 
-      {status && <JetBanner className="mb-4 rounded-md" message={status} style="success" />}
-      {errors.email && <JetBanner className="mb-4 rounded-md" message={errors.email} style="danger" />}
+      {status && <Banner className="mb-4 rounded-md" message={status} style="success" />}
+      {errors.email && <Banner className="mb-4 rounded-md" message={errors.email} style="danger" />}
 
       <form onSubmit={onSubmit}>
         <div>
@@ -66,7 +68,7 @@ export default function Login({ status, canResetPassword }: Props) {
 
         <div className="block mt-4">
           <label className="flex items-center">
-            <JetCheckbox
+            <Checkbox
               name="remember"
               checked={form.data.remember}
               onChange={e => form.setData('remember', e.target.checked)}
@@ -84,10 +86,9 @@ export default function Login({ status, canResetPassword }: Props) {
               Forgot your password?
             </Link>
           )}
-
-          <JetButton className="ml-4" processing={form.processing}>
+          <Button className="ml-4" processing={form.processing}>
             Login
-          </JetButton>
+          </Button>
         </div>
       </form>
     </GuestLayout>

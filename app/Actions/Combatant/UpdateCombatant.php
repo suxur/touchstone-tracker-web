@@ -9,10 +9,18 @@ class UpdateCombatant
 {
   public function update(Combatant $combatant, array $input)
   {
-    Gate::authorize("update", $combatant->encounter);
+    Gate::authorize("update", $combatant);
 
     $combatant->fill($input);
-    $combatant->conditions()->sync(collect($input["conditions"])->pluck("id"));
+    $combatant = $this->syncConditions($combatant, $input);
     $combatant->save();
+  }
+
+  private function syncConditions(Combatant $combatant, array $input): Combatant
+  {
+      if (empty($input["conditions"])) return $combatant;
+
+      $combatant->conditions()->sync(collect($input["conditions"])->pluck("id"));
+      return $combatant;
   }
 }

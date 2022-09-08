@@ -15,76 +15,93 @@ use Illuminate\Support\Str;
 
 class EncounterController extends Controller
 {
-  use EncounterResponse;
+    use EncounterResponse;
 
-  public function store(): JsonResponse
-  {
-    /** @var User $user */
-    $user = auth()->user();
-    $slug = Str::random(8);
+    public function show($slug): EncounterResource
+    {
+        $encounter = Encounter::whereSlug($slug)->firstOrFail();
 
-    $encounter = $user->encounters()->create([
-      "slug" => $slug,
-    ]);
+        $this->authorize("owner", $encounter);
 
-    return response()->json($encounter);
-  }
-
-  public function destroy(Encounter $encounter): JsonResponse
-  {
-    $this->authorize("update", $encounter);
-
-    return response()->json($encounter->delete());
-  }
-
-  public function update(
-    Request $request,
-    Encounter $encounter
-  ): EncounterResource {
-    $this->authorize("update", $encounter);
-
-    if (empty($request->get("combatants"))) {
-      $encounter->combatants()->delete();
+        return $this->returnResponse($encounter);
     }
 
-    $encounter->fill($request->all());
+    public function store(): EncounterResource
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $slug = Str::random(8);
 
-    foreach ($request->get("combatants") as $requestCombatant) {
-      $this->updateCombatant($requestCombatant, $encounter);
+        $encounter = $user->encounters()->create([
+            "slug" => $slug,
+        ]);
+
+        return $this->returnResponse($encounter);
     }
 
-    $encounter->save();
+    public function destroy(Encounter $encounter): JsonResponse
+    {
+        $this->authorize("owner", $encounter);
 
-    return $this->returnResponse($encounter);
-  }
+        return response()->json($encounter->delete());
+    }
 
-  public function addByStatBlock(
-    Encounter $encounter,
-    StatBlock $statBlock
-  ): EncounterResource {
-    $order = $encounter->combatants_count;
+    public function update(
+        Request   $request,
+        Encounter $encounter
+    ): EncounterResource
+    {
+        $this->authorize("owner", $encounter);
 
-    $encounter->combatants()->create([
-      "name" => $statBlock->name,
-      "type" => $statBlock->stat_block_type,
-      "current_hit_points" => $statBlock->hit_points,
-      "hit_point_maximum" => $statBlock->hit_points,
-      "armor_class" => $statBlock->armor_class,
-      "initiative" => $statBlock->getDexterityModifierAttribute(),
-      "order" => $order,
-      "stat_block_id" => $statBlock->id,
-    ]);
+        if (empty($request->get("combatants"))) {
+            $encounter->combatants()->delete();
+        }
 
-    return $this->returnResponse($encounter);
-  }
+        $encounter->fill($request->except('name'));
 
-  private function updateCombatant($data, $encounter)
-  {
-    $combatant = $encounter
-      ->combatants()
-      ->where("id", $data["id"])
-      ->first();
-    $combatant->fill($data);
-    $combatant->save();
-  }
+        if (auth()->user()->subscribed('pro')) {
+            $encounter->fill($request->only('name'));
+        }
+
+        if ($request->has("combatants")) {
+            foreach ($request->get("combatants") as $requestCombatant) {
+                $this->updateCombatant($requestCombatant, $encounter);
+            }
+        }
+
+        $encounter->save();
+
+        return $this->returnResponse($encounter);
+    }
+
+    public function addByStatBlock(
+        Encounter $encounter,
+        StatBlock $statBlock
+    ): EncounterResource
+    {
+        $order = $encounter->combatants_count;
+
+        $encounter->combatants()->create([
+            "name"               => $statBlock->name,
+            "type"               => $statBlock->stat_block_type,
+            "current_hit_points" => $statBlock->hit_points,
+            "hit_point_maximum"  => $statBlock->hit_points,
+            "armor_class"        => $statBlock->armor_class,
+            "initiative"         => $statBlock->getDexterityModifierAttribute(),
+            "order"              => $order,
+            "stat_block_id"      => $statBlock->id,
+        ]);
+
+        return $this->returnResponse($encounter);
+    }
+
+    private function updateCombatant($data, $encounter)
+    {
+        $combatant = $encounter
+            ->combatants()
+            ->where("id", $data["id"])
+            ->first();
+        $combatant->fill($data);
+        $combatant->save();
+    }
 }

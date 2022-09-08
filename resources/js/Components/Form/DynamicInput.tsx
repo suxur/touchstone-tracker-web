@@ -10,11 +10,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { reorder } from "@/lib/helpers";
-import { JetButton, JetInput } from "@/Components/Jetstream";
+import { JetInput } from "@/Components/Jetstream";
 import { DeleteButton } from "@/Components/Button/DeleteButton";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormProps } from "@/Hooks/useStatBlockForm";
 import { DraggablePortalHandler } from "../DraggablePortalHandler";
+import { Button } from '@/Components/Button';
 
 export type DragItems = {
   value: string;
@@ -142,14 +143,14 @@ export const DynamicInput = ({ name, title }: Props) => {
       </DragDropContext>
       {controlledFields.length > 0 && (
         <div className="w-full">
-          <JetButton
+          <Button
             type="button"
             className="ml-10 mt-2"
             disabled={!canAdd}
             onClick={addItem}
           >
             Add
-          </JetButton>
+          </Button>
         </div>
       )}
     </div>

@@ -1,17 +1,17 @@
-// JetActionMessage.stories.ts|tsx
+// ActionMessage.stories.ts|tsx
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetAuthenticationCard } from '@/Components/Jetstream/AuthenticationCard';
+import { AuthenticationCard } from '@/Components/AuthenticationCard';
 
 export default {
-  component: JetAuthenticationCard,
-} as ComponentMeta<typeof JetAuthenticationCard>;
+  component: AuthenticationCard,
+} as ComponentMeta<typeof AuthenticationCard>;
 
-const Template: ComponentStory<typeof JetAuthenticationCard> = (args) => (
-  <JetAuthenticationCard>
+const Template: ComponentStory<typeof AuthenticationCard> = (args) => (
+  <AuthenticationCard>
     {args.children}
-  </JetAuthenticationCard>
+  </AuthenticationCard>
 );
 export const Primary = Template.bind({});
 

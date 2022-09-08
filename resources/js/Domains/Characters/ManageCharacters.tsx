@@ -4,13 +4,14 @@ import { useForm } from '@inertiajs/inertia-react';
 
 import { CharacterPermissions, Classes, StatBlock } from '@/types';
 import useRoute from '@/Hooks/useRoute';
-import { JetActionSection, JetButton } from '@/Components/Jetstream';
+import { ActionSection } from '@/Components/Jetstream';
 import { ClassIcon } from '@/Components/ClassIcon/ClassIcon';
 import { DeleteButton } from '@/Components/Button/DeleteButton';
 import { CloneButton } from '@/Components/Button/CloneButton';
 import { CreateStatBlockForm } from '@/Components/Modals/CreateStatBlockForm';
 import { DeleteStatBlockModal } from '@/Components/Modals/DeleteStatBlockModal';
 import { EditButton } from '@/Components/Button/EditButton';
+import { Button } from '@/Components/Button';
 
 interface Props {
   characters: StatBlock[];
@@ -49,18 +50,18 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
   };
 
   return (
-    <JetActionSection
+    <ActionSection
       title="Characters"
       description="All of the characters that are part of this team."
       actions={(
-        <JetButton
+        <Button
           onClick={() => {
             setStatBlock(undefined);
             setCreateCharacterModal({ isOpen: true });
           }}
         >
           Add Character
-        </JetButton>
+        </Button>
       )}
     >
       {characters.length > 0 ? (
@@ -106,6 +107,6 @@ export const ManageCharacters = ({ characters, permissions }: Props) => {
         type="character"
         onClose={() => setDeleteModal({ ...deleteModal, isOpen: false })}
       />
-    </JetActionSection>
+    </ActionSection>
   );
 };

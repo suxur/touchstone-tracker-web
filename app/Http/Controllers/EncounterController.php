@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Encounters\Encounters;
 use App\Http\Resources\EncounterResource;
 use App\Models\Encounter;
-use App\Models\User;
+use Inertia\Response;
 use function auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class EncounterController extends Controller
         session(['encounter_slug' => $encounter->slug]);
 
         if (auth()->check()) {
-            return redirect()->route('encounter.owner', ['slug' => $slug]);
+            return redirect()->route('e.show', ['e' => $slug]);
         }
 
         return Inertia::render(
@@ -44,7 +44,7 @@ class EncounterController extends Controller
         );
     }
 
-    public function lookup(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'lookup' => 'required|string',
@@ -67,7 +67,7 @@ class EncounterController extends Controller
         return redirect()->route('player.show', ['slug' => $request->get('lookup')]);
     }
 
-    public function owner($slug)
+    public function show($slug): Response
     {
         $encounter = Encounter::whereSlug($slug)->firstOrFail();
 
@@ -82,8 +82,7 @@ class EncounterController extends Controller
         session(['encounter_slug' => $encounter->slug]);
 
         return Inertia::render('Encounter', [
-            'encounter'  => $encounter,
+            'encounter' => $encounter,
         ]);
     }
-
 }

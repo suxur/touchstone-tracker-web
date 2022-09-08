@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { JetActionMessage, JetButton, JetFormSection, JetInput, JetLabel } from '@/Components/Jetstream';
+import { ActionMessage, JetFormSection, JetInput, JetLabel } from '@/Components/Jetstream';
 import { useForm } from '@inertiajs/inertia-react';
 import { User } from '@/types';
 import { JetInputError } from '@/Components/Jetstream/InputError';
 import clsx from 'clsx';
 import useRoute from '@/Hooks/useRoute';
+import { Button } from '@/Components/Button';
 
 type Props = {
   user: User;
@@ -30,15 +31,15 @@ export const CreateTeamForm = ({ user }: Props) => {
       onSubmit={createTeam}
       renderActions={() => (
         <>
-          <JetButton
+          <Button
             className={clsx({ 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Create
-          </JetButton>
-          <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+          </Button>
+          <ActionMessage on={form.recentlySuccessful} className="ml-3">
             Created.
-          </JetActionMessage>
+          </ActionMessage>
         </>
       )}
     >

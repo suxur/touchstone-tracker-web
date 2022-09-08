@@ -10,7 +10,14 @@ export default {
 
 const Template: ComponentStory<typeof TimeSince> = (args) => <TimeSince {...args} />;
 
+const getDateString = () => {
+  const date = new Date();
+
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} 12:00:00`
+}
+
+console.log(getDateString());
 export const Default = Template.bind({});
 Default.args = {
-  date: '2021-12-15 03:53:42',
+  date: getDateString(),
 };

@@ -11,6 +11,31 @@ class EncounterControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function an_authenticated_user_can_view_an_encounter()
+    {
+        $user = $this->signIn();
+
+        $encounter = Encounter::factory()->create([
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->getJson("/api/encounters/{$encounter->slug}");
+        $response->assertOk();
+    }
+
+    /** @test */
+    public function a_user_can_view_their_session_encounter()
+    {
+        $encounter = Encounter::factory()->create();
+
+        $response = $this
+            ->withSession(['encounter_slug' => $encounter->slug])
+            ->getJson("/api/encounters/{$encounter->slug}");
+
+        $response->assertOk();
+    }
+
+    /** @test */
     public function an_unauthenticated_user_cannot_create_encounters(): void
     {
         $response = $this->postJson('/api/encounters');
@@ -44,7 +69,7 @@ class EncounterControllerTest extends TestCase
 
         $encounter = Encounter::factory()->create();
 
-        $response = $this->deleteJson("/api/encounters/{$encounter->id}");
+        $response = $this->deleteJson("/api/encounters/{$encounter->slug}");
         $response->assertForbidden();
     }
 
@@ -57,7 +82,23 @@ class EncounterControllerTest extends TestCase
             'user_id' => $user,
         ]);
 
-        $response = $this->deleteJson("/api/encounters/{$encounter->id}");
+        $response = $this->deleteJson("/api/encounters/{$encounter->slug}");
         $response->assertSuccessful();
+    }
+
+    /** @test */
+    public function a_paywall_user_can_name_an_encounter(): void
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signIn();
+
+        $encounter = Encounter::factory()->create([
+            'user_id' => $user,
+        ]);
+
+        $response = $this->patchJson("/api/encounters/{$encounter->id}", ["name" => "Twig Blight Encounter"]);
+        $response->assertSuccessful();
+
+        $this->assertEquals("Twig Blight Encounter", $encounter->fresh()->name);
     }
 }

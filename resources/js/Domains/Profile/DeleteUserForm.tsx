@@ -2,7 +2,7 @@ import { useForm } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
-import { JetActionSection } from '@/Components/Jetstream/ActionSection';
+import { ActionSection } from '@/Components/ActionSection';
 import { JetDangerButton } from '@/Components/Jetstream/DangerButton';
 import { JetDialogModal } from '@/Components/Jetstream/DialogModal';
 import { JetInput } from '@/Components/Jetstream/Input';
@@ -38,7 +38,7 @@ export default function DeleteUserForm() {
   }
 
   return (
-    <JetActionSection
+    <ActionSection
       title="Delete Account"
       description="Permanently delete your account."
     >
@@ -85,6 +85,6 @@ export default function DeleteUserForm() {
           </JetDangerButton>
         </JetDialogModal.Footer>
       </JetDialogModal>
-    </JetActionSection>
+    </ActionSection>
   );
 }

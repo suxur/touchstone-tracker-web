@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
 
-import { JetApplicationLogo, JetNavLink, JetResponsiveNavLink } from '@/Components/Jetstream';
+import { ApplicationLogo, JetNavLink, JetResponsiveNavLink } from '@/Components/Jetstream';
 import { useUser } from '@/Hooks/useUser';
 import { UserMenu } from '@/Layouts/Nav/UserMenu';
 import useRoute from '@/Hooks/useRoute';
@@ -27,7 +27,7 @@ const Nav = () => {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center w-72">
               <Link href="/" className="block w-auto">
-                <JetApplicationLogo />
+                <ApplicationLogo />
               </Link>
             </div>
             {/* Navigation Links */}

@@ -1,8 +1,8 @@
-// JetActionSection.stories.ts|tsx
+// ActionSection.stories.ts|tsx
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetActionSection } from '@/Components/Jetstream/ActionSection';
+import { ActionSection } from '@/Components/ActionSection';
 
 
 export default {
@@ -10,10 +10,10 @@ export default {
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
    */
-  component: JetActionSection,
-} as ComponentMeta<typeof JetActionSection>;
+  component: ActionSection,
+} as ComponentMeta<typeof ActionSection>;
 
-const Template: ComponentStory<typeof JetActionSection> = (args) => <JetActionSection {...args}/>;
+const Template: ComponentStory<typeof ActionSection> = (args) => <ActionSection {...args}/>;
 
 export const Primary = Template.bind({});
 Primary.args = {

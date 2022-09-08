@@ -109,3 +109,20 @@
         transform: rotate(359deg);
     }
 }
+
+.StripeElement {
+    @apply h-10 border-gray-300 rounded-md flex flex-col justify-center;
+}
+
+.StripeElement--focus {
+    @apply border-purple-300 ring ring-purple-200 ring-opacity-50
+    /*box-shadow: 0 1px 3px 0 #cfd7df;*/
+}
+
+.StripeElement--invalid {
+    /*border-color: #fa755a;*/
+}
+
+.StripeElement--webkit-autofill {
+    /*background-color: #fefde5 !important;*/
+}

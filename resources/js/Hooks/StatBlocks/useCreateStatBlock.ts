@@ -14,10 +14,10 @@ export const useCreateStatBlock = (type: StatBlockType) => {
       axios.post(route("api.stat-blocks.store"), { ...data }),
     {
       onMutate: () => {
-        queryClient.cancelQueries(["stat-blocks", type]);
+        queryClient.cancelQueries([type, 1]);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries(["stat-blocks", type]);
+        queryClient.invalidateQueries([type, 1]);
       },
     }
   );

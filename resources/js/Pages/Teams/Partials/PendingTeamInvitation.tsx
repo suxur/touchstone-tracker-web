@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { JetActionSection } from '@/Components/Jetstream';
+import { ActionSection } from '@/Components/Jetstream';
 import { JetstreamTeamPermissions, Team } from '@/types';
 import { useForm } from '@inertiajs/inertia-react';
 import { useCallback } from 'react';
@@ -21,7 +21,7 @@ export const PendingTeamInvitation = ({ team, permissions }: Props) => {
   }, [form, route]);
 
   return (
-    <JetActionSection
+    <ActionSection
       title="Pending Team Invitation"
       description="These people have been invited to your team and have been sent an invitation email. They may join the team by accepting the email invitation."
     >
@@ -45,6 +45,6 @@ export const PendingTeamInvitation = ({ team, permissions }: Props) => {
           </div>
         ))}
       </div>
-    </JetActionSection>
+    </ActionSection>
   );
 };

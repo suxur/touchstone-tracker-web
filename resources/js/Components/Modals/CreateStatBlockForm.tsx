@@ -9,21 +9,20 @@ import { Dropdown } from "@/Components/Form/Dropdown";
 import { DynamicInput } from "@/Components/Form/DynamicInput";
 import { Skills } from "@/Components/Form/Skills";
 import {
-    JetButton,
-    JetDialogModal,
-    JetInput,
-    JetLabel,
-    ModalProps
+  JetDialogModal,
+  JetInput,
+  JetLabel,
+  ModalProps,
 } from "@/Components/Jetstream";
 import { JetTransparentButton } from "@/Components/Jetstream/TransparentButton";
 import { Divider } from "@/Components/StatBlock/Divider";
 import {
-    ABILITIES,
-    ALIGNMENTS,
-    CLASSES,
-    RACES,
-    SIZES,
-    SKILLS,
+  ABILITIES,
+  ALIGNMENTS,
+  CLASSES,
+  RACES,
+  SIZES,
+  SKILLS,
 } from "@/constants";
 import { useCreateStatBlock } from "@/Hooks/StatBlocks/useCreateStatBlock";
 import { useUpdateStatBlock } from "@/Hooks/StatBlocks/useUpdateStatBlock";
@@ -33,6 +32,7 @@ import { StatBlock, StatBlockType } from "@/types";
 import { PageProps } from "@inertiajs/inertia";
 import { Controller, FormProvider } from "react-hook-form";
 import { JetInputError } from "../Jetstream/InputError";
+import { Button } from '@/Components/Button';
 
 interface Props extends ModalProps {
   statBlock?: StatBlock;
@@ -74,12 +74,15 @@ export const CreateStatBlockForm = ({
 
   const onSubmit = (data: FormProps) => {
     if (statBlock?.id) {
-      update.mutate({ statBlock, data }, {
-        onSuccess: () => {
-          onClose();
-          methods.reset();
-        },
-      });
+      update.mutate(
+        { statBlock, data },
+        {
+          onSuccess: () => {
+            onClose();
+            methods.reset();
+          },
+        }
+      );
     } else {
       create.mutate(data, {
         onSuccess: () => {
@@ -402,13 +405,13 @@ export const CreateStatBlockForm = ({
           <JetTransparentButton onClick={onClose} className="mr-1">
             Cancel
           </JetTransparentButton>
-          <JetButton
+          <Button
             type="submit"
             processing={false}
             onClick={methods.handleSubmit(onSubmit)}
           >
-            {statBlock?.id ? 'Update' : 'Create'}
-          </JetButton>
+            {statBlock?.id ? "Update" : "Create"}
+          </Button>
         </JetDialogModal.Footer>
       </JetDialogModal>
     </FormProvider>

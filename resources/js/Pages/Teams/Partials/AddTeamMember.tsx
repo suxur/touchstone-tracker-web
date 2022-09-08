@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useForm } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
-import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { ActionMessage } from '@/Components/ActionMessage';
+import { Button } from '@/Components/Button';
 import { JetFormSection } from '@/Components/Jetstream/FormSection';
 import { JetInput } from '@/Components/Jetstream/Input';
 import { JetInputError } from '@/Components/Jetstream/InputError';
@@ -39,15 +39,15 @@ export const AddTeamMember = ({ team, permissions, availableRoles }: Props) => {
       description="Add a new team member to your team, allowing them to collaborate with you."
       renderActions={() => (permissions.canUpdateTeam ? (
         <>
-          <JetButton
+          <Button
             className={clsx({ 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Add
-          </JetButton>
-          <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+          </Button>
+          <ActionMessage on={form.recentlySuccessful} className="ml-3">
             Added.
-          </JetActionMessage>
+          </ActionMessage>
         </>
       ) : <div />)}
     >

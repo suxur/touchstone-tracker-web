@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { useEncounter } from '@/Hooks/useEncounter';
-import { JetButton } from '@/Components/Jetstream';
 import { roll } from '@/Dice';
+import { Button } from '@/Components/Button';
 
 export const RollAllButton = () => {
   const { mutation, encounter } = useEncounter();
@@ -21,5 +21,5 @@ export const RollAllButton = () => {
     }
   };
 
-  return <JetButton bg="transparent" onClick={onClick}>Roll All</JetButton>;
+  return <Button bg="transparent" onClick={onClick}>Roll All</Button>;
 };

@@ -41,4 +41,13 @@ class DifficultyCalculator
         '30'  => 155000
     ];
 
+    public function experiencePoints($cr)
+    {
+        if (isset(self::EXPERIENCE_POINTS_BY_CHALLENGE_RATING[$cr])) {
+            return number_format(self::EXPERIENCE_POINTS_BY_CHALLENGE_RATING[$cr]);
+        }
+
+        return null;
+    }
+
 }

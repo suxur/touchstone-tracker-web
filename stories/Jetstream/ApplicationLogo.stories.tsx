@@ -1,8 +1,8 @@
-// JetActionSection.stories.ts|tsx
+// ActionSection.stories.ts|tsx
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetApplicationLogo } from '@/Components/Jetstream/ApplicationLogo';
+import { ApplicationLogo } from '@/Components/ApplicationLogo';
 
 
 export default {
@@ -10,8 +10,8 @@ export default {
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
    */
-  component: JetApplicationLogo,
-} as ComponentMeta<typeof JetApplicationLogo>;
+  component: ApplicationLogo,
+} as ComponentMeta<typeof ApplicationLogo>;
 
-export const Primary: ComponentStory<typeof JetApplicationLogo> = () => <JetApplicationLogo />;
+export const Primary: ComponentStory<typeof ApplicationLogo> = () => <ApplicationLogo />;
 

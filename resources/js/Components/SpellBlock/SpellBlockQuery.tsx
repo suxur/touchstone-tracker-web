@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const getSpell = async (id: number) => {
-  const { data } = await axios.get<Spell>(`/api/spell/${id}`);
+  const { data } = await axios.get<Spell>(`/api/spells/${id}`);
   return data;
 };
 export const SpellBlockQuery = forwardRef<HTMLButtonElement, Props>(({ id }: Props, ref) => {

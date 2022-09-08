@@ -7,7 +7,7 @@ import useRoute from '@/Hooks/useRoute';
 import { JetDialogModal } from '@/Components/Jetstream/DialogModal';
 import { JetInput } from '@/Components/Jetstream/Input';
 import { JetSecondaryButton } from '@/Components/Jetstream/SecondaryButton';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { Button } from '@/Components/Button';
 import { JetInputError } from '@/Components/Jetstream/InputError';
 
 interface Props {
@@ -90,13 +90,13 @@ export const JetConfirmsPassword = ({
         </JetDialogModal.Content>
         <JetDialogModal.Footer>
           <JetSecondaryButton onClick={closeModal}>Cancel</JetSecondaryButton>
-          <JetButton
+          <Button
             className={clsx('ml-2', { 'opacity-25': form.processing })}
             onClick={confirmPassword}
             disabled={form.processing}
           >
             {button}
-          </JetButton>
+          </Button>
         </JetDialogModal.Footer>
       </JetDialogModal>
     </span>

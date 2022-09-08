@@ -23,7 +23,7 @@ export const useCombatant = (combatant: Combatant) => {
     queryClient.invalidateQueries(['encounter', combatant.encounter_id]);
   };
 
-  const mutation = useMutation((data: Combatant) => axios.post(route('api.combatants.update', { combatant }), { ...data }), {
+  const mutation = useMutation((data: Combatant) => axios.put(route('api.combatants.update', { combatant }), { ...data }), {
     onMutate: (updated: Combatant) => {
       queryClient.cancelQueries(['combatant', updated.id]);
       queryClient.cancelQueries(['encounter', updated.encounter_id]);

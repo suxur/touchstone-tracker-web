@@ -7,21 +7,6 @@ use Str;
 
 class EncountersManager
 {
-    public function latest(): Encounter
-    {
-        if ($userId = auth()->user()->id) {
-            $encounter = Encounter::where('user_id', '=', $userId)->latest()->first();
-        }
-
-        if ($encounter) {
-            return $encounter;
-        }
-
-        return Encounter::firstOrCreate([
-            'slug' => $this->slug(),
-        ]);
-    }
-
     public function slug(): string
     {
         $slug = session('encounter_slug');

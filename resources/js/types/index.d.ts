@@ -65,7 +65,7 @@ export type InertiaSharedProps<T = Record<string, unknown>> = T & {
   errors: any;
 };
 
-export interface Pagination<T> {
+export interface PaginationFor<T> {
   current_page: number;
   data: T[];
   first_page_url: string;
@@ -196,6 +196,7 @@ export interface Session {
 }
 
 export type StatBlockType = "monster" | "character";
+export type StatBlockRouteType = "monsters" | "characters";
 
 // Codex
 export interface CodexMonster {

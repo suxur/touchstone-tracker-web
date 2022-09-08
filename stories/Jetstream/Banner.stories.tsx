@@ -1,8 +1,8 @@
-// JetBanner.stories.ts|tsx
+// Banner.stories.ts|tsx
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetBanner } from '@/Components/Jetstream/Banner';
+import { Banner } from '@/Components/Banner';
 
 
 export default {
@@ -10,10 +10,10 @@ export default {
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
    */
-  component: JetBanner,
-} as ComponentMeta<typeof JetBanner>;
+  component: Banner,
+} as ComponentMeta<typeof Banner>;
 
-const Template: ComponentStory<typeof JetBanner> = (args) => <JetBanner {...args}/>;
+const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args}/>;
 
 export const Success = Template.bind({});
 Success.args = {

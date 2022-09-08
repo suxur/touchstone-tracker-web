@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { PropsWithChildren } from 'react';
-import { JetButton, JetButtonProps } from './Button';
+import { Button, ButtonProps } from '../Button';
 
-export type JetDangerButtonProps = Omit<JetButtonProps, 'bg'>
+export type JetDangerButtonProps = Omit<ButtonProps, 'bg'>
 
 export const JetDangerButton = ({ children, ...props }: PropsWithChildren<JetDangerButtonProps>) => (
-  <JetButton {...props} bg="danger">{children}</JetButton>
+  <Button {...props} bg="danger">{children}</Button>
 );

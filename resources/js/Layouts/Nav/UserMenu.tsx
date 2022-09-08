@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { JetDropdown, JetDropdownLink } from '@/Components/Jetstream';
 import { ChevronDown, ChevronUpDown } from '@/Components/Svg';
 import { useLogout } from '@/Hooks/auth';
@@ -92,6 +93,9 @@ export const UserMenu = () => {
             </div>
             <JetDropdownLink href={route('profile.show')}>
               Profile
+            </JetDropdownLink>
+            <JetDropdownLink href={route('subscription.index')}>
+              Manage Plan
             </JetDropdownLink>
             <div className="border-t border-gray-100" />
             <JetDropdownLink as="button" onClick={logout}>

@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import {
-  JetButton,
   JetDialogModal,
   JetInput,
   JetLabel,
@@ -15,6 +14,7 @@ import { PageProps } from "@inertiajs/inertia";
 import { Controller, useForm } from "react-hook-form";
 import { startCase } from "lodash";
 import { Autocomplete } from "../Form/Autocomplete";
+import { Button } from '@/Components/Button';
 
 interface Props extends ModalProps {
   type: StatBlockType;
@@ -86,13 +86,13 @@ export const ImportStatBlocksForm = ({ type, isOpen, onClose }: Props) => {
         <JetTransparentButton onClick={onClose} className="mr-1">
           Cancel
         </JetTransparentButton>
-        <JetButton
+        <Button
           type="submit"
           processing={false}
           onClick={handleSubmit(onSubmit)}
         >
           Import
-        </JetButton>
+        </Button>
       </JetDialogModal.Footer>
     </JetDialogModal>
   );

@@ -2,43 +2,40 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Codex\CodexManager;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CodexCharacterResource;
 use App\Http\Resources\CodexEncounterResource;
 use App\Http\Resources\CodexMonsterResource;
 use App\Http\Resources\CodexSpellResource;
-use App\Models\Spell;
-use App\Models\StatBlock;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CodexController extends Controller
 {
+    private CodexManager $manager;
+
+    public function __construct(CodexManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     public function monsters(): AnonymousResourceCollection
     {
-        $monsters = StatBlock::select(['id', 'name'])->monsters()->get();
-        $userMonsters = StatBlock::select(['id', 'name'])->userMonsters()->get();
-
-        return CodexMonsterResource::collection($monsters->merge($userMonsters)->sortBy('name'));
+        return CodexMonsterResource::collection($this->manager->monsters());
    }
 
     public function characters(): AnonymousResourceCollection
     {
-        $characters = StatBlock::select(['id', 'name'])->userCharacters()->orderBy('name')->get();
-
-        return CodexCharacterResource::collection($characters);
+        return CodexCharacterResource::collection($this->manager->characters());
     }
 
     public function spells(): AnonymousResourceCollection
     {
-        $spells = Spell::select(['id', 'name'])->orderBy('name')->get();
-
-        return CodexSpellResource::collection($spells);
+        return CodexSpellResource::collection($this->manager->spells());
     }
 
     public function encounters(): AnonymousResourceCollection
     {
-        $encounters = $this->user()->encounters()->orderByDesc('created_at')->get();
-
-        return CodexEncounterResource::collection($encounters);
+        return CodexEncounterResource::collection($this->manager->encounters());
     }
 }

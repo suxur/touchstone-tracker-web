@@ -15,13 +15,13 @@ export const useDeleteStatBlock = () => {
 
   return useMutation(
     ({ statBlock }: Props) =>
-      axios.delete(route("stat-blocks.destroy", { stat_block: statBlock })),
+      axios.delete(route("api.stat-blocks.destroy", { stat_block: statBlock })),
     {
       onMutate: ({ type }) => {
-        queryClient.cancelQueries(["stat-blocks", type]);
+        queryClient.cancelQueries([type, 1]);
       },
       onSuccess: (_, { type }) => {
-        queryClient.invalidateQueries(["stat-blocks", type]);
+        queryClient.invalidateQueries([type, 1]);
       },
     }
   );

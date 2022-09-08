@@ -8,7 +8,7 @@ interface Props {
   className?: string;
 }
 
-export const JetBanner = ({ message, style, className }: Props) => {
+export const Banner = ({ message, style, className }: Props) => {
   const [show, setShow] = useState(true);
   // const { props } = usePage<Page<{ jetstream: any }>>();
   // const props = {

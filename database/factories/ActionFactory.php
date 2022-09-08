@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Action;
+use App\Models\Combatant;
+use App\Models\StatBlock;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ActionFactory extends Factory
@@ -22,16 +24,16 @@ class ActionFactory extends Factory
     public function definition(): array
     {
         return [
-            'id'             => null,
-            'combatant_id'   => null,
+            'stat_block_id'   => StatBlock::factory(),
             'name'           => $this->faker->name,
             'description'    => $this->faker->text,
             'attack_bonus'   => $this->faker->numberBetween(0, 10),
             'damage_dice'    => null,
+            'damage_bonus'   => 0,
             'sort'           => 0,
-            'is_reaction'    => $this->faker->boolean,
-            'is_special'     => $this->faker->boolean,
-            'is_legendary'   => $this->faker->boolean,
+            'is_reaction'    => $this->faker->numberBetween(0, 1),
+            'is_special'     => $this->faker->numberBetween(0, 1),
+            'is_legendary'   => $this->faker->numberBetween(0, 1),
         ];
     }
 }

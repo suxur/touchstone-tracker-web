@@ -22,7 +22,6 @@ export default function Show({ sessions }: Props) {
         {page.props.jetstream.canUpdateProfileInformation ? (
           <div>
             <UpdateProfileInformationForm user={page.props.user} />
-
             <JetSectionBorder />
           </div>
         ) : null}

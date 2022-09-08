@@ -19,6 +19,20 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
+    public function signInAndSubscribe(User $user = null)
+    {
+        /** @var User $user */
+        $user = $user ?? User::factory([
+                'stripe_id'     => 'cus_MDLjI0wQHeshD9',
+                'pm_type'       => 'visa',
+                'pm_last_four'  => '4242',
+                'trial_ends_at' => null,
+            ])->withSubscription()->create();
+        $this->actingAs($user);
+
+        return $user;
+    }
+
     private function createEncounterWithUser(): array
     {
         /** @var User $user */

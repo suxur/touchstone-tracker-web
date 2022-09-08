@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Jetstream\RemoveStatBlock;
 use function app;
 use App\Actions\StatBlock\CreateStatBlock;
 use App\Actions\StatBlock\UpdateStatBlock;
@@ -15,26 +16,6 @@ use Illuminate\Http\Request;
 
 class StatBlockController extends Controller
 {
-    public function monsters(): JsonResponse
-    {
-        /** @var User $user */
-        $user = auth()->user();
-
-        $statBlocks = $user->monsters()->orderBy('name')->paginate(10);
-
-        return response()->json($statBlocks);
-    }
-
-    public function characters(): JsonResponse
-    {
-        /** @var User $user */
-        $user = auth()->user();
-
-        $statBlocks = $user->characters()->orderBy('name')->paginate(10);
-
-        return response()->json($statBlocks);
-    }
-
     public function show(StatBlock $statBlock): StatBlockResource
     {
         return new StatBlockResource($statBlock);
@@ -60,7 +41,6 @@ class StatBlockController extends Controller
 
         return response()->json(true);
     }
-
 
     public function duplicate(StatBlock $statBlock): JsonResponse
     {

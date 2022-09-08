@@ -3,8 +3,8 @@ import { usePage } from '@inertiajs/inertia-react';
 import axios from 'axios';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { JetActionSection } from '@/Components/Jetstream/ActionSection';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { ActionSection } from '@/Components/ActionSection';
+import { Button } from '@/Components/Button';
 import { JetConfirmsPassword } from '@/Components/Jetstream/ConfirmsPassword';
 import { JetDangerButton } from '@/Components/Jetstream/DangerButton';
 import { JetSecondaryButton } from '@/Components/Jetstream/SecondaryButton';
@@ -56,7 +56,7 @@ export default function TwoFactorAuthenticationForm() {
   }
 
   return (
-    <JetActionSection
+    <ActionSection
       title="Two Factor Authentication"
       description="Add additional security to your account using two factor authentication."
     >
@@ -134,21 +134,21 @@ export default function TwoFactorAuthenticationForm() {
             )}
 
             <JetConfirmsPassword onConfirm={disableTwoFactorAuthentication}>
-              <JetButton bg="danger" processing={disabling}>
+              <Button bg="danger" processing={disabling}>
                 Disable
-              </JetButton>
+              </Button>
             </JetConfirmsPassword>
           </div>
         ) : (
           <div>
             <JetConfirmsPassword onConfirm={enableTwoFactorAuthentication}>
-              <JetButton type="button" processing={enabling}>
+              <Button type="button" processing={enabling}>
                 Enable
-              </JetButton>
+              </Button>
             </JetConfirmsPassword>
           </div>
         )}
       </div>
-    </JetActionSection>
+    </ActionSection>
   );
 }

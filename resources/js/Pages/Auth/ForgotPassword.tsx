@@ -4,10 +4,10 @@ import { Head, useForm } from '@inertiajs/inertia-react';
 
 import useRoute from '@/Hooks/useRoute';
 import { GuestLayout } from '@/Layouts/GuestLayout';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { Button } from '@/Components/Button';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
-import { JetBanner } from '@/Components/Jetstream';
+import { Banner } from '@/Components/Jetstream';
 
 interface Props {
   status: string;
@@ -28,7 +28,7 @@ export default function ForgotPassword({ status }: Props) {
     <GuestLayout>
       <Head title="Forgot Password" />
 
-      {status && <JetBanner className="mb-4 rounded-md" message={status} style="success" />}
+      {status && <Banner className="mb-4 rounded-md" message={status} style="success" />}
 
       <div className="mb-4 text-sm text-gray-600">
         Forgot your password? No worries! Let us know your email address
@@ -52,9 +52,9 @@ export default function ForgotPassword({ status }: Props) {
         </div>
 
         <div className="flex items-center justify-end mt-4">
-          <JetButton processing={form.processing}>
+          <Button processing={form.processing}>
             Email Password Reset Link
-          </JetButton>
+          </Button>
         </div>
       </form>
     </GuestLayout>

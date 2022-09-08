@@ -2,7 +2,7 @@ import * as React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEncounter } from "@/Hooks/useEncounter";
-import { JetButton } from "@/Components/Jetstream";
+import { Button } from '@/Components/Button';
 
 export const NextButton = () => {
   const { encounter, mutation } = useEncounter();
@@ -39,9 +39,9 @@ export const NextButton = () => {
   };
 
   return (
-    <JetButton onClick={onClick}>
+    <Button onClick={onClick}>
       Next
       <FontAwesomeIcon icon="chevron-right" className="ml-1" />
-    </JetButton>
+    </Button>
   );
 };

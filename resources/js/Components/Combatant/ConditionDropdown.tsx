@@ -7,13 +7,13 @@ import { Combatant, Condition } from "@/types";
 import { Fade } from "../Fade";
 import { JetTransparentButton } from "../Jetstream/TransparentButton";
 import { ConditionCheckbox } from "./ConditionCheckbox";
+import { filter, upperFirst } from 'lodash';
 
 type Props = {
   active: boolean;
   combatant: Combatant;
   conditions: Condition[];
 };
-
 
 export const ConditionDropdown = ({ combatant, conditions, active }: Props) => {
   const [isShowing, setIsShowing] = React.useState(false);
@@ -24,6 +24,25 @@ export const ConditionDropdown = ({ combatant, conditions, active }: Props) => {
       ...combatant,
       conditions: [],
     });
+  };
+
+  const update = (condition: Condition) => {
+    mutation.mutate({
+      ...combatant,
+      conditions: getConditions(condition),
+    });
+  };
+
+  const getConditions = (condition: Condition) => {
+    if (isConditionChecked(condition)) {
+      return filter(combatant.conditions, (c) => c.id !== condition.id);
+    }
+
+    return [...combatant.conditions, condition];
+  };
+
+  const isConditionChecked = (condition: Condition) => {
+    return !!combatant.conditions.find((c) => c.id === condition.id);
   };
 
   return (
@@ -46,8 +65,9 @@ export const ConditionDropdown = ({ combatant, conditions, active }: Props) => {
             {conditions.map((condition) => (
               <div className="w-28 mb-1" key={condition.id}>
                 <ConditionCheckbox
-                  condition={condition}
-                  combatant={combatant}
+                  update={() => update(condition)}
+                  checked={isConditionChecked(condition)}
+                  name={upperFirst(condition.name)}
                 />
               </div>
             ))}

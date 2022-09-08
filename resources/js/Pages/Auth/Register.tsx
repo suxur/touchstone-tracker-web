@@ -1,10 +1,10 @@
 import React, { FormEvent, useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import { GuestLayout } from '@/Layouts/GuestLayout';
-import { JetButton } from '@/Components/Jetstream';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
 import useRoute from '@/Hooks/useRoute';
+import { Button } from '@/Components/Button';
 
 export default function Register() {
   const route = useRoute();
@@ -89,9 +89,9 @@ export default function Register() {
           <Link href={route('login')} className="underline text-sm text-gray-600 hover:text-gray-900">
             Already registered?
           </Link>
-          <JetButton className="ml-4" processing={form.processing}>
+          <Button className="ml-4" processing={form.processing}>
             Register
-          </JetButton>
+          </Button>
         </div>
       </form>
     </GuestLayout>

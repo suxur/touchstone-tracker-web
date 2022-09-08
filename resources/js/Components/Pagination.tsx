@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Pagination as PaginationType, VoidFn } from '@/types';
+import { PaginationFor, VoidFn } from '@/types';
 import { JetTransparentButton } from './Jetstream/TransparentButton';
 
 interface Props<T> {
-  pagination: PaginationType<T>;
+  pagination: PaginationFor<T>;
   next: VoidFn;
   prev: VoidFn;
 }

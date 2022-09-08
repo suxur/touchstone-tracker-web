@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { StatBlockType } from "@/types";
 import { useEncounter } from "@/Hooks/useEncounter";
-import { JetButton } from "@/Components/Jetstream";
+import { Button } from '@/Components/Button';
 
 interface Props {
   type: StatBlockType;
@@ -40,13 +40,13 @@ export const QuickAdd = ({ type }: Props) => {
         onChange={(e) => setName(e.target.value)}
         required
       />
-      <JetButton
+      <Button
         type="submit"
         className="rounded-l-none"
         processing={add.isLoading}
       >
         <FontAwesomeIcon icon="plus" />
-      </JetButton>
+      </Button>
     </form>
   );
 };

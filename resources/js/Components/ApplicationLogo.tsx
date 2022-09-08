@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const JetApplicationLogo = () => (
+export const ApplicationLogo = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 315 76">
     <g transform="translate(10.99 14)">
       <g transform="rotate(-.97 97.2 -1767.6)">

@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-export const JetActionMessage = ({ on, className, children }: PropsWithChildren<Props>) => (
+export const ActionMessage = ({ on, className, children }: PropsWithChildren<Props>) => (
   <div className={className}>
     <Transition
       show={on}

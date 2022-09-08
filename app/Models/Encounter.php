@@ -7,22 +7,20 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
 class Encounter extends Model
 {
     use SoftDeletes;
     use HasFactory;
 
-    public const COMBATANT_MONSTER = 'monster';
-    public const COMBATANT_CHARACTER = 'character';
-
-    protected $combatantPivotColumns = [
-        'unique_id', 'unique_name', 'combatant_type', 'hit_points', 'initiative', 'action', 'bonus_action', 'reaction', 'extra_action', 'death_save_success', 'death_save_failure', 'order',
-    ];
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 
     protected $fillable = [
         'slug',
+        'name',
         'round',
         'monster_hp_status',
         'character_hp_status',
@@ -76,11 +74,7 @@ class Encounter extends Model
 
     public function getCreatedAtDiffAttribute()
     {
-        if (!empty($this->created_at)) {
-            return $this->created_at->diffForHumans();
-        }
-
-        return null;
+        return $this->created_at->diffForHumans();
     }
 
     /**
@@ -101,37 +95,5 @@ class Encounter extends Model
     public function scopeTrash(Builder $query)
     {
         return $query->onlyTrashed()->whereDate('deleted_at', '<=', Carbon::now()->subMonth());
-    }
-
-    public function addCharacterCombatant(StatBlock $character)
-    {
-        $this->characters()->attach([
-            $character->id => [
-                'unique_name' => $character->name,
-                'unique_id'   => Str::random(8),
-                'hit_points'  => $character->hit_points,
-                'initiative'  => $character->dexterity,
-                'order'       => $this->combatants_count,
-            ],
-        ]);
-    }
-
-    public function addMonsterCombatant(StatBlock $character)
-    {
-        $updateData = [
-            'unique_name' => $character->name,
-            'unique_id'   => Str::random(8),
-            'hit_points'  => $character->hit_points,
-            'initiative'  => $character->initiative,
-            'order'       => $this->combatants_count,
-        ];
-
-        if (($count = $this->combatants()->where('id', $character->id)->count()) > 0) {
-            $updateData['unique_name'] = $character->name.' '.$count;
-        }
-
-        $this->combatants()->attach([
-            $character->id => $updateData,
-        ]);
     }
 }

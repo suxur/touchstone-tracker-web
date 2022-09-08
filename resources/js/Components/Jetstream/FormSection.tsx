@@ -6,9 +6,7 @@ import { JetSectionTitle } from './SectionTitle';
 interface Props {
   title: string;
   description: string;
-
   renderActions?(): JSX.Element;
-
   onSubmit(): void;
 }
 
@@ -37,7 +35,7 @@ export const JetFormSection = ({ onSubmit, renderActions, title, description, ch
         </div>
 
         {hasActions && (
-          <div className="flex items-center py-3 bg-slate-100 text-right px-4 shadow sm:rounded-bl-md sm:rounded-br-md">
+          <div className="flex items-center py-3 bg-white text-right px-4 shadow sm:rounded-bl-md sm:rounded-br-md">
             {renderActions?.()}
           </div>
         )}

@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { useMemo } from 'react';
 import clsx from 'clsx';
 
 import { Combatant } from '@/types';
 import { useCombatant } from '@/Hooks/useCombatant';
-import { JetCheckbox } from '@/Components/Jetstream';
 import { JetTransparentButton } from '@/Components/Jetstream/TransparentButton';
-import { useMemo } from 'react';
+import { Checkbox } from '@/Components/Checkbox';
 
 type Props = {
   combatant: Combatant;
@@ -30,7 +30,7 @@ export const Actions = ({ combatant, active, disabled }: Props) => {
     <div className="flex flex-col sm:flex-row">
       <div className={clsx('bg-gray-100 rounded-md px-2 h-10 text-sm flex justify-around sm:justify-center items-center space-x-4', { 'bg-purple-400': active })}>
         <label className={labelClass}>
-          <JetCheckbox
+          <Checkbox
             className="mr-1"
             name="action"
             disabled={disabled}
@@ -40,7 +40,7 @@ export const Actions = ({ combatant, active, disabled }: Props) => {
           <span>Action</span>
         </label>
         <label className={labelClass}>
-          <JetCheckbox
+          <Checkbox
             className="mr-2"
             disabled={disabled}
             checked={combatant.bonus_action}
@@ -52,7 +52,7 @@ export const Actions = ({ combatant, active, disabled }: Props) => {
           </span>
         </label>
         <label className={labelClass}>
-          <JetCheckbox
+          <Checkbox
             className="mr-1"
             disabled={disabled}
             checked={combatant.reaction}
@@ -63,7 +63,7 @@ export const Actions = ({ combatant, active, disabled }: Props) => {
       </div>
       {!disabled && (
         <JetTransparentButton
-         className={clsx('mt-2 sm:ml-1 sm:mt-0', active ? 'text-gray-700' : 'text-gray-500')}
+          className={clsx('mt-2 sm:ml-1 sm:mt-0', active ? 'text-gray-700' : 'text-gray-500')}
           onClick={clear}
         >
           Clear

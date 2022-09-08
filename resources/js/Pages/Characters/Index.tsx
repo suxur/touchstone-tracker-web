@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { AppLayout } from '@/Layouts/AppLayout';
-import { StatBlockPermissions } from '@/types';
-import { ManageStatBlocks } from '@/Domains/StatBlocks/ManageStatBlocks';
+import { AppLayout } from "@/Layouts/AppLayout";
+import { StatBlockPermissions } from "@/types";
+import { ManageStatBlocks } from "@/Domains/StatBlocks/ManageStatBlocks";
 
 type Props = {
   permissions: StatBlockPermissions;
@@ -10,7 +10,7 @@ type Props = {
 
 const Index = ({ permissions }: Props) => (
   <AppLayout>
-    <ManageStatBlocks permissions={permissions} type="character" />
+    <ManageStatBlocks permissions={permissions} route="characters" type="character" />
   </AppLayout>
 );
 

@@ -2,9 +2,9 @@ import { useForm } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import useRoute from '@/Hooks/useRoute';
-import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
-import { JetActionSection } from '@/Components/Jetstream/ActionSection';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { ActionMessage } from '@/Components/ActionMessage';
+import { ActionSection } from '@/Components/ActionSection';
+import { Button } from '@/Components/Button';
 import { JetDialogModal } from '@/Components/Jetstream/DialogModal';
 import { JetInput } from '@/Components/Jetstream/Input';
 import { JetInputError } from '@/Components/Jetstream/InputError';
@@ -45,7 +45,7 @@ export default function LogoutOtherBrowserSessions({ sessions }: Props) {
   }
 
   return (
-    <JetActionSection
+    <ActionSection
       title="Browser Sessions"
       description="Manage and log out your active sessions on other browsers and devices."
     >
@@ -116,13 +116,13 @@ export default function LogoutOtherBrowserSessions({ sessions }: Props) {
       ) : null}
 
       <div className="flex items-center mt-5">
-        <JetButton onClick={confirmLogout}>
+        <Button onClick={confirmLogout}>
           Log Out Other Browser Sessions
-        </JetButton>
+        </Button>
 
-        <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+        <ActionMessage on={form.recentlySuccessful} className="ml-3">
           Done.
-        </JetActionMessage>
+        </ActionMessage>
       </div>
 
       {/* <!-- Log Out Other Devices Confirmation Modal --> */}
@@ -147,15 +147,15 @@ export default function LogoutOtherBrowserSessions({ sessions }: Props) {
         <JetDialogModal.Footer>
           <JetSecondaryButton onClick={closeModal}>Cancel</JetSecondaryButton>
 
-          <JetButton
+          <Button
             onClick={logoutOtherBrowserSessions}
             className={clsx('ml-2', { 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Log Out Other Browser Sessions
-          </JetButton>
+          </Button>
         </JetDialogModal.Footer>
       </JetDialogModal>
-    </JetActionSection>
+    </ActionSection>
   );
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import clsx from 'clsx';
 
-export const JetCheckbox = ({ className, disabled, ...props } : DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => (
+export const Checkbox = ({ className, disabled, ...props } : DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => (
   <input
     type="checkbox"
     {...props}

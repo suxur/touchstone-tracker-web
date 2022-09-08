@@ -1,13 +1,13 @@
-// JetActionSection.stories.ts|tsx
+// ActionSection.stories.ts|tsx
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetAuthenticationCardLogo } from '@/Components/Jetstream/AuthenticationCardLogo';
+import { AuthenticationCardLogo } from '@/Components/AuthenticationCardLogo';
 
 
 export default {
-  component: JetAuthenticationCardLogo,
-} as ComponentMeta<typeof JetAuthenticationCardLogo>;
+  component: AuthenticationCardLogo,
+} as ComponentMeta<typeof AuthenticationCardLogo>;
 
-export const Primary: ComponentStory<typeof JetAuthenticationCardLogo> = () => <JetAuthenticationCardLogo />;
+export const Primary: ComponentStory<typeof AuthenticationCardLogo> = () => <AuthenticationCardLogo />;
 

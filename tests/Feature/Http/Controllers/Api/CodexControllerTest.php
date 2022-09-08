@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class ConditionControllerTest extends TestCase
+class CodexControllerTest extends TestCase
 {
     use RefreshDatabase;
 

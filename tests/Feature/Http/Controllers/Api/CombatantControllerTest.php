@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\Combatant;
+use App\Models\Condition;
 use App\Models\Encounter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -11,53 +13,53 @@ class CombatantControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function an_unauthenticated_user_cannot_create_encounters(): void
+    public function a_user_can_update_a_combatant(): void
     {
-        $response = $this->postJson('/api/encounters');
-        $response->assertUnauthorized();
+        $combatant = Combatant::factory()->create(["armor_class" => "10"]);
+
+        $response = $this
+            ->withSession(['encounter_slug' => $combatant->encounter->slug])
+            ->putJson("/api/combatants/{$combatant->id}", [
+                "armor_class" => "15"
+            ]);
+
+        $response->assertOk();
+        $this->assertEquals("15", $combatant->fresh()->armor_class, "15");
     }
 
     /** @test */
-    public function an_authenticated_user_can_create_encounters(): void
+    public function a_user_can_update_a_combatants_conditions(): void
     {
-        $this->signIn();
+        $condition = Condition::factory()->create();
+        $combatant = Combatant::factory()->create();
+        session('encounter_slug', $combatant->encounter->slug);
 
-        $response = $this->postJson('/api/encounters');
-        $response->assertStatus(200);
-
-        $this->assertDatabaseCount('encounters', 1);
-    }
-
-    /** @test */
-    public function an_unauthenticated_user_cannot_delete_encounters(): void
-    {
-        $encounter = Encounter::factory()->create();
-
-        $response = $this->deleteJson("/api/encounters/{$encounter->id}");
-        $response->assertUnauthorized();
-    }
-
-    /** @test */
-    public function an_unauthorized_user_cannot_delete_encounters(): void
-    {
-        $this->signIn();
-
-        $encounter = Encounter::factory()->create();
-
-        $response = $this->deleteJson("/api/encounters/{$encounter->id}");
-        $response->assertForbidden();
-    }
-
-    /** @test */
-    public function an_authenticated_user_can_delete_encounters(): void
-    {
-        $user = $this->signIn();
-
-        $encounter = Encounter::factory()->create([
-            'user_id' => $user,
+        $response = $this
+            ->withSession(['encounter_slug' => $combatant->encounter->slug])
+            ->putJson("/api/combatants/{$combatant->id}", [
+            "conditions" => [$condition]
         ]);
 
-        $response = $this->deleteJson("/api/encounters/{$encounter->id}");
-        $response->assertSuccessful();
+        $response->assertOk();
+        $this->assertCount(1, $combatant->fresh()->conditions);
+    }
+
+    /** @test */
+    public function a_user_cannot_update_a_combatant_that_belongs_to_a_different_encounter(): void
+    {
+        $encounter1 = Encounter::factory()->create();
+        $encounter2 = Encounter::factory()->create();
+
+        session('encounter_slug', $encounter2->slug);
+
+        $combatant = Combatant::factory()->create([
+            "encounter_id" => $encounter1
+        ]);
+
+        $response = $this->putJson("/api/combatants/{$combatant->id}", [
+            "armor_class" => "15"
+        ]);
+
+        $response->assertForbidden();
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class StatBlockCollection extends Collection
 {
-    public function collections()
+    public function collections(): \Illuminate\Support\Collection
     {
         return $this->where('collection', '!=', '')->groupBy('collection')->keys();
     }

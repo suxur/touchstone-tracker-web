@@ -2,8 +2,8 @@ import { useForm } from '@inertiajs/inertia-react';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 import useRoute from '@/Hooks/useRoute';
-import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { ActionMessage } from '@/Components/ActionMessage';
+import { Button } from '@/Components/Button';
 import { JetFormSection } from '@/Components/Jetstream/FormSection';
 import { JetInput } from '@/Components/Jetstream/Input';
 import { JetInputError } from '@/Components/Jetstream/InputError';
@@ -45,15 +45,15 @@ export default function UpdatePasswordForm() {
       description="Ensure your account is using a long, random password to stay secure."
       renderActions={() => (
         <>
-          <JetButton
+          <Button
             className={clsx({ 'opacity-25': form.processing })}
             disabled={form.processing}
           >
             Save
-          </JetButton>
-          <JetActionMessage on={form.recentlySuccessful} className="ml-3">
+          </Button>
+          <ActionMessage on={form.recentlySuccessful} className="ml-3">
             Saved.
-          </JetActionMessage>
+          </ActionMessage>
         </>
       )}
     >

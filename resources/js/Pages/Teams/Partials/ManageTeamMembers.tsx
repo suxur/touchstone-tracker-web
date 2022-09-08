@@ -4,8 +4,7 @@ import { useForm } from '@inertiajs/inertia-react';
 import { JetstreamTeamPermissions, Role, Team, User } from '@/types';
 import useRoute from '@/Hooks/useRoute';
 import {
-  JetActionSection,
-  JetButton,
+  ActionSection,
   JetConfirmationModal,
   JetDialogModal,
   JetSecondaryButton,
@@ -13,6 +12,7 @@ import {
 import useTypedPage from '@/Hooks/useTypedPage';
 import clsx from 'clsx';
 import { Roles } from '@/Domains/Teams/Components/Roles';
+import { Button } from '@/Components/Button';
 
 interface Props {
   team: Team;
@@ -74,7 +74,7 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
   };
 
   return (
-    <JetActionSection
+    <ActionSection
       title="Team Members"
       description="All of the people that are part of this team."
     >
@@ -133,13 +133,13 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
           />
           <JetDialogModal.Footer>
             <JetSecondaryButton onClick={() => setCurrentlyManagingRole(false)}>Cancel</JetSecondaryButton>
-            <JetButton
+            <Button
               className={clsx('ml-2', { 'opacity-25': updateRoleForm.processing })}
               onClick={updateRole}
               disabled={updateRoleForm.processing}
             >
               Save
-            </JetButton>
+            </Button>
           </JetDialogModal.Footer>
         </JetDialogModal.Content>
       </JetDialogModal>
@@ -150,13 +150,13 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
         </JetConfirmationModal.Content>
         <JetConfirmationModal.Footer>
           <JetSecondaryButton onClick={() => setConfirmingLeavingTeam(false)}>Cancel</JetSecondaryButton>
-          <JetButton
+          <Button
             className={clsx('ml-2', { 'opacity-25': leaveForm.processing })}
             onClick={leaveTeam}
             disabled={leaveForm.processing}
           >
             Leave
-          </JetButton>
+          </Button>
         </JetConfirmationModal.Footer>
       </JetConfirmationModal>
 
@@ -181,6 +181,6 @@ export const ManageTeamMembers = ({ team, permissions, availableRoles }: Props) 
       {/* </template> */}
       {/* </JetConfirmationModal> */}
 
-    </JetActionSection>
+    </ActionSection>
   );
 };

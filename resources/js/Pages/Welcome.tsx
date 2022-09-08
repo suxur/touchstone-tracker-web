@@ -4,7 +4,7 @@ import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import useRoute from '@/Hooks/useRoute';
 import { GuestLayout } from '@/Layouts/GuestLayout';
 import { InputError } from '@/Components/InputError';
-import { JetButton } from '@/Components/Jetstream';
+import { Button } from '@/Components/Button';
 
 export default function Welcome() {
   const route = useRoute();
@@ -14,10 +14,8 @@ export default function Welcome() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    form.post(route('encounter.lookup'));
+    form.post(route('e.store'));
   };
-
-  const activeEncounter = false;
 
   return (
     <GuestLayout>
@@ -28,15 +26,9 @@ export default function Welcome() {
           Dungeons &amp; Dragons 5E
         </p>
       </div>
-      {activeEncounter ? (
-        <Link href="/">
-          Active Encounter
-        </Link>
-      ) : (
-        <Link href={route('encounter')} className="button button-primary w-full h-10 mb-4">
-          Start Encounter
-        </Link>
-      )}
+      <Link href={route('e.index')} className="button button-primary w-full h-10 mb-4">
+        Start Encounter
+      </Link>
       <form onSubmit={submit}>
         <div className="flex h-10">
           <input
@@ -47,13 +39,13 @@ export default function Welcome() {
             onChange={e => form.setData('lookup', e.target.value)}
             required
           />
-          <JetButton
+          <Button
             type="submit"
             className="rounded-l-none"
             processing={form.processing}
           >
             Join
-          </JetButton>
+          </Button>
         </div>
         {form.hasErrors && form.errors.lookup && (
           <InputError className="mt-2">

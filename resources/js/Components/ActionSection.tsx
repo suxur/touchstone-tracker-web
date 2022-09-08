@@ -8,7 +8,7 @@ interface Props {
   actions?: JSX.Element;
 }
 
-export const JetActionSection = ({ title, description, children, actions }: PropsWithChildren<Props>) => (
+export const ActionSection = ({ title, description, children, actions }: PropsWithChildren<Props>) => (
   <div className="max-w-3xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <div className="flex flex-row justify-between items-end">
       <JetSectionTitle title={title} description={description} />

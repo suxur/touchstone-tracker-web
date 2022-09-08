@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\StatBlock;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class MonsterController extends Controller
 {
-    public function preloaded()
+    public function index(): JsonResponse
     {
-        $preloaded = StatBlock::preloadedMonsters()->paginate(10);
+        /** @var User $user */
+        $user = auth()->user();
 
-        return response()->json($preloaded);
+        $statBlocks = $user->monsters()->orderBy('name')->paginate(10);
+
+        return response()->json($statBlocks);
     }
 }

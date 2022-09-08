@@ -2,15 +2,20 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\StatBlock;
 use App\Models\TeamInvitation;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\TestCase;
 
-class TeamInvitationTest extends TestCase
+class TeamInvitationTest extends ModelTestCase
 {
-    use DatabaseMigrations;
+    protected ?string $table = 'team_invitations';
+    protected array $columns = [
+        'id',
+        'team_id',
+        'email',
+        'role',
+        'created_at',
+        'updated_at',
+    ];
 
     /** @test */
     public function a_team_invitation_belongs_to_a_team(): void

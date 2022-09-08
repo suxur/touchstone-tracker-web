@@ -3,8 +3,8 @@ import { FormEvent, useRef, useState } from 'react';
 import { Head, useForm } from '@inertiajs/inertia-react';
 
 import useRoute from '@/Hooks/useRoute';
-import { JetAuthenticationCard } from '@/Components/Jetstream/AuthenticationCard';
-import { JetButton } from '@/Components/Jetstream/Button';
+import { AuthenticationCard } from '@/Components/AuthenticationCard';
+import { Button } from '@/Components/Button';
 import { AuthLabel } from '@/Components/Auth/Label';
 import { AuthInput } from '@/Components/Auth/Input';
 
@@ -40,7 +40,7 @@ export default function TwoFactorChallenge() {
   };
 
   return (
-    <JetAuthenticationCard>
+    <AuthenticationCard>
       <Head title="Two-Factor Confirmation" />
 
       <div className="mb-4 text-sm text-gray-600">
@@ -89,11 +89,11 @@ export default function TwoFactorChallenge() {
             {recovery ? 'Use an authentication code' : 'Use a recovery code'}
           </button>
 
-          <JetButton className="ml-4" processing={form.processing}>
+          <Button className="ml-4" processing={form.processing}>
             Login
-          </JetButton>
+          </Button>
         </div>
       </form>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
   );
 }

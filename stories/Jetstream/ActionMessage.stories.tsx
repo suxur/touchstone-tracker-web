@@ -1,18 +1,18 @@
-// JetActionMessage.stories.ts|tsx
+// ActionMessage.stories.ts|tsx
 import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JetActionMessage } from '@/Components/Jetstream/ActionMessage';
+import { ActionMessage } from '@/Components/ActionMessage';
 
 export default {
   /* 👇 The title prop is optional.
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
    */
-  component: JetActionMessage,
-} as ComponentMeta<typeof JetActionMessage>;
+  component: ActionMessage,
+} as ComponentMeta<typeof ActionMessage>;
 
-const Template: ComponentStory<typeof JetActionMessage> = (args) => <JetActionMessage {...args} />;
+const Template: ComponentStory<typeof ActionMessage> = (args) => <ActionMessage {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
